@@ -1,11 +1,13 @@
 package org.pharaox.mastermind;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.pharaox.mastermind.Constants.*;
 
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -20,6 +22,7 @@ public class GameTest
     private Mastermind mastermind;
     private String code;
     private int maxRounds;
+    private Game game;
 
     public GameTest(AlgorithmType type, Mastermind mastermind, String code, int maxRounds)
     {
@@ -43,14 +46,36 @@ public class GameTest
         // @formatter:on
         return Arrays.asList(data);
     }
+    
+    @Before
+    public void setup()
+    {
+        game = new Game(mastermind, type, maxRounds);
+    }
+    
+    @Test
+    public void testSetPlayer()
+    {
+        Player player = new ConsolePlayer();
+        game.setPlayer(player);
+        assertEquals(player, game.getPlayer());
+    }
 
     @Test
-    public void testPlay() throws MastermindException
+    public void testPlay()
     {
         mastermind.setCode(code);
-        Game game = new Game(mastermind, new AlgorithmFactory(type, mastermind).getAlgorithm(), maxRounds);
         boolean won = game.play();
+        assertEquals(won, game.hasWon());
         assertTrue((type != AlgorithmType.DUMB && won) || (type == AlgorithmType.DUMB && !won));
         assertTrue(game.getRoundsPlayed() <= maxRounds);
+    }
+    
+    @Test(expected = MastermindException.class)
+    public void testPlayRepeatedly()
+    {
+        mastermind.setCode(code);
+        game.play();
+        game.play();
     }
 }

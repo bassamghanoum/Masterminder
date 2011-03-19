@@ -122,10 +122,15 @@ public class Mastermind
     {
         return evaluateScore(guess, code);
     }
-
+    
     public Score evaluateScore(String guess, String code)
     {
-        if (!isValidCode(guess) || !isValidCode(code))
+        return evaluateScore(guess, code, true);
+    }
+
+    public Score evaluateScore(String guess, String code, boolean safe)
+    {
+        if (safe && (!isValidCode(guess) || !isValidCode(code)))
             throw new MastermindException();
         return (uniqueChars)? evaluateScoreUniqueChars(guess, code) : evaluateScoreNonUniqueChars(guess, code);
     }
@@ -208,14 +213,20 @@ public class Mastermind
         });
         return result;
     }
-
+    
     public SortedSet<String> evaluatePossibleCodes(String guess, Score score,
         SortedSet<String> codes)
+    {
+        return evaluatePossibleCodes(guess, score, codes, true);
+    }
+
+    public SortedSet<String> evaluatePossibleCodes(String guess, Score score,
+        SortedSet<String> codes, boolean safe)
     {
         SortedSet<String> result = new TreeSet<String>();
         for (String code : codes)
         {
-            Score evaluatedScore = evaluateScore(guess, code);
+            Score evaluatedScore = evaluateScore(guess, code, safe);
             if (evaluatedScore.equals(score))
                 result.add(code);
         }

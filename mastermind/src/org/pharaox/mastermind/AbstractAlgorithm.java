@@ -43,8 +43,8 @@ public abstract class AbstractAlgorithm implements Algorithm
         {
             if (!evaluated.contains(guess))
             {
-                possibleCodes =
-                    mastermind.evaluatePossibleCodes(guess, guessScores.get(guess), possibleCodes);
+                possibleCodes = mastermind.evaluatePossibleCodes(guess, guessScores.get(guess), 
+                    possibleCodes, false);
                 evaluated.add(guess);
             }
         }

@@ -20,7 +20,7 @@ public class PharaoxAlgorithm extends AbstractAlgorithm
         Distribution dist = new Distribution();
         for (Score score : allScores)
         {
-            SortedSet<String> elem = mastermind.evaluatePossibleCodes(guess, score, possibleCodes);
+            SortedSet<String> elem = mastermind.evaluatePossibleCodes(guess, score, possibleCodes, false);
             int diff = possibleCodes.size() - elem.size();
             dist.add(diff);
         }

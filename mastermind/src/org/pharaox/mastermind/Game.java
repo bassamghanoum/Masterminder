@@ -2,6 +2,8 @@ package org.pharaox.mastermind;
 
 import static org.pharaox.util.Logger.debug;
 
+import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
+
 public class Game
 {
     public static final Score ZERO_SCORE = new Score(0, 0);
@@ -10,19 +12,38 @@ public class Game
     private Algorithm algorithm;
     private int maxRounds;
     private ReadyGuesses readyGuesses;
+    private Player player = new DefaultConsole();
+    private Score[] scores = new Score[] { ZERO_SCORE, ZERO_SCORE, ZERO_SCORE };
+    boolean won = false;
     private int roundsPlayed = 0;
 
-    public Game(Mastermind mastermind, Algorithm algorithm, int maxRounds)
+    public Game(Mastermind mastermind, AlgorithmType type, int maxRounds)
     {
-        this(mastermind, algorithm, maxRounds, null);
+        this(mastermind, type, maxRounds, null);
     }
 
-    public Game(Mastermind mastermind, Algorithm algorithm, int maxRounds, ReadyGuesses readyGuesses)
+    public Game(Mastermind mastermind, AlgorithmType type, int maxRounds,
+        ReadyGuesses readyGuesses)
     {
         this.mastermind = mastermind;
-        this.algorithm = algorithm;
+        this.algorithm = new AlgorithmFactory(type, mastermind).getAlgorithm();
         this.maxRounds = maxRounds;
         this.readyGuesses = readyGuesses;
+    }
+    
+    public void setPlayer(Player player)
+    {
+        this.player = player;
+    }
+    
+    public Player getPlayer()
+    {
+        return player;
+    }
+    
+    public boolean hasWon()
+    {
+        return won;
     }
 
     public int getRoundsPlayed()
@@ -30,39 +51,51 @@ public class Game
         return roundsPlayed;
     }
 
-    public boolean play() throws MastermindException
+    public boolean play()
     {
-        boolean won = false;
-        Score[] scores = new Score[] { ZERO_SCORE, ZERO_SCORE, ZERO_SCORE };
+        if (roundsPlayed > 0)
+            throw new MastermindException();
+        player.startGame();
         int i;
         for (i = 0; i < maxRounds; i++)
         {
-            Score score = playRound(i, scores);
-            if (score.equals(mastermind.getWinningScore()))
+            Score score = playRound(i);
+            if (isWinningScore(score))
             {
                 won = true;
                 i++;
                 break;
             }
-            for (int j = scores.length - 1; j > 0; j--)
-                scores[j] = scores[j - 1];
-            scores[0] = score;
+            shiftScores(score);
         }
         roundsPlayed = i;
+        player.endGame(won, roundsPlayed);
         return won;
     }
 
-    private Score playRound(int round, Score[] scores)
+    private boolean isWinningScore(Score score)
     {
-        String guess = makeGuess(round, scores);
+        return score.equals(mastermind.getWinningScore());
+    }
+
+    private void shiftScores(Score score)
+    {
+        for (int j = scores.length - 1; j > 0; j--)
+            scores[j] = scores[j - 1];
+        scores[0] = score;
+    }
+
+    private Score playRound(int round)
+    {
+        String guess = makeGuess(round);
         assert (mastermind.isValidCode(guess));
-        Score score = getScore(guess);
+        Score score = player.getScore(guess);
         debug(guess + " => " + score);
         putGuessScore(guess, score);
         return score;
     }
 
-    private String makeGuess(int round, Score[] scores)
+    private String makeGuess(int round)
     {
         String guess;
         if (round == 0 && readyGuesses != null)
@@ -78,13 +111,27 @@ public class Game
         return guess;
     }
 
-    private Score getScore(String guess)
-    {
-        return mastermind.evaluateScore(guess);
-    }
-
     private void putGuessScore(String guess, Score score)
     {
         algorithm.putGuessScore(guess, score);
+    }
+    
+    class DefaultConsole implements Player
+    {
+        @Override
+        public void startGame()
+        {
+        }
+
+        @Override
+        public void endGame(boolean won, int roundsPlayed)
+        {
+        }
+        
+        @Override
+        public Score getScore(String guess)
+        {
+            return mastermind.evaluateScore(guess);
+        }
     }
 }

@@ -241,7 +241,6 @@ public class MastermindTest
         {
             String code = mastermind.generateCode();
             assertValidCode(code, alphabet, length, uniqueChars);
-            assertFalse(generated.contains(code));
             generated.add(code);
         }
     }
@@ -322,6 +321,18 @@ public class MastermindTest
             }
             count++;
         }
+    }
+    
+    @Test(expected = MastermindException.class)
+    public void testEvaluateScoreInvalidScore()
+    {
+        mastermind.evaluateScore("");
+    }
+    
+    @Test(expected = MastermindException.class)
+    public void testEvaluateScoreInvalidCode()
+    {
+        mastermind.evaluateScore(codes[0], "");
     }
     
     @Test

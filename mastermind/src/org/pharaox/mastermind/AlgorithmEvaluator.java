@@ -3,24 +3,25 @@ package org.pharaox.mastermind;
 import static org.pharaox.util.Logger.debug;
 import static org.pharaox.util.Logger.info;
 
+import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
+
 public class AlgorithmEvaluator
 {
     public static final int MAX_ROUNDS = 10;
 
-    Mastermind mastermind;
-    AlgorithmFactory algorithmFactory;
-    ReadyGuesses readyGuesses;
-
+    private Mastermind mastermind;
+    private AlgorithmType type;
+    private ReadyGuesses readyGuesses;
     private int totalRoundsPlayed = 0;
     private int maxRoundsPlayed = 0;
     private int gamesPlayed = 0;
     private int gamesWon = 0;
 
-    public AlgorithmEvaluator(Mastermind mastermind, AlgorithmFactory algorithmFactory)
+    public AlgorithmEvaluator(Mastermind mastermind, AlgorithmType type)
     {
         this.mastermind = mastermind;
-        this.algorithmFactory = algorithmFactory;
-        this.readyGuesses = new ReadyGuesses(mastermind, algorithmFactory);
+        this.type = type;
+        this.readyGuesses = new ReadyGuesses(mastermind, type);
     }
 
     public void evaluate()
@@ -31,7 +32,7 @@ public class AlgorithmEvaluator
 
     private void printInfo()
     {
-        info("Algorithm Evaluation for " + algorithmFactory.getAlgorithm());
+        info("Algorithm Evaluation for " + new AlgorithmFactory(type, mastermind).getAlgorithm());
         info("===============================================");
         info("Total Rounds Played: " + totalRoundsPlayed);
         info("Max Rounds Played: " + maxRoundsPlayed);
@@ -73,8 +74,7 @@ public class AlgorithmEvaluator
         {
             debug("Code: " + code);
             mastermind.setCode(code);
-            Game game = new Game(mastermind, algorithmFactory.getAlgorithm(), 
-                MAX_ROUNDS, readyGuesses);
+            Game game = new Game(mastermind, type, MAX_ROUNDS, readyGuesses);
             boolean won = game.play();
             int roundsPlayed = game.getRoundsPlayed();
             debug("Game " + (won ? "won" : "lost") + " in " + roundsPlayed + " round(s)");

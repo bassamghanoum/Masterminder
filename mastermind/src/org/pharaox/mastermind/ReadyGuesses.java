@@ -4,52 +4,60 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
+
 public class ReadyGuesses
 {
+    private Mastermind mastermind;
+    private AlgorithmFactory factory;
     private String firstGuess = "";
     private Map<Score, String> secondGuesses = new HashMap<Score, String>();
     private Map<Score, Map<Score, String>> thirdGuesses = new HashMap<Score, Map<Score, String>>();
     private Map<Score, Map<Score, Map<Score, String>>> fourthGuesses =
         new HashMap<Score, Map<Score, Map<Score, String>>>();
+    private String secondGuess = null; 
+    private String thirdGuess = null; 
 
-    public ReadyGuesses(Mastermind mastermind, AlgorithmFactory factory)
+    public ReadyGuesses(Mastermind mastermind, AlgorithmType type)
     {
-        initFirstGuess(mastermind, factory);
-        initSecondGuesses(mastermind, factory);
-        initThirdGuesses(mastermind, factory);
-        initFourthGuesses(mastermind, factory);
+        this.mastermind = mastermind;
+        this.factory = new AlgorithmFactory(type, mastermind);
+        initFirstGuess();
+        initSecondGuesses();
+        initThirdGuesses();
+        initFourthGuesses();
     }
 
-    private void initFirstGuess(Mastermind mastermind, AlgorithmFactory factory)
+    private void initFirstGuess()
     {
-        firstGuess = makeFirstGuess(factory);
+        firstGuess = makeFirstGuess();
     }
 
-    private String makeFirstGuess(AlgorithmFactory factory)
+    private String makeFirstGuess()
     {
         Algorithm algorithm = factory.getAlgorithm();
         return algorithm.makeGuess();
     }
 
-    private void initSecondGuesses(Mastermind mastermind, AlgorithmFactory factory)
+    private void initSecondGuesses()
     {
         for (Score score : mastermind.getAllPossibleScores())
         {
-            if (isNotWinningScore(mastermind, score))
+            if (isNotWinningScore(score))
             {
-                String guess = makeSecondGuess(factory, score);
+                String guess = makeSecondGuess(score);
                 if (!guess.isEmpty())
                     addSecondGuess(score, guess);
             }
         }
     }
 
-    private boolean isNotWinningScore(Mastermind mastermind, Score score)
+    private boolean isNotWinningScore(Score score)
     {
         return !score.equals(mastermind.getWinningScore());
     }
 
-    private String makeSecondGuess(AlgorithmFactory factory, Score score)
+    private String makeSecondGuess(Score score)
     {
         Algorithm algorithm = factory.getAlgorithm();
         algorithm.putGuessScore(firstGuess, score);
@@ -61,18 +69,18 @@ public class ReadyGuesses
         secondGuesses.put(score, guess);
     }
 
-    private void initThirdGuesses(Mastermind mastermind, AlgorithmFactory factory)
+    private void initThirdGuesses()
     {
         List<Score> scores = mastermind.getAllPossibleScores();
         for (Score score1 : scores)
         {
-            if (isNotWinningScore(mastermind, score1) && hasSecondGuess(score1))
+            if (isNotWinningScore(score1) && hasSecondGuess(score1))
             {
                 for (Score score2 : scores)
                 {
-                    if (isNotWinningScore(mastermind, score2))
+                    if (isNotWinningScore(score2))
                     {
-                        String guess = makeThirdGuess(factory, score1, score2);
+                        String guess = makeThirdGuess(score1, score2);
                         if (!guess.isEmpty())
                             addThirdGuess(score1, score2, guess);
                     }
@@ -83,14 +91,15 @@ public class ReadyGuesses
 
     private boolean hasSecondGuess(Score score)
     {
-        return (getSecondGuess(score) != null);
+        secondGuess = getSecondGuess(score);
+        return (secondGuess != null);
     }
 
-    private String makeThirdGuess(AlgorithmFactory factory, Score score1, Score score2)
+    private String makeThirdGuess(Score score1, Score score2)
     {
         Algorithm algorithm = factory.getAlgorithm();
         algorithm.putGuessScore(firstGuess, score1);
-        algorithm.putGuessScore(getSecondGuess(score1), score2);
+        algorithm.putGuessScore(secondGuess, score2);
         return algorithm.makeGuess();
     }
 
@@ -105,22 +114,22 @@ public class ReadyGuesses
         map.put(score2, guess);
     }
 
-    private void initFourthGuesses(Mastermind mastermind, AlgorithmFactory factory)
+    private void initFourthGuesses()
     {
         List<Score> scores = mastermind.getAllPossibleScores();
         for (Score score1 : scores)
         {
-            if (isNotWinningScore(mastermind, score1) && hasSecondGuess(score1))
+            if (isNotWinningScore(score1) && hasSecondGuess(score1))
             {
                 for (Score score2 : scores)
                 {
-                    if (isNotWinningScore(mastermind, score2) && hasThirdGuess(score1, score2))
+                    if (isNotWinningScore(score2) && hasThirdGuess(score1, score2))
                     {
                         for (Score score3 : scores)
                         {
-                            if (isNotWinningScore(mastermind, score3))
+                            if (isNotWinningScore(score3))
                             {
-                                String guess = makeFourthGuess(factory, score1, score2, score3);
+                                String guess = makeFourthGuess(score1, score2, score3);
                                 if (!guess.isEmpty())
                                     addFourthGuess(score1, score2, score3, guess);
                             }
@@ -133,16 +142,16 @@ public class ReadyGuesses
 
     private boolean hasThirdGuess(Score score1, Score score2)
     {
-        return (getThirdGuess(score1, score2) != null);
+        thirdGuess = getThirdGuess(score1, score2);
+        return (thirdGuess != null);
     }
 
-    private String makeFourthGuess(AlgorithmFactory factory, Score score1, Score score2,
-        Score score3)
+    private String makeFourthGuess(Score score1, Score score2, Score score3)
     {
         Algorithm algorithm = factory.getAlgorithm();
         algorithm.putGuessScore(firstGuess, score1);
-        algorithm.putGuessScore(getSecondGuess(score1), score2);
-        algorithm.putGuessScore(getThirdGuess(score1, score2), score3);
+        algorithm.putGuessScore(secondGuess, score2);
+        algorithm.putGuessScore(thirdGuess, score3);
         return algorithm.makeGuess();
     }
 

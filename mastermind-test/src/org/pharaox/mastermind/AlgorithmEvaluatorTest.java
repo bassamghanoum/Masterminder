@@ -44,6 +44,11 @@ public class AlgorithmEvaluatorTest
             { AlgorithmType.KNUTH, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_KNUTH, M2_TOTAL_ROUNDS_KNUTH },
             { AlgorithmType.EXP_SIZE, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_EXP_SIZE, M2_TOTAL_ROUNDS_EXP_SIZE },
             { AlgorithmType.DUMB, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_DUMB, M2_TOTAL_ROUNDS_DUMB },
+/*            
+            { AlgorithmType.SIMPLE, M1, M1_NUM_GAMES, M1_MAX_ROUNDS_SIMPLE, M1_TOTAL_ROUNDS_SIMPLE },
+            { AlgorithmType.KNUTH, M1, M1_NUM_GAMES, M1_MAX_ROUNDS_KNUTH, M1_TOTAL_ROUNDS_KNUTH },
+            { AlgorithmType.EXP_SIZE, M1, M1_NUM_GAMES, M1_MAX_ROUNDS_EXP_SIZE, M1_TOTAL_ROUNDS_EXP_SIZE },
+*/            
         };
         // @formatter:on
         return Arrays.asList(data);
@@ -52,7 +57,7 @@ public class AlgorithmEvaluatorTest
     @Before
     public void setup()
     {
-        evaluator = new AlgorithmEvaluator(mastermind, new AlgorithmFactory(type, mastermind));
+        evaluator = new AlgorithmEvaluator(mastermind, type);
     }
 
     @Test

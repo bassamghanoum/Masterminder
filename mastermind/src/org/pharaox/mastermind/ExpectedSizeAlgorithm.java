@@ -17,7 +17,7 @@ public class ExpectedSizeAlgorithm extends AbstractAlgorithm
         double sum = 0.0;
         for (Score score : allScores)
         {
-            SortedSet<String> elem = mastermind.evaluatePossibleCodes(guess, score, possibleCodes);
+            SortedSet<String> elem = mastermind.evaluatePossibleCodes(guess, score, possibleCodes, false);
             double size = (double) (elem.size() * elem.size()) / (double) possibleCodes.size();
             sum += size;
         }
