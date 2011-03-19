@@ -8,25 +8,28 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.pharaox.mastermind.AlgorithmFactory.Type;
+import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
 
 @RunWith(value = Parameterized.class)
 public class AlgorithmEvaluatorTest
 {
-    private AlgorithmFactory algorithmFactory;
+    private AlgorithmType type;
+    private Mastermind mastermind;
+    private int numGames;
     private int maxRounds;
     private int totalRounds;
-
     private AlgorithmEvaluator evaluator;
 
-    public AlgorithmEvaluatorTest(AlgorithmFactory algorithmFactory, int maxRounds, int totalRounds)
+    public AlgorithmEvaluatorTest(AlgorithmType type, Mastermind mastermind, int numGames,
+        int maxRounds, int totalRounds)
     {
-        this.algorithmFactory = algorithmFactory;
+        this.type = type;
+        this.mastermind = mastermind;
+        this.numGames = numGames;
         this.maxRounds = maxRounds;
         this.totalRounds = totalRounds;
     }
@@ -37,9 +40,10 @@ public class AlgorithmEvaluatorTest
         // @formatter:off
         Object[][] data = new Object[][]
         {
-            { new AlgorithmFactory(Type.SIMPLE, MASTERMIND), MAX_ROUNDS_SIMPLE, TOTAL_ROUNDS_SIMPLE },
-            { new AlgorithmFactory(Type.KNUTH, MASTERMIND), MAX_ROUNDS_KNUTH, TOTAL_ROUNDS_KNUTH },
-            { new AlgorithmFactory(Type.EXP_SIZE, MASTERMIND), MAX_ROUNDS_EXP_SIZE, TOTAL_ROUNDS_EXP_SIZE },
+            { AlgorithmType.SIMPLE, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_SIMPLE, M2_TOTAL_ROUNDS_SIMPLE },
+            { AlgorithmType.KNUTH, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_KNUTH, M2_TOTAL_ROUNDS_KNUTH },
+            { AlgorithmType.EXP_SIZE, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_EXP_SIZE, M2_TOTAL_ROUNDS_EXP_SIZE },
+            { AlgorithmType.DUMB, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_DUMB, M2_TOTAL_ROUNDS_DUMB },
         };
         // @formatter:on
         return Arrays.asList(data);
@@ -48,18 +52,17 @@ public class AlgorithmEvaluatorTest
     @Before
     public void setup()
     {
-        evaluator = new AlgorithmEvaluator(MASTERMIND, algorithmFactory);
+        evaluator = new AlgorithmEvaluator(mastermind, new AlgorithmFactory(type, mastermind));
     }
 
-    @Ignore
     @Test
     public void testEvaluate()
     {
         evaluator.evaluate();
-        assertEquals(NUM_GAMES, evaluator.getGamesPlayed());
-        assertEquals(NUM_GAMES, evaluator.getGamesWon());
+        assertEquals(numGames, evaluator.getGamesPlayed());
+        assertEquals((type != AlgorithmType.DUMB)? numGames : 1, evaluator.getGamesWon());
         assertEquals(maxRounds, evaluator.getMaxRoundsPlayed());
         assertEquals(totalRounds, evaluator.getTotalRoundsPlayed());
-        assertTrue((double)totalRounds / (double)NUM_GAMES == evaluator.getAverageRoundsPlayed());
+        assertTrue((double)totalRounds / (double)numGames == evaluator.getAverageRoundsPlayed());
     }
 }

@@ -7,27 +7,34 @@ import static org.pharaox.mastermind.Constants.*;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.pharaox.mastermind.Score.ZERO_SCORE;
 import static org.pharaox.mastermind.MastermindTest.assertValidCode;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.pharaox.mastermind.AlgorithmFactory.Type;
+import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
 
 @RunWith(value = Parameterized.class)
 public class AlgorithmTest
 {
-    private AlgorithmFactory algorithmFactory;
+    private AlgorithmType type;
+    private Mastermind mastermind;
+    private String name;
     private String firstGuess;
+    private String secondGuess;
     private Algorithm algorithm;
-    
-    public AlgorithmTest(AlgorithmFactory algorithmFactory, String firstGuess)
+
+    public AlgorithmTest(AlgorithmType type, Mastermind mastermind, String name, String firstGuess,
+        String secondGuess)
     {
-        this.algorithmFactory = algorithmFactory;
+        this.type = type;
+        this.mastermind = mastermind;
+        this.name = name;
         this.firstGuess = firstGuess;
+        this.secondGuess = secondGuess;
     }
 
     @Parameters
@@ -36,61 +43,66 @@ public class AlgorithmTest
         // @formatter:off
         Object[][] data = new Object[][]
         {
-            { new AlgorithmFactory(Type.SIMPLE, MASTERMIND), FIRST_GUESS_SIMPLE },
-            { new AlgorithmFactory(Type.KNUTH, MASTERMIND), FIRST_GUESS_KNUTH },
-            { new AlgorithmFactory(Type.EXP_SIZE, MASTERMIND), FIRST_GUESS_EXP_SIZE }
+            { AlgorithmType.SIMPLE, M2, SimpleAlgorithm.NAME, M2_FIRST_GUESS_SIMPLE, M2_SECOND_GUESS_SIMPLE },
+            { AlgorithmType.KNUTH, M2, KnuthAlgorithm.NAME, M2_FIRST_GUESS_KNUTH, M2_SECOND_GUESS_KNUTH },
+            { AlgorithmType.PHARAOX, M2, PharaoxAlgorithm.NAME, M2_FIRST_GUESS_KNUTH, M2_SECOND_GUESS_KNUTH },
+            { AlgorithmType.EXP_SIZE, M2, ExpectedSizeAlgorithm.NAME, M2_FIRST_GUESS_EXP_SIZE, M2_SECOND_GUESS_EXP_SIZE },
+            { AlgorithmType.DUMB, M2, DumbAlgorithm.NAME, M2_FIRST_GUESS_DUMB, M2_SECOND_GUESS_DUMB }
         };
         // @formatter:on
         return Arrays.asList(data);
     }
-    
+
     @Before
     public void setup()
     {
-        algorithm = algorithmFactory.getAlgorithm();
+        algorithm = new AlgorithmFactory(type, mastermind).getAlgorithm();
     }
 
-    @Ignore
     @Test
     public void testMakeGuess()
     {
         String guess = algorithm.makeGuess();
-        assertValidCode(guess, ALPHABET, LENGTH, UNIQUE);
+        assertValidCode(guess, mastermind.getAlphabet(), mastermind.getLength(),
+            mastermind.hasUniqueChars());
+        assertEquals(firstGuess, guess);
     }
 
-    @Ignore
     @Test
     public void testMakeGuessRepeatedly()
     {
         String guess1 = algorithm.makeGuess();
-        assertValidCode(guess1, ALPHABET, LENGTH, UNIQUE);
         String guess2 = algorithm.makeGuess();
         assertEquals(guess1, guess2);
     }
 
-    @Ignore
     @Test
     public void testPutGuessScore()
     {
-        String guess = algorithm.makeGuess();
-        algorithm.putGuessScore(guess, ZERO_SCORE);
-        assertTrue(ZERO_SCORE.equals(algorithm.getGuessScore(guess)));
+        algorithm.putGuessScore(firstGuess, ZERO_SCORE);
+        assertTrue(ZERO_SCORE.equals(algorithm.getGuessScore(firstGuess)));
     }
 
-    @Ignore
     @Test
     public void testPutGuessScoreRepeatedly()
     {
+        Score score = mastermind.getWinningScore();
+        algorithm.putGuessScore(firstGuess, ZERO_SCORE);
+        algorithm.putGuessScore(firstGuess, score);
+        assertTrue(score.equals(algorithm.getGuessScore(firstGuess)));
+    }
+
+    @Test
+    public void testSecondGuess()
+    {
+        algorithm.putGuessScore(firstGuess, ZERO_SCORE);
         String guess = algorithm.makeGuess();
-        algorithm.putGuessScore(guess, ZERO_SCORE);
-        algorithm.putGuessScore(guess, ZERO_SCORE);
+        assertEquals(secondGuess, guess);
     }
     
     @Test
-    public void testFirstGuess()
+    public void testToString()
     {
-        String guess = algorithm.makeGuess();
-        assertEquals(firstGuess, guess);
+        assertEquals(name, algorithm.toString());
     }
-
 }

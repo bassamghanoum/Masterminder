@@ -1,8 +1,11 @@
 package org.pharaox.mastermind;
 
+import static org.pharaox.mastermind.Mastermind.MAX_LENGTH;
+
 public class Score
 {
-
+    public static final Score ZERO_SCORE = new Score(0, 0);
+    
     private int cows;
     private int bulls;
 
@@ -43,7 +46,7 @@ public class Score
     @Override
     public int hashCode()
     {
-        return bulls * 10 + cows;
+        return bulls * (MAX_LENGTH + 1) + cows;
     }
 
 }

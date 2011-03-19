@@ -4,6 +4,8 @@ import java.util.SortedSet;
 
 public class PharaoxAlgorithm extends AbstractAlgorithm
 {
+    public static final String NAME = "Pharaox Mastermind Algorithm";
+    
     double percents;
 
     public PharaoxAlgorithm(Mastermind mastermind, double percents)
@@ -28,6 +30,6 @@ public class PharaoxAlgorithm extends AbstractAlgorithm
     @Override
     public String toString()
     {
-        return "Pharaox Mastermind Algorithm, percents: " + percents;
+        return NAME;
     }
 }

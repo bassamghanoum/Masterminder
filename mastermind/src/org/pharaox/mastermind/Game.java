@@ -1,6 +1,6 @@
 package org.pharaox.mastermind;
 
-import static org.pharaox.mastermind.Logger.debug;
+import static org.pharaox.util.Logger.debug;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,7 +68,7 @@ public class Game
     private Score playRound(int round, Score[] scores)
     {
         String guess = makeGuess(round, scores);
-        checkGuess(guess);
+        assert (mastermind.isValidCode(guess));
         Score score = getScore(guess);
         debug(guess + " => " + score);
         putGuessScore(guess, score);
@@ -89,12 +89,6 @@ public class Game
         else
             guess = algorithm.makeGuess();
         return guess;
-    }
-
-    private void checkGuess(String guess)
-    {
-        if (!mastermind.isValidCode(guess))
-            throw new MastermindException();
     }
 
     private Score getScore(String guess)

@@ -4,6 +4,7 @@ import java.util.SortedSet;
 
 public class ExpectedSizeAlgorithm extends AbstractAlgorithm
 {
+    public static final String NAME = "Expected Size Mastermind Algorithm";
 
     public ExpectedSizeAlgorithm(Mastermind mastermind)
     {
@@ -26,6 +27,6 @@ public class ExpectedSizeAlgorithm extends AbstractAlgorithm
     @Override
     public String toString()
     {
-        return "Expected Size Mastermind Algorithm";
+        return NAME;
     }
 }

@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 public class Mastermind
 {
+    public static final int MAX_LENGTH = 9;
     public static final String VALID_ALPHABET_CHARS = "0123456789ABCDEFGH";
 
     private static final Random RANDOM = new Random();
@@ -15,7 +16,7 @@ public class Mastermind
 
     private String alphabet;
     private int length;
-    private boolean unique;
+    private boolean uniqueChars;
     private String code = "";
 
     public Mastermind(String alphabet, int length)
@@ -23,13 +24,18 @@ public class Mastermind
         this(alphabet, length, false);
     }
 
-    public Mastermind(String alphabet, int length, boolean unique)
+    public Mastermind(String alphabet, int length, boolean uniqueChars)
     {
-        if (length <= 0 || !isValidAlphabet(alphabet, length))
+        if (!isValidLength(length) || !isValidAlphabet(alphabet, length))
             throw new MastermindException();
         this.alphabet = alphabet;
         this.length = length;
-        this.unique = unique;
+        this.uniqueChars = uniqueChars;
+    }
+
+    private static boolean isValidLength(int length)
+    {
+        return (length > 0 && length <= MAX_LENGTH);
     }
 
     private static boolean isValidAlphabet(String alphabet, int length)
@@ -56,6 +62,21 @@ public class Mastermind
         return result;
     }
 
+    public String getAlphabet()
+    {
+        return alphabet;
+    }
+
+    public int getLength()
+    {
+        return length;
+    }
+
+    public boolean hasUniqueChars()
+    {
+        return uniqueChars;
+    }
+    
     public void setCode(String code)
     {
         if (!isValidCode(code))
@@ -71,7 +92,7 @@ public class Mastermind
     public boolean isValidCode(String code)
     {
         return (code != null && code.length() == length && containsValidChars(code, alphabet,
-            unique));
+            uniqueChars));
     }
 
     public String generateCode()
@@ -85,11 +106,16 @@ public class Mastermind
                 int index = RANDOM.nextInt(alphabet.length());
                 c = alphabet.substring(index, index + 1);
             }
-            while (unique && result.contains(c));
+            while (uniqueChars && result.contains(c));
             result += c;
         }
         assert (isValidCode(result));
         return result;
+    }
+
+    public Score getWinningScore()
+    {
+        return new Score(0, length);
     }
 
     public Score evaluateScore(String guess)
@@ -99,21 +125,7 @@ public class Mastermind
 
     public Score evaluateScore(String guess, String code)
     {
-        return (unique)? evaluateScoreUnique(guess, code) : evaluateScoreNonUnique(guess, code);
-    }
-    
-    public Score evaluateScoreSafe(String guess)
-    {
-        if (!isValidCode(guess))
-            throw new MastermindException();
-        return evaluateScore(guess);
-    }
-
-    public Score evaluateScoreSafe(String guess, String code)
-    {
-        if (!isValidCode(guess) || !isValidCode(code))
-            throw new MastermindException();
-        return evaluateScore(guess, code);
+        return (uniqueChars)? evaluateScoreUnique(guess, code) : evaluateScoreNonUnique(guess, code);
     }
     
     private Score evaluateScoreUnique(String guess, String code)
@@ -166,7 +178,7 @@ public class Mastermind
         for (int bulls = 0; bulls < length + 1; bulls++)
         {
             int maxCows = length - bulls;
-            int minCows = (unique)? (length - bulls - (alphabet.length() - length)) : 0;
+            int minCows = (uniqueChars)? (length - bulls - (alphabet.length() - length)) : 0;
             minCows = (minCows > 0) ? minCows : 0;
             for (int cows = minCows; cows < maxCows + 1; cows++)
             {
@@ -181,22 +193,15 @@ public class Mastermind
     public SortedSet<String> getAllPossibleCodes()
     {
         final SortedSet<String> result = new TreeSet<String>();
-        try
+        visitCodes(new CodeVisitor()
         {
-            visitCodes(new CodeVisitor()
+            @Override
+            public void visit(String code)
             {
-                @Override
-                public void visit(String code)
-                {
-                    boolean added = result.add(code);
-                    assert (added);
-                }
-            });
-        }
-        catch (MastermindException e)
-        {
-            assert (false); // Not possible
-        }
+                boolean added = result.add(code);
+                assert (added);
+            }
+        });
         return result;
     }
 
@@ -223,7 +228,7 @@ public class Mastermind
         for (int i = 0; i < alphabet.length(); i++)
         {
             chars[index] = alphabet.charAt(i);
-            if (unique && isDuplicate(chars, index))
+            if (uniqueChars && isDuplicate(chars, index))
                 continue;
             if (index == length - 1)
                 visitor.visit(new String(chars));
@@ -246,8 +251,4 @@ public class Mastermind
         return duplicate;
     }
 
-    public Object getWinningScore()
-    {
-        return new Score(0, length);
-    }
 }

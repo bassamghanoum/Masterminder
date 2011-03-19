@@ -11,17 +11,21 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import org.pharaox.mastermind.AlgorithmFactory.Type;
+import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
 
 @RunWith(value = Parameterized.class)
 public class GameTest
 {
-    private AlgorithmFactory algorithmFactory;
+    private AlgorithmType type;
+    private Mastermind mastermind;
+    private String code;
     private int maxRounds;
 
-    public GameTest(AlgorithmFactory algorithmFactory, int maxRounds)
+    public GameTest(AlgorithmType type, Mastermind mastermind, String code, int maxRounds)
     {
-        this.algorithmFactory = algorithmFactory;
+        this.type = type;
+        this.mastermind = mastermind;
+        this.code = code;
         this.maxRounds = maxRounds;
     }
 
@@ -31,19 +35,22 @@ public class GameTest
         // @formatter:off
         Object[][] data = new Object[][]
         {
-            { new AlgorithmFactory(Type.SIMPLE, MASTERMIND), MAX_ROUNDS_SIMPLE },
-            { new AlgorithmFactory(Type.KNUTH, MASTERMIND), MAX_ROUNDS_KNUTH },
-            { new AlgorithmFactory(Type.EXP_SIZE, MASTERMIND), MAX_ROUNDS_EXP_SIZE },
+            { AlgorithmType.SIMPLE, M2, M2_CODE, M2_MAX_ROUNDS_SIMPLE },
+            { AlgorithmType.KNUTH, M2, M2_CODE, M2_MAX_ROUNDS_KNUTH },
+            { AlgorithmType.EXP_SIZE, M2, M2_CODE, M2_MAX_ROUNDS_EXP_SIZE },
+            { AlgorithmType.DUMB, M2, M2_CODE, M2_MAX_ROUNDS_DUMB },
         };
         // @formatter:on
         return Arrays.asList(data);
     }
 
     @Test
-    public void testGame() throws MastermindException
+    public void testPlay() throws MastermindException
     {
-        MASTERMIND.setCode(CODE_1);
-        boolean won = new Game(MASTERMIND, algorithmFactory.getAlgorithm(), maxRounds).play();
-        assertTrue(won);
+        mastermind.setCode(code);
+        Game game = new Game(mastermind, new AlgorithmFactory(type, mastermind).getAlgorithm(), maxRounds);
+        boolean won = game.play();
+        assertTrue((type != AlgorithmType.DUMB && won) || (type == AlgorithmType.DUMB && !won));
+        assertTrue(game.getRoundsPlayed() <= maxRounds);
     }
 }

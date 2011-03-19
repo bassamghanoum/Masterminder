@@ -4,6 +4,8 @@ import java.util.SortedSet;
 
 public class KnuthAlgorithm extends AbstractAlgorithm
 {
+    public static final String NAME = "Knuth Mastermind Algorithm";
+
     public KnuthAlgorithm(Mastermind mastermind)
     {
         super(mastermind);
@@ -24,6 +26,6 @@ public class KnuthAlgorithm extends AbstractAlgorithm
     @Override
     public String toString()
     {
-        return "Knuth Mastermind Algorithm";
+        return NAME;
     }
 }

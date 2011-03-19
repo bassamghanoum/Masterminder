@@ -2,15 +2,15 @@ package org.pharaox.mastermind;
 
 public class AlgorithmFactory
 {
-    public enum Type
+    public enum AlgorithmType
     {
-        SIMPLE, KNUTH, EXP_SIZE
+        SIMPLE, KNUTH, PHARAOX, EXP_SIZE, DUMB, 
     };
     
-    private Type type;
+    private AlgorithmType type;
     private Mastermind mastermind;
     
-    public AlgorithmFactory(Type type, Mastermind mastermind)
+    public AlgorithmFactory(AlgorithmType type, Mastermind mastermind)
     {
         this.type = type;
         this.mastermind = mastermind;
@@ -18,20 +18,26 @@ public class AlgorithmFactory
     
     public Algorithm getAlgorithm()
     {
-        Algorithm alg = null;
+        Algorithm algorithm = null;
         switch (type)
         {
         case SIMPLE:
-            alg = new SimpleAlgorithm(mastermind);
+            algorithm = new SimpleAlgorithm(mastermind);
             break;
         case KNUTH:
-            alg = new KnuthAlgorithm(mastermind);
+            algorithm = new KnuthAlgorithm(mastermind);
+            break;
+        case PHARAOX:
+            algorithm = new PharaoxAlgorithm(mastermind, 0.0);
             break;
         case EXP_SIZE:
-            alg = new ExpectedSizeAlgorithm(mastermind);
+            algorithm = new ExpectedSizeAlgorithm(mastermind);
+            break;
+        case DUMB:
+            algorithm = new DumbAlgorithm(mastermind);
             break;
         }
-        return alg;
+        return algorithm;
     }
 
 }

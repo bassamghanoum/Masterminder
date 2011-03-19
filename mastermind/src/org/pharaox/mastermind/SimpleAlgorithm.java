@@ -2,6 +2,8 @@ package org.pharaox.mastermind;
 
 public class SimpleAlgorithm extends AbstractAlgorithm
 {
+    public static final String NAME = "Simple Mastermind Algorithm";
+    
     public SimpleAlgorithm(Mastermind mastermind)
     {
         super(mastermind);
@@ -16,6 +18,6 @@ public class SimpleAlgorithm extends AbstractAlgorithm
     @Override
     public String toString()
     {
-        return "Simple Mastermind Algorithm";
+        return NAME;
     }
 }

@@ -1,7 +1,7 @@
 package org.pharaox.mastermind;
 
-import static org.pharaox.mastermind.Logger.debug;
-import static org.pharaox.mastermind.Logger.info;
+import static org.pharaox.util.Logger.debug;
+import static org.pharaox.util.Logger.info;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.pharaox.mastermind;
+package org.pharaox.util;
 
 public class Logger
 {
@@ -7,7 +7,7 @@ public class Logger
         ERROR, WARNING, INFO, DEBUG
     }
     
-    public static Level LEVEL = Level.DEBUG; 
+    public static Level LEVEL = Level.ERROR; 
 
     public static void error(String message)
     {
