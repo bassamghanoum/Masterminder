@@ -125,11 +125,14 @@ public class Mastermind
 
     public Score evaluateScore(String guess, String code)
     {
-        return (uniqueChars)? evaluateScoreUnique(guess, code) : evaluateScoreNonUnique(guess, code);
+        if (!isValidCode(guess) || !isValidCode(code))
+            throw new MastermindException();
+        return (uniqueChars)? evaluateScoreUniqueChars(guess, code) : evaluateScoreNonUniqueChars(guess, code);
     }
     
-    private Score evaluateScoreUnique(String guess, String code)
+    private Score evaluateScoreUniqueChars(String guess, String code)
     {
+        assert (isValidCode(guess) && isValidCode(code));
         int cows = 0, bulls = 0;
         for (int i = 0; i < guess.length(); i++)
         {
@@ -142,8 +145,9 @@ public class Mastermind
         return new Score(cows, bulls);
     }
 
-    private Score evaluateScoreNonUnique(String guess, String code)
+    private Score evaluateScoreNonUniqueChars(String guess, String code)
     {
+        assert (isValidCode(guess) && isValidCode(code));
         int cows = 0, bulls = 0;
         char[] gc = guess.toCharArray(), cc = code.toCharArray();
         for (int i = 0; i < length; i++)

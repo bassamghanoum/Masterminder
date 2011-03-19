@@ -2,9 +2,6 @@ package org.pharaox.mastermind;
 
 import static org.pharaox.util.Logger.debug;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Game
 {
     public static final Score ZERO_SCORE = new Score(0, 0);
@@ -12,30 +9,20 @@ public class Game
     private Mastermind mastermind;
     private Algorithm algorithm;
     private int maxRounds;
-    private String firstGuess;
-    private Map<Score, String> secondGuesses;
-    private Map<Score, Map<Score, String>> thirdGuesses;
-    private Map<Score, Map<Score, Map<Score, String>>> fourthGuesses;
+    private ReadyGuesses readyGuesses;
     private int roundsPlayed = 0;
 
     public Game(Mastermind mastermind, Algorithm algorithm, int maxRounds)
     {
-        this(mastermind, algorithm, maxRounds, "", new HashMap<Score, String>(),
-            new HashMap<Score, Map<Score, String>>(),
-            new HashMap<Score, Map<Score, Map<Score, String>>>());
+        this(mastermind, algorithm, maxRounds, null);
     }
 
-    public Game(Mastermind mastermind, Algorithm algorithm, int maxRounds, String firstGuess,
-        Map<Score, String> secondGuesses, Map<Score, Map<Score, String>> thirdGuesses,
-        Map<Score, Map<Score, Map<Score, String>>> fourthGuesses)
+    public Game(Mastermind mastermind, Algorithm algorithm, int maxRounds, ReadyGuesses readyGuesses)
     {
         this.mastermind = mastermind;
         this.algorithm = algorithm;
         this.maxRounds = maxRounds;
-        this.firstGuess = firstGuess;
-        this.secondGuesses = secondGuesses;
-        this.thirdGuesses = thirdGuesses;
-        this.fourthGuesses = fourthGuesses;
+        this.readyGuesses = readyGuesses;
     }
 
     public int getRoundsPlayed()
@@ -78,14 +65,14 @@ public class Game
     private String makeGuess(int round, Score[] scores)
     {
         String guess;
-        if (round == 0 && !firstGuess.isEmpty())
-            guess = firstGuess;
-        else if (round == 1 && !secondGuesses.isEmpty())
-            guess = secondGuesses.get(scores[0]);
-        else if (round == 2 && !thirdGuesses.isEmpty())
-            guess = thirdGuesses.get(scores[1]).get(scores[0]);
-        else if (round == 3 && !fourthGuesses.isEmpty())
-            guess = fourthGuesses.get(scores[2]).get(scores[1]).get(scores[0]);
+        if (round == 0 && readyGuesses != null)
+            guess = readyGuesses.getFirstGuess();
+        else if (round == 1 && readyGuesses != null)
+            guess = readyGuesses.getSecondGuess(scores[0]);
+        else if (round == 2 && readyGuesses != null)
+            guess = readyGuesses.getThirdGuess(scores[1], scores[0]);
+        else if (round == 3 && readyGuesses != null)
+            guess = readyGuesses.getFourthGuess(scores[2], scores[1], scores[0]);
         else
             guess = algorithm.makeGuess();
         return guess;
