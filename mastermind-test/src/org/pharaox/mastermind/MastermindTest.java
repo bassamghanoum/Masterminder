@@ -54,10 +54,10 @@ public class MastermindTest
         this.length = length;
         this.uniqueChars = uniqueChars;
         this.code = code;
-        this.scores = scores;
-        this.possibleScores = possibleScores;
-        this.possibleCodes = possibleCodes;
-        this.possibleCodes2 = possibleCodes2;
+        this.scores = Arrays.copyOf(scores, scores.length);
+        this.possibleScores = Arrays.copyOf(possibleScores, possibleScores.length);
+        this.possibleCodes = Arrays.copyOf(possibleCodes, possibleCodes.length);
+        this.possibleCodes2 = Arrays.copyOf(possibleCodes2, possibleCodes2.length);
 
         initalizeArrays();
     }
@@ -315,15 +315,15 @@ public class MastermindTest
     {
         assertTrue(code != null && !code.isEmpty());
         assertTrue(code.length() == length);
-        String used = "";
+        Set<Character> usedChars = new HashSet<Character>();
         for (int i = 0; i < code.length(); i++)
         {
-            String c = code.substring(i, i + 1);
-            assertTrue(alphabet.contains(c));
+            char c = code.charAt(i);
+            assertTrue(alphabet.contains(new String(new char[] { c })));
             if (uniqueChars)
             {
-                assertFalse(used.contains(c));
-                used += c;
+                assertFalse(usedChars.contains(c));
+                usedChars.add(c);
             }
         }
     }

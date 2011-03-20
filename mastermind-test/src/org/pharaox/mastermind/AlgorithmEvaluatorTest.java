@@ -18,6 +18,8 @@ import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
 @RunWith(value = Parameterized.class)
 public class AlgorithmEvaluatorTest
 {
+    private static final double PRECISION = 0.0000001;
+
     private AlgorithmType type;
     private Mastermind mastermind;
     private int numGames;
@@ -70,6 +72,7 @@ public class AlgorithmEvaluatorTest
         assertEquals(expectedGamesWon, evaluator.getGamesWon());
         assertEquals(maxRounds, evaluator.getMaxRoundsPlayed());
         assertEquals(totalRounds, evaluator.getTotalRoundsPlayed());
-        assertTrue((double) totalRounds / (double) numGames == evaluator.getAverageRoundsPlayed());
+        double expectedAvgRounds = (double) totalRounds / (double) numGames;
+        assertTrue(Math.abs(expectedAvgRounds - evaluator.getAverageRoundsPlayed()) < PRECISION);
     }
 }

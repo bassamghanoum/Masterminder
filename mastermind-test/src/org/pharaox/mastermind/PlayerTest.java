@@ -1,6 +1,7 @@
 package org.pharaox.mastermind;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.pharaox.mastermind.Messages.*;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class PlayerTest
     private static final int COWS = 1;
     private static final int BULLS = 0;
     private static final String INPUT = "" + COWS + "\n" + BULLS + "\n";
-    private static final String INVALID_INPUT = "" + COWS + "\n";
+    private static final String[] INVALID_INPUT = { "", "" + COWS + "\n", "XXX\nYYY\n" };
 
     private StringReader reader;
     private StringWriter writer;
@@ -85,10 +86,23 @@ public class PlayerTest
         player.getScore(GUESS);
     }
 
-    @Test(expected = MastermindException.class)
+    @Test
     public final void testGetScoreInvalidInput()
     {
-        player = new ReaderWriterPlayer(new StringReader(INVALID_INPUT), writer);
-        player.getScore(GUESS);
+        for (int i = 0; i < INVALID_INPUT.length; i++)
+        {
+            player = new ReaderWriterPlayer(new StringReader(INVALID_INPUT[i]), writer);
+            try
+            {
+                player.getScore(GUESS);
+                fail();
+            }
+            catch (MastermindException e)
+            // @checkstyle:off
+            {
+            }
+            // @checkstyle:on
+        }
     }
+    
 }
