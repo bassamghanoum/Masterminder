@@ -3,6 +3,7 @@ package org.pharaox.mastermind;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.pharaox.mastermind.Constants.*;
+import static org.pharaox.mastermind.AlgorithmFactory.AlgorithmType.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,8 +28,8 @@ public class AlgorithmTest
     private String secondGuess;
     private Algorithm algorithm;
 
-    public AlgorithmTest(AlgorithmType type, Mastermind mastermind, String name, String firstGuess,
-        String secondGuess)
+    public AlgorithmTest(final AlgorithmType type, final Mastermind mastermind, final String name,
+        final String firstGuess, final String secondGuess)
     {
         this.type = type;
         this.mastermind = mastermind;
@@ -43,24 +44,24 @@ public class AlgorithmTest
         // @formatter:off
         Object[][] data = new Object[][]
         {
-            { AlgorithmType.SIMPLE, M2, SimpleAlgorithm.NAME, M2_FIRST_GUESS_SIMPLE, M2_SECOND_GUESS_SIMPLE },
-            { AlgorithmType.KNUTH, M2, KnuthAlgorithm.NAME, M2_FIRST_GUESS_KNUTH, M2_SECOND_GUESS_KNUTH },
-            { AlgorithmType.PHARAOX, M2, PharaoxAlgorithm.NAME, M2_FIRST_GUESS_KNUTH, M2_SECOND_GUESS_KNUTH },
-            { AlgorithmType.EXP_SIZE, M2, ExpectedSizeAlgorithm.NAME, M2_FIRST_GUESS_EXP_SIZE, M2_SECOND_GUESS_EXP_SIZE },
-            { AlgorithmType.DUMB, M2, DumbAlgorithm.NAME, M2_FIRST_GUESS_DUMB, M2_SECOND_GUESS_DUMB }
+            { SIMPLE, M2, SimpleAlgorithm.NAME, M2_FIRST_GUESS_SIMPLE, M2_SECOND_GUESS_SIMPLE },
+            { KNUTH, M2, KnuthAlgorithm.NAME, M2_FIRST_GUESS_KNUTH, M2_SECOND_GUESS_KNUTH },
+            { PHARAOX, M2, PharaoxAlgorithm.NAME, M2_FIRST_GUESS_KNUTH, M2_SECOND_GUESS_KNUTH },
+            { ESIZE, M2, ExpectedSizeAlgorithm.NAME, M2_FIRST_GUESS_ESIZE, M2_SECOND_GUESS_ESIZE },
+            { DUMB, M2, DumbAlgorithm.NAME, M2_FIRST_GUESS_DUMB, M2_SECOND_GUESS_DUMB }
         };
         // @formatter:on
         return Arrays.asList(data);
     }
 
     @Before
-    public void setup()
+    public final void setup()
     {
         algorithm = new AlgorithmFactory(type, mastermind).getAlgorithm();
     }
 
     @Test
-    public void testMakeGuess()
+    public final void testMakeGuess()
     {
         String guess = algorithm.makeGuess();
         assertValidCode(guess, mastermind.getAlphabet(), mastermind.getLength(),
@@ -69,7 +70,7 @@ public class AlgorithmTest
     }
 
     @Test
-    public void testMakeGuessRepeatedly()
+    public final void testMakeGuessRepeatedly()
     {
         String guess1 = algorithm.makeGuess();
         String guess2 = algorithm.makeGuess();
@@ -77,14 +78,14 @@ public class AlgorithmTest
     }
 
     @Test
-    public void testPutGuessScore()
+    public final void testPutGuessScore()
     {
         algorithm.putGuessScore(firstGuess, ZERO_SCORE);
         assertTrue(ZERO_SCORE.equals(algorithm.getGuessScore(firstGuess)));
     }
 
     @Test
-    public void testPutGuessScoreRepeatedly()
+    public final void testPutGuessScoreRepeatedly()
     {
         Score score = mastermind.getWinningScore();
         algorithm.putGuessScore(firstGuess, ZERO_SCORE);
@@ -93,15 +94,15 @@ public class AlgorithmTest
     }
 
     @Test
-    public void testSecondGuess()
+    public final void testSecondGuess()
     {
         algorithm.putGuessScore(firstGuess, ZERO_SCORE);
         String guess = algorithm.makeGuess();
         assertEquals(secondGuess, guess);
     }
-    
+
     @Test
-    public void testToString()
+    public final void testToString()
     {
         assertEquals(name, algorithm.toString());
     }

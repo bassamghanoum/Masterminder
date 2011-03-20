@@ -5,28 +5,28 @@ import static org.pharaox.mastermind.Mastermind.MAX_LENGTH;
 public class Score
 {
     public static final Score ZERO_SCORE = new Score(0, 0);
-    
+
     private int cows;
     private int bulls;
 
-    public Score(int cows, int bulls)
+    public Score(final int cows, final int bulls)
     {
         this.cows = cows;
         this.bulls = bulls;
     }
 
-    public int getCows()
+    public final int getCows()
     {
         return cows;
     }
 
-    public int getBulls()
+    public final int getBulls()
     {
         return bulls;
     }
 
     @Override
-    public boolean equals(Object obj)
+    public final boolean equals(final Object obj)
     {
         boolean result = false;
         if (obj instanceof Score)
@@ -38,13 +38,13 @@ public class Score
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return "(" + cows + ", " + bulls + ")";
     }
-    
+
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return bulls * (MAX_LENGTH + 1) + cows;
     }

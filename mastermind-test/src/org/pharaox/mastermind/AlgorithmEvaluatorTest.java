@@ -3,6 +3,7 @@ package org.pharaox.mastermind;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.pharaox.mastermind.Constants.*;
+import static org.pharaox.mastermind.AlgorithmFactory.AlgorithmType.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,8 +25,8 @@ public class AlgorithmEvaluatorTest
     private int totalRounds;
     private AlgorithmEvaluator evaluator;
 
-    public AlgorithmEvaluatorTest(AlgorithmType type, Mastermind mastermind, int numGames,
-        int maxRounds, int totalRounds)
+    public AlgorithmEvaluatorTest(final AlgorithmType type, final Mastermind mastermind,
+        final int numGames, final int maxRounds, final int totalRounds)
     {
         this.type = type;
         this.mastermind = mastermind;
@@ -40,14 +41,14 @@ public class AlgorithmEvaluatorTest
         // @formatter:off
         Object[][] data = new Object[][]
         {
-            { AlgorithmType.SIMPLE, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_SIMPLE, M2_TOTAL_ROUNDS_SIMPLE },
-            { AlgorithmType.KNUTH, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_KNUTH, M2_TOTAL_ROUNDS_KNUTH },
-            { AlgorithmType.EXP_SIZE, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_EXP_SIZE, M2_TOTAL_ROUNDS_EXP_SIZE },
-            { AlgorithmType.DUMB, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_DUMB, M2_TOTAL_ROUNDS_DUMB },
+            { SIMPLE, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_SIMPLE, M2_TOTAL_ROUNDS_SIMPLE },
+            { KNUTH, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_KNUTH, M2_TOTAL_ROUNDS_KNUTH },
+            { ESIZE, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_ESIZE, M2_TOTAL_ROUNDS_ESIZE },
+            { DUMB, M2, M2_NUM_GAMES, M2_MAX_ROUNDS_DUMB, M2_TOTAL_ROUNDS_DUMB },
 /*            
-            { AlgorithmType.SIMPLE, M1, M1_NUM_GAMES, M1_MAX_ROUNDS_SIMPLE, M1_TOTAL_ROUNDS_SIMPLE },
-            { AlgorithmType.KNUTH, M1, M1_NUM_GAMES, M1_MAX_ROUNDS_KNUTH, M1_TOTAL_ROUNDS_KNUTH },
-            { AlgorithmType.EXP_SIZE, M1, M1_NUM_GAMES, M1_MAX_ROUNDS_EXP_SIZE, M1_TOTAL_ROUNDS_EXP_SIZE },
+            { SIMPLE, M1, M1_NUM_GAMES, M1_MAX_ROUNDS_SIMPLE, M1_TOTAL_ROUNDS_SIMPLE },
+            { KNUTH, M1, M1_NUM_GAMES, M1_MAX_ROUNDS_KNUTH, M1_TOTAL_ROUNDS_KNUTH },
+            { EXP_SIZE, M1, M1_NUM_GAMES, M1_MAX_ROUNDS_EXP_SIZE, M1_TOTAL_ROUNDS_EXP_SIZE },
 */            
         };
         // @formatter:on
@@ -55,19 +56,20 @@ public class AlgorithmEvaluatorTest
     }
 
     @Before
-    public void setup()
+    public final void setup()
     {
         evaluator = new AlgorithmEvaluator(mastermind, type);
     }
 
     @Test
-    public void testEvaluate()
+    public final void testEvaluate()
     {
         evaluator.evaluate();
         assertEquals(numGames, evaluator.getGamesPlayed());
-        assertEquals((type != AlgorithmType.DUMB)? numGames : 1, evaluator.getGamesWon());
+        int expectedGamesWon = (type != AlgorithmType.DUMB) ? numGames : 1;
+        assertEquals(expectedGamesWon, evaluator.getGamesWon());
         assertEquals(maxRounds, evaluator.getMaxRoundsPlayed());
         assertEquals(totalRounds, evaluator.getTotalRoundsPlayed());
-        assertTrue((double)totalRounds / (double)numGames == evaluator.getAverageRoundsPlayed());
+        assertTrue((double) totalRounds / (double) numGames == evaluator.getAverageRoundsPlayed());
     }
 }

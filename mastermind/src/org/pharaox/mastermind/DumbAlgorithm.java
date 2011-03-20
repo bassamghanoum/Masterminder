@@ -6,35 +6,35 @@ import java.util.Map;
 public class DumbAlgorithm implements Algorithm
 {
     public static final String NAME = "Dumb Mastermind Algorithm";
-    
-    private String code;
-    protected Map<String, Score> guessScores = new HashMap<String, Score>();
 
-    public DumbAlgorithm(Mastermind mastermind)
+    private String code;
+    private Map<String, Score> guessScores = new HashMap<String, Score>();
+
+    public DumbAlgorithm(final Mastermind mastermind)
     {
         code = mastermind.getAllPossibleCodes().first();
     }
 
     @Override
-    public String makeGuess()
+    public final String makeGuess()
     {
         return code;
     }
-    
+
     @Override
-    public void putGuessScore(String guess, Score score)
+    public final void putGuessScore(final String guess, final Score score)
     {
         guessScores.put(guess, score);
     }
 
     @Override
-    public Score getGuessScore(String guess)
+    public final Score getGuessScore(final String guess)
     {
         return guessScores.get(guess);
     }
-    
+
     @Override
-    public String toString()
+    public final String toString()
     {
         return NAME;
     }

@@ -1,8 +1,10 @@
 package org.pharaox.mastermind;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -12,19 +14,19 @@ public class Mastermind
     public static final String VALID_ALPHABET_CHARS = "0123456789ABCDEFGH";
 
     private static final Random RANDOM = new Random();
-    private static char MARK = '*';
+    private static final char MARK = '*';
 
     private String alphabet;
     private int length;
     private boolean uniqueChars;
-    private String code = "";
+    private String currentCode = "";
 
-    public Mastermind(String alphabet, int length)
+    public Mastermind(final String alphabet, final int length)
     {
         this(alphabet, length, false);
     }
 
-    public Mastermind(String alphabet, int length, boolean uniqueChars)
+    public Mastermind(final String alphabet, final int length, final boolean uniqueChars)
     {
         if (!isValidLength(length) || !isValidAlphabet(alphabet, length))
             throw new MastermindException();
@@ -33,109 +35,123 @@ public class Mastermind
         this.uniqueChars = uniqueChars;
     }
 
-    private static boolean isValidLength(int length)
+    private static boolean isValidLength(final int length)
     {
         return (length > 0 && length <= MAX_LENGTH);
     }
 
-    private static boolean isValidAlphabet(String alphabet, int length)
+    private static boolean isValidAlphabet(final String alphabet, final int length)
     {
-        return (alphabet != null && alphabet.length() > 1 && alphabet.length() >= length && containsValidChars(
-            alphabet, VALID_ALPHABET_CHARS, true));
+        // @formatter:off
+        return (alphabet != null 
+            && alphabet.length() > 1 && alphabet.length() >= length 
+            && containsValidChars(alphabet, VALID_ALPHABET_CHARS, true));
+        // @formatter:on
     }
 
-    private static boolean containsValidChars(String string, String validChars, boolean unique)
+    private static boolean containsValidChars(final String string, final String validChars,
+        final boolean uniqueChars)
     {
         boolean result = true;
-        String usedChars = "";
+        Set<Character> usedChars = new HashSet<Character>();
         for (int i = 0; i < string.length(); i++)
         {
-            String c = string.substring(i, i + 1);
-            if (!validChars.contains(c) || (unique && usedChars.contains(c)))
+            char c = string.charAt(i);
+            if (!validChars.contains(new String(new char[] { c }))
+                || (uniqueChars && usedChars.contains(c)))
             {
                 result = false;
                 break;
             }
-            if (unique)
-                usedChars += c;
+            if (uniqueChars)
+                usedChars.add(c);
         }
         return result;
     }
 
-    public String getAlphabet()
+    public final String getAlphabet()
     {
         return alphabet;
     }
 
-    public int getLength()
+    public final int getLength()
     {
         return length;
     }
 
-    public boolean hasUniqueChars()
+    public final boolean hasUniqueChars()
     {
         return uniqueChars;
     }
-    
-    public void setCode(String code)
+
+    public final void setCurrentCode(final String currentCode)
     {
-        if (!isValidCode(code))
+        if (!isValidCode(currentCode))
             throw new MastermindException();
-        this.code = code;
+        this.currentCode = currentCode;
     }
 
-    public String getCode()
+    public final String getCurrentCode()
     {
-        return code;
+        return currentCode;
     }
 
-    public boolean isValidCode(String code)
+    public final boolean isValidCode(final String code)
     {
         return (code != null && code.length() == length && containsValidChars(code, alphabet,
             uniqueChars));
     }
 
-    public String generateCode()
+    public final String generateCode()
     {
-        String result = "";
+        StringBuilder builder = new StringBuilder();
+        Set<Character> usedChars = new HashSet<Character>();
         for (int i = 0; i < length; i++)
         {
-            String c;
+            char c;
             do
             {
                 int index = RANDOM.nextInt(alphabet.length());
-                c = alphabet.substring(index, index + 1);
+                c = alphabet.charAt(index);
             }
-            while (uniqueChars && result.contains(c));
-            result += c;
+            while (uniqueChars && usedChars.contains(c));
+            if (uniqueChars)
+                usedChars.add(c);
+            builder.append(c);
         }
+        String result = builder.toString();
         assert (isValidCode(result));
         return result;
     }
 
-    public Score getWinningScore()
+    public final Score getWinningScore()
     {
         return new Score(0, length);
     }
 
-    public Score evaluateScore(String guess)
+    public final Score evaluateScore(final String guess)
     {
-        return evaluateScore(guess, code);
+        return evaluateScore(guess, currentCode);
     }
-    
-    public Score evaluateScore(String guess, String code)
+
+    public final Score evaluateScore(final String guess, final String code)
     {
         return evaluateScore(guess, code, true);
     }
 
-    public Score evaluateScore(String guess, String code, boolean safe)
+    public final Score evaluateScore(final String guess, final String code, final boolean safe)
     {
         if (safe && (!isValidCode(guess) || !isValidCode(code)))
             throw new MastermindException();
-        return (uniqueChars)? evaluateScoreUniqueChars(guess, code) : evaluateScoreNonUniqueChars(guess, code);
+        Score result;
+        if (uniqueChars)
+            result = evaluateScoreUniqueChars(guess, code);
+        else
+            result = evaluateScoreNonUniqueChars(guess, code);
+        return result;
     }
-    
-    private Score evaluateScoreUniqueChars(String guess, String code)
+
+    private Score evaluateScoreUniqueChars(final String guess, final String code)
     {
         assert (isValidCode(guess) && isValidCode(code));
         int cows = 0, bulls = 0;
@@ -150,7 +166,7 @@ public class Mastermind
         return new Score(cows, bulls);
     }
 
-    private Score evaluateScoreNonUniqueChars(String guess, String code)
+    private Score evaluateScoreNonUniqueChars(final String guess, final String code)
     {
         assert (isValidCode(guess) && isValidCode(code));
         int cows = 0, bulls = 0;
@@ -160,7 +176,8 @@ public class Mastermind
             if (cc[i] == gc[i])
             {
                 bulls++;
-                gc[i] = cc[i] = MARK;
+                gc[i] = MARK;
+                cc[i] = MARK;
             }
         }
         for (int i = 0; i < length; i++)
@@ -180,15 +197,16 @@ public class Mastermind
         }
         return new Score(cows, bulls);
     }
-    
-    public List<Score> getAllPossibleScores()
+
+    public final List<Score> getAllPossibleScores()
     {
         List<Score> result = new ArrayList<Score>();
         for (int bulls = 0; bulls < length + 1; bulls++)
         {
             int maxCows = length - bulls;
-            int minCows = (uniqueChars)? (length - bulls - (alphabet.length() - length)) : 0;
-            minCows = (minCows > 0) ? minCows : 0;
+            int minCows = 0;
+            if (uniqueChars)
+                minCows = Math.max((length - bulls - (alphabet.length() - length)), 0);
             for (int cows = minCows; cows < maxCows + 1; cows++)
             {
                 if ((bulls == length - 1) && (cows == 1))
@@ -199,13 +217,13 @@ public class Mastermind
         return result;
     }
 
-    public SortedSet<String> getAllPossibleCodes()
+    public final SortedSet<String> getAllPossibleCodes()
     {
         final SortedSet<String> result = new TreeSet<String>();
         visitCodes(new CodeVisitor()
         {
             @Override
-            public void visit(String code)
+            public void visit(final String code)
             {
                 boolean added = result.add(code);
                 assert (added);
@@ -213,15 +231,15 @@ public class Mastermind
         });
         return result;
     }
-    
-    public SortedSet<String> evaluatePossibleCodes(String guess, Score score,
-        SortedSet<String> codes)
+
+    public final SortedSet<String> evaluatePossibleCodes(final String guess, final Score score,
+        final SortedSet<String> codes)
     {
         return evaluatePossibleCodes(guess, score, codes, true);
     }
 
-    public SortedSet<String> evaluatePossibleCodes(String guess, Score score,
-        SortedSet<String> codes, boolean safe)
+    public final SortedSet<String> evaluatePossibleCodes(final String guess, final Score score,
+        final SortedSet<String> codes, final boolean safe)
     {
         SortedSet<String> result = new TreeSet<String>();
         for (String code : codes)
@@ -233,12 +251,12 @@ public class Mastermind
         return result;
     }
 
-    public void visitCodes(CodeVisitor visitor)
+    public final void visitCodes(final CodeVisitor visitor)
     {
         visitCodes(new char[length], 0, visitor);
     }
 
-    private void visitCodes(char[] chars, int index, CodeVisitor visitor)
+    private void visitCodes(final char[] chars, final int index, final CodeVisitor visitor)
     {
         for (int i = 0; i < alphabet.length(); i++)
         {
@@ -252,7 +270,7 @@ public class Mastermind
         }
     }
 
-    private static boolean isDuplicate(char[] chars, int index)
+    private static boolean isDuplicate(final char[] chars, final int index)
     {
         boolean duplicate = false;
         for (int i = 0; i < index; i++)

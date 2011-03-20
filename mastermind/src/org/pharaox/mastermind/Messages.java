@@ -3,25 +3,30 @@ package org.pharaox.mastermind;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class Messages
+public final class Messages
 {
     // AbstractIOPlayer
-    public static final String MSG_AIOP_STARTING_GAME = Messages.getString("AbstractIOPlayer.0");  //$NON-NLS-1$
-    public static final String MSG_AIOP_GAME_WON_IN_X_ROUNDS = Messages.getString("AbstractIOPlayer.1");  //$NON-NLS-1$
-    public static final String MSG_AIOP_GAME_LOST_IN_X_ROUNDS = Messages.getString("AbstractIOPlayer.2");  //$NON-NLS-1$
-    public static final String MSG_AIOP_GUESS = Messages.getString("AbstractIOPlayer.3");  //$NON-NLS-1$
-    public static final String MSG_AIOP_COWS = Messages.getString("AbstractIOPlayer.4");  //$NON-NLS-1$
-    public static final String MSG_AIOP_BULLS = Messages.getString("AbstractIOPlayer.5");  //$NON-NLS-1$
+    public static final String MSG_AIOP_STARTING_GAME = s("AbstractIOPlayer.0");
+    public static final String MSG_AIOP_GAME_WON_IN_X_ROUNDS = s("AbstractIOPlayer.1");
+    public static final String MSG_AIOP_GAME_LOST_IN_X_ROUNDS = s("AbstractIOPlayer.2");
+    public static final String MSG_AIOP_GUESS = s("AbstractIOPlayer.3");
+    public static final String MSG_AIOP_COWS = s("AbstractIOPlayer.4");
+    public static final String MSG_AIOP_BULLS = s("AbstractIOPlayer.5");
 
-    private static final String BUNDLE_NAME = "org.pharaox.mastermind.messages"; //$NON-NLS-1$
+    private static final String BUNDLE_NAME = "org.pharaox.mastermind.messages";
 
     private static ResourceBundle bundle;
-    
+
     private Messages()
     {
     }
 
-    public static String getString(String key)
+    public static String s(final String key)
+    {
+        return Messages.getString(key);
+    }
+
+    public static String getString(final String key)
     {
         try
         {

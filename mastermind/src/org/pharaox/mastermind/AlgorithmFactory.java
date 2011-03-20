@@ -4,19 +4,19 @@ public class AlgorithmFactory
 {
     public enum AlgorithmType
     {
-        SIMPLE, KNUTH, PHARAOX, EXP_SIZE, DUMB, 
+        SIMPLE, KNUTH, PHARAOX, ESIZE, DUMB,
     };
-    
+
     private AlgorithmType type;
     private Mastermind mastermind;
-    
-    public AlgorithmFactory(AlgorithmType type, Mastermind mastermind)
+
+    public AlgorithmFactory(final AlgorithmType type, final Mastermind mastermind)
     {
         this.type = type;
         this.mastermind = mastermind;
     }
-    
-    public Algorithm getAlgorithm()
+
+    public final Algorithm getAlgorithm()
     {
         Algorithm algorithm = null;
         switch (type)
@@ -30,11 +30,13 @@ public class AlgorithmFactory
         case PHARAOX:
             algorithm = new PharaoxAlgorithm(mastermind, 0.0);
             break;
-        case EXP_SIZE:
+        case ESIZE:
             algorithm = new ExpectedSizeAlgorithm(mastermind);
             break;
         case DUMB:
             algorithm = new DumbAlgorithm(mastermind);
+            break;
+        default:
             break;
         }
         return algorithm;

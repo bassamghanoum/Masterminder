@@ -2,9 +2,9 @@ package org.pharaox.mastermind;
 
 public interface Player
 {
-    public void startGame();
-    
-    public void endGame(boolean won, int roundsPlayed);
-    
-    public Score getScore(String guess);
+    void startGame();
+
+    void endGame(final boolean won, final int roundsPlayed);
+
+    Score getScore(final String guess);
 }

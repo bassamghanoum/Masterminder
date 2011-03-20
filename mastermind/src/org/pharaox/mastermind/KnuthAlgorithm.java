@@ -6,25 +6,28 @@ public class KnuthAlgorithm extends AbstractAlgorithm
 {
     public static final String NAME = "Knuth Mastermind Algorithm";
 
-    public KnuthAlgorithm(Mastermind mastermind)
+    public KnuthAlgorithm(final Mastermind mastermind)
     {
         super(mastermind);
     }
 
     @Override
-    protected double calculateGuessRating(String guess)
+    protected final double calculateGuessRating(final String guess)
     {
         int maxSize = 0;
-        for (Score score : allScores)
+        for (Score score : getAllScores())
         {
-            SortedSet<String> elem = mastermind.evaluatePossibleCodes(guess, score, possibleCodes, false);
+            // @formatter:off
+            SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
+                getPossibleCodes(), false);
+            // @formatter:on
             maxSize = Math.max(maxSize, elem.size());
         }
-        return (possibleCodes.size() - maxSize);
+        return (getPossibleCodes().size() - maxSize);
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return NAME;
     }

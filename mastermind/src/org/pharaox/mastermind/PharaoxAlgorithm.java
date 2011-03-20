@@ -5,30 +5,33 @@ import java.util.SortedSet;
 public class PharaoxAlgorithm extends AbstractAlgorithm
 {
     public static final String NAME = "Pharaox Mastermind Algorithm";
-    
-    double percents;
 
-    public PharaoxAlgorithm(Mastermind mastermind, double percents)
+    private double percents;
+
+    public PharaoxAlgorithm(final Mastermind mastermind, final double percents)
     {
         super(mastermind);
         this.percents = percents;
     }
 
     @Override
-    protected double calculateGuessRating(String guess)
+    protected final double calculateGuessRating(final String guess)
     {
         Distribution dist = new Distribution();
-        for (Score score : allScores)
+        for (Score score : getAllScores())
         {
-            SortedSet<String> elem = mastermind.evaluatePossibleCodes(guess, score, possibleCodes, false);
-            int diff = possibleCodes.size() - elem.size();
+            // @formatter:off
+            SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
+                getPossibleCodes(), false);
+            // @formatter:on
+            int diff = getPossibleCodes().size() - elem.size();
             dist.add(diff);
         }
         return dist.calculatePercentile(percents);
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return NAME;
     }

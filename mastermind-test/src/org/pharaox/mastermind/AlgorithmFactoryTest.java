@@ -21,7 +21,7 @@ public class AlgorithmFactoryTest
     private Mastermind mastermind;
     private AlgorithmFactory factory;
 
-    public AlgorithmFactoryTest(AlgorithmType type, Mastermind mastermind)
+    public AlgorithmFactoryTest(final AlgorithmType type, final Mastermind mastermind)
     {
         this.type = type;
         this.mastermind = mastermind;
@@ -36,7 +36,7 @@ public class AlgorithmFactoryTest
             { AlgorithmType.SIMPLE, M2 },
             { AlgorithmType.KNUTH, M2 },
             { AlgorithmType.PHARAOX, M2 },
-            { AlgorithmType.EXP_SIZE, M2 },
+            { AlgorithmType.ESIZE, M2 },
             { AlgorithmType.DUMB, M2 },
         };
         // @formatter:on
@@ -44,13 +44,13 @@ public class AlgorithmFactoryTest
     }
 
     @Before
-    public void setup()
+    public final void setup()
     {
         factory = new AlgorithmFactory(type, mastermind);
     }
 
     @Test
-    public void testGetAlgorithm()
+    public final void testGetAlgorithm()
     {
         Algorithm algorithm = factory.getAlgorithm();
         if (type == AlgorithmType.SIMPLE)
@@ -59,20 +59,20 @@ public class AlgorithmFactoryTest
             assertTrue(algorithm instanceof KnuthAlgorithm);
         else if (type == AlgorithmType.PHARAOX)
             assertTrue(algorithm instanceof PharaoxAlgorithm);
-        else if (type == AlgorithmType.EXP_SIZE)
+        else if (type == AlgorithmType.ESIZE)
             assertTrue(algorithm instanceof ExpectedSizeAlgorithm);
         else if (type == AlgorithmType.DUMB)
             assertTrue(algorithm instanceof DumbAlgorithm);
     }
-    
+
     @Test
-    public void testAlgorithmTypeValueOf()
+    public final void testAlgorithmTypeValueOf()
     {
         assertEquals(type, AlgorithmType.valueOf(type.toString()));
     }
 
     @Test
-    public void testAlgorithmTypeValues()
+    public final void testAlgorithmTypeValues()
     {
         AlgorithmType.values();
     }

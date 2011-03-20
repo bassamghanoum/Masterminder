@@ -17,14 +17,14 @@ public class AlgorithmEvaluator
     private int gamesPlayed = 0;
     private int gamesWon = 0;
 
-    public AlgorithmEvaluator(Mastermind mastermind, AlgorithmType type)
+    public AlgorithmEvaluator(final Mastermind mastermind, final AlgorithmType type)
     {
         this.mastermind = mastermind;
         this.type = type;
         this.readyGuesses = new ReadyGuesses(mastermind, type);
     }
 
-    public void evaluate()
+    public final void evaluate()
     {
         mastermind.visitCodes(new GamesVisitor());
         printInfo();
@@ -42,51 +42,55 @@ public class AlgorithmEvaluator
         info("");
     }
 
-    public int getTotalRoundsPlayed()
+    public final int getTotalRoundsPlayed()
     {
         return totalRoundsPlayed;
     }
 
-    public int getMaxRoundsPlayed()
+    public final int getMaxRoundsPlayed()
     {
         return maxRoundsPlayed;
     }
 
-    public int getGamesPlayed()
+    public final int getGamesPlayed()
     {
         return gamesPlayed;
     }
 
-    public int getGamesWon()
+    public final int getGamesWon()
     {
         return gamesWon;
     }
 
-    public double getAverageRoundsPlayed()
+    public final double getAverageRoundsPlayed()
     {
         return (double) totalRoundsPlayed / (double) gamesPlayed;
     }
-    
+
     class GamesVisitor implements CodeVisitor
     {
         @Override
-        public void visit(String code)
+        public void visit(final String code)
         {
             debug("Code: " + code);
-            mastermind.setCode(code);
+            mastermind.setCurrentCode(code);
             Game game = new Game(mastermind, type, MAX_ROUNDS, readyGuesses);
             boolean won = game.play();
             int roundsPlayed = game.getRoundsPlayed();
-            debug("Game " + (won ? "won" : "lost") + " in " + roundsPlayed + " round(s)");
+            if (won)
+                debug("Game won in " + roundsPlayed + " round(s)");
+            else
+                debug("Game lost in " + roundsPlayed + " round(s)");
             updateStatistics(won, roundsPlayed);
         }
 
-        private void updateStatistics(boolean won, int roundsPlayed)
+        private void updateStatistics(final boolean won, final int roundsPlayed)
         {
             totalRoundsPlayed += roundsPlayed;
             maxRoundsPlayed = Math.max(maxRoundsPlayed, roundsPlayed);
             gamesPlayed++;
-            gamesWon += (won) ? 1 : 0;
+            if (won)
+                gamesWon++;
         }
     }
 }

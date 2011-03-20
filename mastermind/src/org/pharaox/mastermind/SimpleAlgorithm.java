@@ -3,20 +3,20 @@ package org.pharaox.mastermind;
 public class SimpleAlgorithm extends AbstractAlgorithm
 {
     public static final String NAME = "Simple Mastermind Algorithm";
-    
-    public SimpleAlgorithm(Mastermind mastermind)
+
+    public SimpleAlgorithm(final Mastermind mastermind)
     {
         super(mastermind);
     }
 
     @Override
-    protected double calculateGuessRating(String guess)
+    protected final double calculateGuessRating(final String guess)
     {
         return 0.0;
     }
-    
+
     @Override
-    public String toString()
+    public final String toString()
     {
         return NAME;
     }

@@ -8,24 +8,33 @@ import org.junit.Test;
 
 public class ScoreTest
 {
+    private static final Score[] SCORES = { Score.ZERO_SCORE, new Score(1, 2), new Score(1, 2),
+        new Score(2, 3), new Score(2, 3) };
 
     @Test
-    public void testConstructor()
+    public final void testConstructor()
     {
-        Score hits = new Score(0, 0);
-        assertEquals(0, hits.getCows());
-        assertEquals(0, hits.getBulls());
+        assertEquals(0, SCORES[0].getCows());
+        assertEquals(0, SCORES[0].getBulls());
     }
 
     @Test
-    public void testEquals()
+    public final void testEquals()
     {
-        Score hits1 = new Score(1, 2);
-        Score hits2 = new Score(1, 2);
-        Score hits3 = new Score(2, 3);
-        Score hits4 = new Score(2, 3);
-        assertTrue(hits1.equals(hits2));
-        assertFalse(hits1.equals(hits3));
-        assertTrue(hits3.equals(hits4));
+        // @checkstyle:off (Magic numbers)
+        assertTrue(SCORES[1].equals(SCORES[2]));
+        assertTrue(SCORES[3].equals(SCORES[4]));
+        assertFalse(SCORES[1].equals(SCORES[3]));
+        // @checkstyle:on
+    }
+
+    @Test
+    public final void testHashCode()
+    {
+        // @checkstyle:off (Magic numbers)
+        assertTrue(SCORES[1].hashCode() == SCORES[2].hashCode());
+        assertTrue(SCORES[3].hashCode() == SCORES[4].hashCode());
+        assertFalse(SCORES[1].hashCode() == SCORES[3].hashCode());
+        // @checkstyle:on
     }
 }

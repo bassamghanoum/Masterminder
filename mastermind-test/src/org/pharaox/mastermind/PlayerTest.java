@@ -18,40 +18,40 @@ public class PlayerTest
     private static final int COWS = 1;
     private static final int BULLS = 0;
     private static final String INPUT = "" + COWS + "\n" + BULLS + "\n";
-    private static final String INVALID_INPUT = "";
-    
+    private static final String INVALID_INPUT = "" + COWS + "\n";
+
     private StringReader reader;
     private StringWriter writer;
     private Player player;
-    
+
     public PlayerTest()
     {
     }
-    
+
     @Before
-    public void setup()
+    public final void setup()
     {
         reader = new StringReader(INPUT);
         writer = new StringWriter();
         player = new ReaderWriterPlayer(reader, writer);
     }
-    
+
     @After
-    public void teardown() throws IOException
+    public final void teardown() throws IOException
     {
         reader.close();
         writer.close();
     }
-    
+
     @Test
-    public void testStartGame()
+    public final void testStartGame()
     {
         player.startGame();
         assertEquals(MSG_AIOP_STARTING_GAME + "\n", writer.toString());
     }
-    
+
     @Test
-    public void testEndGameWon()
+    public final void testEndGameWon()
     {
         player.endGame(true, ROUNDS_PLAYED);
         String expected = String.format(MSG_AIOP_GAME_WON_IN_X_ROUNDS, ROUNDS_PLAYED) + "\n";
@@ -59,31 +59,34 @@ public class PlayerTest
     }
 
     @Test
-    public void testEndGameLost()
+    public final void testEndGameLost()
     {
         player.endGame(false, ROUNDS_PLAYED);
         String expected = String.format(MSG_AIOP_GAME_LOST_IN_X_ROUNDS, ROUNDS_PLAYED) + "\n";
         assertEquals(expected, writer.toString());
     }
-    
+
     @Test
-    public void testGetScore()
+    public final void testGetScore()
     {
         Score score = player.getScore(GUESS);
         assertEquals(new Score(COWS, BULLS), score);
-        String expected = String.format(MSG_AIOP_GUESS, GUESS) + "\n" + MSG_AIOP_COWS + MSG_AIOP_BULLS;
+        // @formatter:off
+        String expected = String.format(MSG_AIOP_GUESS, GUESS) + "\n" 
+            + MSG_AIOP_COWS + MSG_AIOP_BULLS;
+        // @formatter:on
         assertEquals(expected, writer.toString());
     }
-    
+
     @Test(expected = MastermindException.class)
-    public void testGetScoreInputClosed()
+    public final void testGetScoreInputClosed()
     {
         reader.close();
         player.getScore(GUESS);
     }
-    
-    @Test(expected = NumberFormatException.class)
-    public void testGetScoreInvalidInput()
+
+    @Test(expected = MastermindException.class)
+    public final void testGetScoreInvalidInput()
     {
         player = new ReaderWriterPlayer(new StringReader(INVALID_INPUT), writer);
         player.getScore(GUESS);

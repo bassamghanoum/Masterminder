@@ -24,7 +24,8 @@ public class GameTest
     private int maxRounds;
     private Game game;
 
-    public GameTest(AlgorithmType type, Mastermind mastermind, String code, int maxRounds)
+    public GameTest(final AlgorithmType type, final Mastermind mastermind, final String code,
+        final int maxRounds)
     {
         this.type = type;
         this.mastermind = mastermind;
@@ -40,41 +41,40 @@ public class GameTest
         {
             { AlgorithmType.SIMPLE, M2, M2_CODE, M2_MAX_ROUNDS_SIMPLE },
             { AlgorithmType.KNUTH, M2, M2_CODE, M2_MAX_ROUNDS_KNUTH },
-            { AlgorithmType.EXP_SIZE, M2, M2_CODE, M2_MAX_ROUNDS_EXP_SIZE },
+            { AlgorithmType.ESIZE, M2, M2_CODE, M2_MAX_ROUNDS_ESIZE },
             { AlgorithmType.DUMB, M2, M2_CODE, M2_MAX_ROUNDS_DUMB },
         };
         // @formatter:on
         return Arrays.asList(data);
     }
-    
+
     @Before
-    public void setup()
+    public final void setup()
     {
         game = new Game(mastermind, type, maxRounds);
     }
-    
+
     @Test
-    public void testSetPlayer()
+    public final void testSetPlayer()
     {
-        Player player = new ConsolePlayer();
-        game.setPlayer(player);
-        assertEquals(player, game.getPlayer());
+        game.setPlayer(null);
+        assertEquals(null, game.getPlayer());
     }
 
     @Test
-    public void testPlay()
+    public final void testPlay()
     {
-        mastermind.setCode(code);
+        mastermind.setCurrentCode(code);
         boolean won = game.play();
         assertEquals(won, game.hasWon());
         assertTrue((type != AlgorithmType.DUMB && won) || (type == AlgorithmType.DUMB && !won));
         assertTrue(game.getRoundsPlayed() <= maxRounds);
     }
-    
+
     @Test(expected = MastermindException.class)
-    public void testPlayRepeatedly()
+    public final void testPlayRepeatedly()
     {
-        mastermind.setCode(code);
+        mastermind.setCurrentCode(code);
         game.play();
         game.play();
     }

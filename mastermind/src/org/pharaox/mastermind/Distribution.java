@@ -5,47 +5,48 @@ import java.util.TreeMap;
 
 public class Distribution
 {
+    private static final double PERCENT_MULTIPLIER = 100.0;
+
     private SortedMap<Integer, Integer> numbers = new TreeMap<Integer, Integer>();
     private int size = 0;
 
-    public void add(int number)
+    public final void add(final int number)
     {
-        Integer key = new Integer(number);
-        Integer value = numbers.get(key);
+        Integer value = numbers.get(number);
         if (value != null)
-            numbers.put(key, new Integer(value.intValue() + 1));
+            numbers.put(number, value.intValue() + 1);
         else
-            numbers.put(key, new Integer(1));
+            numbers.put(number, 1);
         size++;
     }
 
-    public double calculateMean()
+    public final double calculateMean()
     {
         double sum = 0;
         for (int key : numbers.keySet())
             sum += key * numbers.get(key);
-        return (sum / (double)size);
+        return (sum / (double) size);
     }
 
-    public double calculateStandardDeviation()
+    public final double calculateStandardDeviation()
     {
         double mean = calculateMean();
         double sum = 0;
         for (int key : numbers.keySet())
         {
-            double diff = (double)key - mean;
+            double diff = (double) key - mean;
             sum += (diff * diff) * numbers.get(key);
         }
-        return Math.sqrt(sum / (double)size);
+        return Math.sqrt(sum / (double) size);
     }
 
-    public int calculatePercentile(double percents)
+    public final int calculatePercentile(final double percents)
     {
         int x = 0;
         for (int key : numbers.keySet())
         {
             x += numbers.get(key);
-            if (((double)x / (double)size) * 100.0 > percents)
+            if (((double) x / (double) size) * PERCENT_MULTIPLIER > percents)
                 return key;
         }
         return numbers.lastKey();

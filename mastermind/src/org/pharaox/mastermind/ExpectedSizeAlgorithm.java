@@ -6,26 +6,29 @@ public class ExpectedSizeAlgorithm extends AbstractAlgorithm
 {
     public static final String NAME = "Expected Size Mastermind Algorithm";
 
-    public ExpectedSizeAlgorithm(Mastermind mastermind)
+    public ExpectedSizeAlgorithm(final Mastermind mastermind)
     {
         super(mastermind);
     }
 
     @Override
-    protected double calculateGuessRating(String guess)
+    protected final double calculateGuessRating(final String guess)
     {
         double sum = 0.0;
-        for (Score score : allScores)
+        for (Score score : getAllScores())
         {
-            SortedSet<String> elem = mastermind.evaluatePossibleCodes(guess, score, possibleCodes, false);
-            double size = (double) (elem.size() * elem.size()) / (double) possibleCodes.size();
+            // @formatter:off
+            SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
+                getPossibleCodes(), false);
+            // @formatter:on
+            double size = (double) (elem.size() * elem.size()) / (double) getPossibleCodes().size();
             sum += size;
         }
-        return ((double) possibleCodes.size() - sum);
+        return ((double) getPossibleCodes().size() - sum);
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return NAME;
     }

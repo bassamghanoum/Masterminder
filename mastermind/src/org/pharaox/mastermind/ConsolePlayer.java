@@ -1,27 +1,28 @@
 package org.pharaox.mastermind;
 
+import java.io.Console;
+
 public class ConsolePlayer extends AbstractIOPlayer
 {
-    @Override
-    protected void initialize()
+    private Console console;
+
+    public ConsolePlayer(final Console console)
     {
-        if (System.console() == null) 
-        {
-            System.err.println("No console.");
-            System.exit(1);
-        }
+        if (console == null)
+            throw new MastermindException();
+        this.console = console;
     }
 
     @Override
-    protected void printLine(String message, Object... args)
+    protected final void printLine(final String message, final Object... args)
     {
-        System.console().printf(message + "\n", args);
+        console.printf(message + "\n", args);
     }
 
     @Override
-    protected int readLineInt(String message)
+    protected final int readLineInt(final String message)
     {
-        String line = System.console().readLine(message);
+        String line = console.readLine(message);
         return Integer.parseInt(line);
     }
 

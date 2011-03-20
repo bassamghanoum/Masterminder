@@ -10,14 +10,14 @@ import java.util.TreeSet;
 
 public abstract class AbstractAlgorithm implements Algorithm
 {
-    protected Mastermind mastermind;
-    protected SortedSet<String> allCodes;
-    protected List<Score> allScores;
-    protected SortedSet<String> possibleCodes = new TreeSet<String>();
-    protected Map<String, Score> guessScores = new HashMap<String, Score>();
-    protected Set<String> evaluated = new HashSet<String>();
+    private Mastermind mastermind;
+    private SortedSet<String> allCodes;
+    private List<Score> allScores;
+    private SortedSet<String> possibleCodes = new TreeSet<String>();
+    private Map<String, Score> guessScores = new HashMap<String, Score>();
+    private Set<String> evaluated = new HashSet<String>();
 
-    public AbstractAlgorithm(Mastermind mastermind)
+    public AbstractAlgorithm(final Mastermind mastermind)
     {
         this.mastermind = mastermind;
         allCodes = mastermind.getAllPossibleCodes();
@@ -25,8 +25,23 @@ public abstract class AbstractAlgorithm implements Algorithm
         possibleCodes.addAll(allCodes);
     }
 
+    protected final Mastermind getMastermind()
+    {
+        return mastermind;
+    }
+
+    protected final List<Score> getAllScores()
+    {
+        return allScores;
+    }
+
+    public final SortedSet<String> getPossibleCodes()
+    {
+        return possibleCodes;
+    }
+
     @Override
-    public String makeGuess()
+    public final String makeGuess()
     {
         evaluateGuesses();
         String guess = "";
@@ -43,8 +58,10 @@ public abstract class AbstractAlgorithm implements Algorithm
         {
             if (!evaluated.contains(guess))
             {
+                // @formatter:off
                 possibleCodes = mastermind.evaluatePossibleCodes(guess, guessScores.get(guess), 
                     possibleCodes, false);
+                // @formatter:on
                 evaluated.add(guess);
             }
         }
@@ -57,26 +74,24 @@ public abstract class AbstractAlgorithm implements Algorithm
         for (String guessx : allCodes)
         {
             double rating = calculateGuessRating(guessx);
-            // @formatter:off
-            if ((rating > maxRating) ||
-                ((rating == maxRating) && possibleCodes.contains(guessx) && !possibleCodes.contains(guess)))
+            boolean preferGuessx = possibleCodes.contains(guessx) && !possibleCodes.contains(guess);
+            if ((rating > maxRating) || ((rating == maxRating) && preferGuessx))
                 guess = guessx;
-            // @formatter:on
             maxRating = Math.max(maxRating, rating);
         }
         return guess;
     }
 
-    protected abstract double calculateGuessRating(String guess);
+    protected abstract double calculateGuessRating(final String guess);
 
     @Override
-    public void putGuessScore(String guess, Score score)
+    public final void putGuessScore(final String guess, final Score score)
     {
         guessScores.put(guess, score);
     }
 
     @Override
-    public Score getGuessScore(String guess)
+    public final Score getGuessScore(final String guess)
     {
         return guessScores.get(guess);
     }
