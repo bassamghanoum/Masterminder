@@ -6,8 +6,8 @@ public class Score
 {
     public static final Score ZERO_SCORE = new Score(0, 0);
 
-    private int cows;
-    private int bulls;
+    private final transient int cows;
+    private final transient int bulls;
 
     public Score(final int cows, final int bulls)
     {
@@ -26,21 +26,21 @@ public class Score
     }
 
     @Override
+    public final String toString()
+    {
+        return "(" + cows + ", " + bulls + ")";
+    }
+
+    @Override
     public final boolean equals(final Object obj)
     {
         boolean result = false;
         if (obj instanceof Score)
         {
-            Score other = (Score) obj;
+            final Score other = (Score) obj;
             result = (cows == other.cows) && (bulls == other.bulls);
         }
         return result;
-    }
-
-    @Override
-    public final String toString()
-    {
-        return "(" + cows + ", " + bulls + ")";
     }
 
     @Override

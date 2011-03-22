@@ -7,8 +7,8 @@ public class DumbAlgorithm implements Algorithm
 {
     public static final String NAME = "Dumb Mastermind Algorithm";
 
-    private String code;
-    private Map<String, Score> guessScores = new HashMap<String, Score>();
+    private final transient String code;
+    private final transient Map<String, Score> guessScores = new HashMap<String, Score>();
 
     public DumbAlgorithm(final Mastermind mastermind)
     {

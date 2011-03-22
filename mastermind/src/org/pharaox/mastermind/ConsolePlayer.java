@@ -4,12 +4,15 @@ import java.io.Console;
 
 public class ConsolePlayer extends AbstractIOPlayer
 {
-    private Console console;
+    private final transient Console console;
 
     public ConsolePlayer(final Console console)
     {
+        super();
         if (console == null)
+        {
             throw new MastermindException();
+        }
         this.console = console;
     }
 
@@ -22,7 +25,7 @@ public class ConsolePlayer extends AbstractIOPlayer
     @Override
     protected final int readLineInt(final String message)
     {
-        String line = console.readLine(message);
+        final String line = console.readLine(message);
         return Integer.parseInt(line);
     }
 

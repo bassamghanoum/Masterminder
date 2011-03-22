@@ -22,6 +22,8 @@ public class GameTest
     private Mastermind mastermind;
     private String code;
     private int maxRounds;
+    
+    private Player player;
     private Game game;
 
     public GameTest(final AlgorithmType type, final Mastermind mastermind, final String code,
@@ -51,20 +53,13 @@ public class GameTest
     @Before
     public final void setup()
     {
-        game = new Game(mastermind, type, maxRounds);
-    }
-
-    @Test
-    public final void testSetPlayer()
-    {
-        game.setPlayer(null);
-        assertEquals(null, game.getPlayer());
+        player = new DefaultPlayer(mastermind, code);
+        game = new Game(mastermind, type, maxRounds, player);
     }
 
     @Test
     public final void testPlay()
     {
-        mastermind.setCurrentCode(code);
         boolean won = game.play();
         assertEquals(won, game.hasWon());
         assertTrue((type != AlgorithmType.DUMB && won) || (type == AlgorithmType.DUMB && !won));
@@ -74,7 +69,6 @@ public class GameTest
     @Test(expected = MastermindException.class)
     public final void testPlayRepeatedly()
     {
-        mastermind.setCurrentCode(code);
         game.play();
         game.play();
     }

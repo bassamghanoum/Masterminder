@@ -19,10 +19,10 @@ public final class Main
 
     public static void main(final String[] args)
     {
-        Mastermind mastermind = new Mastermind(ALPHABET, LENGTH, UNIQUE_CHARS);
-        Game game = new Game(mastermind, ALGORITHM_TYPE, MAX_ROUNDS);
-        game.setPlayer(new ReaderWriterPlayer(new InputStreamReader(System.in),
-            new OutputStreamWriter(System.out)));
+        final Mastermind mastermind = new Mastermind(ALPHABET, LENGTH, UNIQUE_CHARS);
+        final Player player = new ReaderWriterPlayer(new InputStreamReader(System.in),
+            new OutputStreamWriter(System.out));
+        final Game game = new Game(mastermind, ALGORITHM_TYPE, MAX_ROUNDS, player);
         game.play();
     }
 

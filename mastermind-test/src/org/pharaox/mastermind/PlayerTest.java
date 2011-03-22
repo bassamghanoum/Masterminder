@@ -48,14 +48,14 @@ public class PlayerTest
     public final void testStartGame()
     {
         player.startGame();
-        assertEquals(MSG_AIOP_STARTING_GAME + "\n", writer.toString());
+        assertEquals(M_C_STARTING_GAME + "\n", writer.toString());
     }
 
     @Test
     public final void testEndGameWon()
     {
         player.endGame(true, ROUNDS_PLAYED);
-        String expected = String.format(MSG_AIOP_GAME_WON_IN_X_ROUNDS, ROUNDS_PLAYED) + "\n";
+        String expected = String.format(M_C_GAME_WON, ROUNDS_PLAYED) + "\n";
         assertEquals(expected, writer.toString());
     }
 
@@ -63,7 +63,7 @@ public class PlayerTest
     public final void testEndGameLost()
     {
         player.endGame(false, ROUNDS_PLAYED);
-        String expected = String.format(MSG_AIOP_GAME_LOST_IN_X_ROUNDS, ROUNDS_PLAYED) + "\n";
+        String expected = String.format(M_C_GAME_LOST, ROUNDS_PLAYED) + "\n";
         assertEquals(expected, writer.toString());
     }
 
@@ -73,8 +73,8 @@ public class PlayerTest
         Score score = player.getScore(GUESS);
         assertEquals(new Score(COWS, BULLS), score);
         // @formatter:off
-        String expected = String.format(MSG_AIOP_GUESS, GUESS) + "\n" 
-            + MSG_AIOP_COWS + MSG_AIOP_BULLS;
+        String expected = String.format(M_C_GUESS, GUESS) + "\n" 
+            + M_C_COWS + M_C_BULLS;
         // @formatter:on
         assertEquals(expected, writer.toString());
     }
@@ -98,7 +98,7 @@ public class PlayerTest
                 fail();
             }
             catch (MastermindException e)
-            // @checkstyle:off
+            // @checkstyle:off (Empty catch block)
             {
             }
             // @checkstyle:on

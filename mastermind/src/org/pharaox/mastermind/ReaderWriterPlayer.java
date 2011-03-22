@@ -8,11 +8,12 @@ import java.io.Writer;
 
 public class ReaderWriterPlayer extends AbstractIOPlayer
 {
-    private BufferedReader reader;
-    private PrintWriter writer;
+    private final transient BufferedReader reader;
+    private final transient PrintWriter writer;
 
     public ReaderWriterPlayer(final Reader reader, final Writer writer)
     {
+        super();
         this.reader = new BufferedReader(reader);
         this.writer = new PrintWriter(writer, true);
     }
@@ -28,7 +29,7 @@ public class ReaderWriterPlayer extends AbstractIOPlayer
     protected final int readLineInt(final String message)
     {
         print(message);
-        String line = readLine();
+        final String line = readLine();
         return parseInt(line);
     }
 
@@ -45,11 +46,13 @@ public class ReaderWriterPlayer extends AbstractIOPlayer
         {
             line = reader.readLine();
             if (line == null)
+            {
                 throw new MastermindException();
+            }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
-            throw new MastermindException();
+            throw new MastermindException(e);
         }
         return line;
     }
@@ -61,9 +64,9 @@ public class ReaderWriterPlayer extends AbstractIOPlayer
         {
             result = Integer.parseInt(text);
         }
-        catch (NumberFormatException e)
+        catch (final NumberFormatException e)
         {
-            throw new MastermindException();
+            throw new MastermindException(e);
         }
         return result;
     }

@@ -6,7 +6,7 @@ public class PharaoxAlgorithm extends AbstractAlgorithm
 {
     public static final String NAME = "Pharaox Mastermind Algorithm";
 
-    private double percents;
+    private final transient double percents;
 
     public PharaoxAlgorithm(final Mastermind mastermind, final double percents)
     {
@@ -17,14 +17,14 @@ public class PharaoxAlgorithm extends AbstractAlgorithm
     @Override
     protected final double calculateGuessRating(final String guess)
     {
-        Distribution dist = new Distribution();
-        for (Score score : getAllScores())
+        final Distribution dist = new Distribution();
+        for (final Score score : getAllScores())
         {
             // @formatter:off
-            SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
+            final SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
                 getPossibleCodes(), false);
             // @formatter:on
-            int diff = getPossibleCodes().size() - elem.size();
+            final int diff = getPossibleCodes().size() - elem.size();
             dist.add(diff);
         }
         return dist.calculatePercentile(percents);

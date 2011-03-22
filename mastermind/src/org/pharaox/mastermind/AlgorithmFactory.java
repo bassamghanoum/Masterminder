@@ -7,8 +7,8 @@ public class AlgorithmFactory
         SIMPLE, KNUTH, PHARAOX, ESIZE, DUMB,
     };
 
-    private AlgorithmType type;
-    private Mastermind mastermind;
+    private final transient AlgorithmType type;
+    private final transient Mastermind mastermind;
 
     public AlgorithmFactory(final AlgorithmType type, final Mastermind mastermind)
     {

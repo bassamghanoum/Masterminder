@@ -15,10 +15,10 @@ public class KnuthAlgorithm extends AbstractAlgorithm
     protected final double calculateGuessRating(final String guess)
     {
         int maxSize = 0;
-        for (Score score : getAllScores())
+        for (final Score score : getAllScores())
         {
             // @formatter:off
-            SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
+            final SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
                 getPossibleCodes(), false);
             // @formatter:on
             maxSize = Math.max(maxSize, elem.size());

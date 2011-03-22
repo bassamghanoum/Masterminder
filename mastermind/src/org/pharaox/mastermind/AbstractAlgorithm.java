@@ -10,13 +10,14 @@ import java.util.TreeSet;
 
 public abstract class AbstractAlgorithm implements Algorithm
 {
-    private Mastermind mastermind;
-    private SortedSet<String> allCodes;
-    private List<Score> allScores;
-    private SortedSet<String> possibleCodes = new TreeSet<String>();
-    private Map<String, Score> guessScores = new HashMap<String, Score>();
-    private Set<String> evaluated = new HashSet<String>();
+    private final transient Mastermind mastermind;
+    private final transient SortedSet<String> allCodes;
+    private final transient List<Score> allScores;
+    private final transient Map<String, Score> guessScores = new HashMap<String, Score>();
+    private final transient Set<String> evaluated = new HashSet<String>();
 
+    private transient SortedSet<String> possibleCodes = new TreeSet<String>();
+    
     public AbstractAlgorithm(final Mastermind mastermind)
     {
         this.mastermind = mastermind;
@@ -54,7 +55,7 @@ public abstract class AbstractAlgorithm implements Algorithm
 
     private void evaluateGuesses()
     {
-        for (String guess : guessScores.keySet())
+        for (final String guess : guessScores.keySet())
         {
             if (!evaluated.contains(guess))
             {
@@ -71,12 +72,15 @@ public abstract class AbstractAlgorithm implements Algorithm
     {
         String guess = possibleCodes.first();
         double maxRating = 0.0;
-        for (String guessx : allCodes)
+        for (final String guessx : allCodes)
         {
-            double rating = calculateGuessRating(guessx);
-            boolean preferGuessx = possibleCodes.contains(guessx) && !possibleCodes.contains(guess);
+            final double rating = calculateGuessRating(guessx);
+            final boolean preferGuessx =
+                possibleCodes.contains(guessx) && !possibleCodes.contains(guess);
             if ((rating > maxRating) || ((rating == maxRating) && preferGuessx))
+            {
                 guess = guessx;
+            }
             maxRating = Math.max(maxRating, rating);
         }
         return guess;

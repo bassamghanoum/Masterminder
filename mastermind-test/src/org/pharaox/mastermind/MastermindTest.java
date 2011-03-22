@@ -3,7 +3,6 @@ package org.pharaox.mastermind;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
 import static org.pharaox.util.Logger.debug;
 import static org.pharaox.mastermind.Mastermind.MAX_LENGTH;
 import static org.pharaox.mastermind.Constants.*;
@@ -127,7 +126,6 @@ public class MastermindTest
     public final void setup()
     {
         mastermind = new Mastermind(alphabet, length, uniqueChars);
-        mastermind.setCurrentCode(code);
     }
 
     @Test(expected = MastermindException.class)
@@ -203,29 +201,11 @@ public class MastermindTest
     }
 
     @Test
-    public final void testGetCode()
-    {
-        assertEquals(code, mastermind.getCurrentCode());
-    }
-
-    @Test
-    public final void testCodes()
+    public final void testIsValidCode()
     {
         for (int i = 0; i < codes.length; i++)
         {
-            String codex = codes[i];
-            boolean valid = valids[i];
-            try
-            {
-                mastermind.setCurrentCode(codex);
-                if (!valid)
-                    fail((codex != null) ? codex : "null");
-            }
-            catch (MastermindException e)
-            // @checkstyle:off (Empty catch block)
-            {
-            }
-            // @checkstyle:on
+            assertEquals(valids[i], mastermind.isValidCode(codes[i]));
         }
     }
 
@@ -256,7 +236,7 @@ public class MastermindTest
         {
             if (count < scores.length)
             {
-                Score score = mastermind.evaluateScore(codex);
+                Score score = mastermind.evaluateScore(codex, code);
                 debug(codex + ": " + score);
                 assertTrue(score.equals(scores[count]));
             }
@@ -267,7 +247,7 @@ public class MastermindTest
     @Test(expected = MastermindException.class)
     public final void testEvaluateScoreInvalidScore()
     {
-        mastermind.evaluateScore("");
+        mastermind.evaluateScore("", code);
     }
 
     @Test(expected = MastermindException.class)

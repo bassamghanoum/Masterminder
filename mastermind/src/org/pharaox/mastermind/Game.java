@@ -7,44 +7,32 @@ import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
 
 public class Game
 {
-    private static final int ROUND_1 = 0;
-    private static final int ROUND_2 = 1;
-    private static final int ROUND_3 = 2;
-    private static final int ROUND_4 = 3;
+    private final transient Mastermind mastermind;
+    private final transient Algorithm algorithm;
+    private final transient int maxRounds;
+    private final transient Player player;
+    private final transient ReadyGuesses readyGuesses;
 
-    private Mastermind mastermind;
-    private Algorithm algorithm;
-    private int maxRounds;
-    private ReadyGuesses readyGuesses;
-    private Player player = new DefaultPlayer();
-    private boolean won = false;
-    private int roundsPlayed = 0;
+    private transient boolean won = false;
+    private transient int roundsPlayed = 0;
     // @formatter:off
-    private Score[] scores = new Score[] { ZERO_SCORE, ZERO_SCORE, ZERO_SCORE };
+    private transient Score[] scores = new Score[] { ZERO_SCORE, ZERO_SCORE, ZERO_SCORE };
     // @formatter:on
 
-    public Game(final Mastermind mastermind, final AlgorithmType type, final int maxRounds)
+    public Game(final Mastermind mastermind, final AlgorithmType type, final int maxRounds,
+        final Player player)
     {
-        this(mastermind, type, maxRounds, null);
+        this(mastermind, type, maxRounds, player, null);
     }
 
     public Game(final Mastermind mastermind, final AlgorithmType type, final int maxRounds,
-        final ReadyGuesses readyGuesses)
+        final Player player, final ReadyGuesses readyGuesses)
     {
         this.mastermind = mastermind;
         this.algorithm = new AlgorithmFactory(type, mastermind).getAlgorithm();
         this.maxRounds = maxRounds;
-        this.readyGuesses = readyGuesses;
-    }
-
-    public final void setPlayer(final Player player)
-    {
         this.player = player;
-    }
-
-    public final Player getPlayer()
-    {
-        return player;
+        this.readyGuesses = readyGuesses;
     }
 
     public final boolean hasWon()
@@ -60,21 +48,21 @@ public class Game
     public final boolean play()
     {
         if (roundsPlayed > 0)
-            throw new MastermindException();
-        player.startGame();
-        int i;
-        for (i = 0; i < maxRounds; i++)
         {
-            Score score = playRound(i);
+            throw new MastermindException();
+        }
+        player.startGame();
+        while (roundsPlayed < maxRounds)
+        {
+            final Score score = playRound(roundsPlayed);
+            roundsPlayed++;
             if (isWinningScore(score))
             {
                 won = true;
-                i++;
                 break;
             }
             shiftScores(score);
         }
-        roundsPlayed = i;
         player.endGame(won, roundsPlayed);
         return won;
     }
@@ -86,16 +74,17 @@ public class Game
 
     private void shiftScores(final Score score)
     {
-        for (int j = scores.length - 1; j > 0; j--)
-            scores[j] = scores[j - 1];
-        scores[0] = score;
+        final Score[] scoresx = new Score[scores.length];
+        System.arraycopy(scores, 0, scoresx, 1, scores.length - 1);
+        scoresx[0] = score;
+        scores = scoresx;
     }
 
     private Score playRound(final int round)
     {
-        String guess = makeGuess(round);
-        assert (mastermind.isValidCode(guess));
-        Score score = player.getScore(guess);
+        final String guess = makeGuess(round);
+        assert mastermind.isValidCode(guess);
+        final Score score = player.getScore(guess);
         debug(guess + " => " + score);
         putGuessScore(guess, score);
         return score;
@@ -104,40 +93,33 @@ public class Game
     private String makeGuess(final int round)
     {
         String guess;
-        if (round == ROUND_1 && readyGuesses != null)
+        if ((round == 0) && (readyGuesses != null))
+        {
             guess = readyGuesses.getFirstGuess();
-        else if (round == ROUND_2 && readyGuesses != null)
+        }
+        else if ((round == 1) && (readyGuesses != null))
+        {
             guess = readyGuesses.getSecondGuess(scores[0]);
-        else if (round == ROUND_3 && readyGuesses != null)
+        }
+        else if ((round == 2) && (readyGuesses != null))
+        {
             guess = readyGuesses.getThirdGuess(scores[1], scores[0]);
-        else if (round == ROUND_4 && readyGuesses != null)
+        }
+        // @checkstyle:off (Magic numbers)
+        else if ((round == 3) && (readyGuesses != null))
+        // @checkstyle:on
+        {
             guess = readyGuesses.getFourthGuess(scores[2], scores[1], scores[0]);
+        }
         else
+        {
             guess = algorithm.makeGuess();
+        }
         return guess;
     }
 
     private void putGuessScore(final String guess, final Score score)
     {
         algorithm.putGuessScore(guess, score);
-    }
-
-    class DefaultPlayer implements Player
-    {
-        @Override
-        public void startGame()
-        {
-        }
-
-        @Override
-        public void endGame(final boolean wonx, final int roundsPlayedx)
-        {
-        }
-
-        @Override
-        public Score getScore(final String guess)
-        {
-            return mastermind.evaluateScore(guess);
-        }
     }
 }

@@ -6,12 +6,12 @@ import java.util.ResourceBundle;
 public final class Messages
 {
     // AbstractIOPlayer
-    public static final String MSG_AIOP_STARTING_GAME = s("AbstractIOPlayer.0");
-    public static final String MSG_AIOP_GAME_WON_IN_X_ROUNDS = s("AbstractIOPlayer.1");
-    public static final String MSG_AIOP_GAME_LOST_IN_X_ROUNDS = s("AbstractIOPlayer.2");
-    public static final String MSG_AIOP_GUESS = s("AbstractIOPlayer.3");
-    public static final String MSG_AIOP_COWS = s("AbstractIOPlayer.4");
-    public static final String MSG_AIOP_BULLS = s("AbstractIOPlayer.5");
+    public static final String M_C_STARTING_GAME = msg("AbstractIOPlayer.0");
+    public static final String M_C_GAME_WON = msg("AbstractIOPlayer.1");
+    public static final String M_C_GAME_LOST = msg("AbstractIOPlayer.2");
+    public static final String M_C_GUESS = msg("AbstractIOPlayer.3");
+    public static final String M_C_COWS = msg("AbstractIOPlayer.4");
+    public static final String M_C_BULLS = msg("AbstractIOPlayer.5");
 
     private static final String BUNDLE_NAME = "org.pharaox.mastermind.messages";
 
@@ -21,27 +21,29 @@ public final class Messages
     {
     }
 
-    public static String s(final String key)
+    public static String msg(final String key)
     {
-        return Messages.getString(key);
-    }
-
-    public static String getString(final String key)
-    {
+        String string = "";
         try
         {
             initBundle();
-            return bundle.getString(key);
+            string = bundle.getString(key);
         }
-        catch (MissingResourceException e)
+        catch (final MissingResourceException e)
         {
-            return '!' + key + '!';
+            string = '!' + key + '!';
         }
+        return string;
     }
 
     private static void initBundle()
     {
-        if (bundle == null)
-            bundle = ResourceBundle.getBundle(BUNDLE_NAME);
+        synchronized (new Object())
+        {
+            if (bundle == null)
+            {
+                bundle = ResourceBundle.getBundle(BUNDLE_NAME);
+            }
+        }
     }
 }

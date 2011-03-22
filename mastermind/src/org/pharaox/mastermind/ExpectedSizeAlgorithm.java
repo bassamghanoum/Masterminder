@@ -15,16 +15,17 @@ public class ExpectedSizeAlgorithm extends AbstractAlgorithm
     protected final double calculateGuessRating(final String guess)
     {
         double sum = 0.0;
-        for (Score score : getAllScores())
+        for (final Score score : getAllScores())
         {
             // @formatter:off
-            SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
+            final SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
                 getPossibleCodes(), false);
             // @formatter:on
-            double size = (double) (elem.size() * elem.size()) / (double) getPossibleCodes().size();
+            final double size =
+                (double) (elem.size() * elem.size()) / (double) getPossibleCodes().size();
             sum += size;
         }
-        return ((double) getPossibleCodes().size() - sum);
+        return (getPossibleCodes().size() - sum);
     }
 
     @Override

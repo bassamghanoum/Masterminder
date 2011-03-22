@@ -9,13 +9,14 @@ public class AlgorithmEvaluator
 {
     public static final int MAX_ROUNDS = 10;
 
-    private Mastermind mastermind;
-    private AlgorithmType type;
-    private ReadyGuesses readyGuesses;
-    private int totalRoundsPlayed = 0;
-    private int maxRoundsPlayed = 0;
-    private int gamesPlayed = 0;
-    private int gamesWon = 0;
+    private final transient Mastermind mastermind;
+    private final transient AlgorithmType type;
+    private final transient ReadyGuesses readyGuesses;
+    
+    private transient int totalRoundsPlayed = 0;
+    private transient int maxRoundsPlayed = 0;
+    private transient int gamesPlayed = 0;
+    private transient int gamesWon = 0;
 
     public AlgorithmEvaluator(final Mastermind mastermind, final AlgorithmType type)
     {
@@ -73,14 +74,18 @@ public class AlgorithmEvaluator
         public void visit(final String code)
         {
             debug("Code: " + code);
-            mastermind.setCurrentCode(code);
-            Game game = new Game(mastermind, type, MAX_ROUNDS, readyGuesses);
-            boolean won = game.play();
-            int roundsPlayed = game.getRoundsPlayed();
+            final Player player = new DefaultPlayer(mastermind, code);
+            final Game game = new Game(mastermind, type, MAX_ROUNDS, player, readyGuesses);
+            final boolean won = game.play();
+            final int roundsPlayed = game.getRoundsPlayed();
             if (won)
+            {
                 debug("Game won in " + roundsPlayed + " round(s)");
+            }
             else
+            {
                 debug("Game lost in " + roundsPlayed + " round(s)");
+            }
             updateStatistics(won, roundsPlayed);
         }
 
@@ -90,7 +95,9 @@ public class AlgorithmEvaluator
             maxRoundsPlayed = Math.max(maxRoundsPlayed, roundsPlayed);
             gamesPlayed++;
             if (won)
+            {
                 gamesWon++;
+            }
         }
     }
 }

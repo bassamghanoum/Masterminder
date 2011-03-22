@@ -1,35 +1,34 @@
 package org.pharaox.mastermind;
 
-import static org.pharaox.mastermind.Messages.MSG_AIOP_STARTING_GAME;
-import static org.pharaox.mastermind.Messages.MSG_AIOP_GAME_WON_IN_X_ROUNDS;
-import static org.pharaox.mastermind.Messages.MSG_AIOP_GAME_LOST_IN_X_ROUNDS;
-import static org.pharaox.mastermind.Messages.MSG_AIOP_GUESS;
-import static org.pharaox.mastermind.Messages.MSG_AIOP_COWS;
-import static org.pharaox.mastermind.Messages.MSG_AIOP_BULLS;
+import static org.pharaox.mastermind.Messages.*; // NOPMD UnusedImports
 
 public abstract class AbstractIOPlayer implements Player
 {
     @Override
     public final void startGame()
     {
-        printLine(MSG_AIOP_STARTING_GAME);
+        printLine(M_C_STARTING_GAME);
     }
 
     @Override
     public final void endGame(final boolean won, final int roundsPlayed)
     {
         if (won)
-            printLine(MSG_AIOP_GAME_WON_IN_X_ROUNDS, roundsPlayed);
+        {
+            printLine(M_C_GAME_WON, roundsPlayed);
+        }
         else
-            printLine(MSG_AIOP_GAME_LOST_IN_X_ROUNDS, roundsPlayed);
+        {
+            printLine(M_C_GAME_LOST, roundsPlayed);
+        }
     }
 
     @Override
     public final Score getScore(final String guess)
     {
-        printLine(MSG_AIOP_GUESS, guess);
-        int cows = readLineInt(MSG_AIOP_COWS);
-        int bulls = readLineInt(MSG_AIOP_BULLS);
+        printLine(M_C_GUESS, guess);
+        final int cows = readLineInt(M_C_COWS);
+        final int bulls = readLineInt(M_C_BULLS);
         return new Score(cows, bulls);
     }
 
