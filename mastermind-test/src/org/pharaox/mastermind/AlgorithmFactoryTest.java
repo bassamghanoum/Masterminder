@@ -1,8 +1,7 @@
 package org.pharaox.mastermind;
 
-import static org.pharaox.mastermind.Constants.M2;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.pharaox.mastermind.Constants.MM2;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,14 +11,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
 import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
 
 @RunWith(value = Parameterized.class)
 public class AlgorithmFactoryTest
 {
-    private AlgorithmType type;
-    private Mastermind mastermind;
-    private AlgorithmFactory factory;
+    private static final String M_WRONG_ALGORITHM_TYPE = "Wrong algorithm type";
+    
+    private final transient AlgorithmType type;
+    private final transient Mastermind mastermind;
+    
+    private transient AlgorithmFactory factory;
 
     public AlgorithmFactoryTest(final AlgorithmType type, final Mastermind mastermind)
     {
@@ -31,20 +34,20 @@ public class AlgorithmFactoryTest
     public static Collection<Object[]> data()
     {
         // @formatter:off
-        Object[][] data = new Object[][]
+        final Object[][] data = new Object[][]
         {
-            { AlgorithmType.SIMPLE, M2 },
-            { AlgorithmType.KNUTH, M2 },
-            { AlgorithmType.PHARAOX, M2 },
-            { AlgorithmType.ESIZE, M2 },
-            { AlgorithmType.DUMB, M2 },
+            { AlgorithmType.SIMPLE, MM2 },
+            { AlgorithmType.KNUTH, MM2 },
+            { AlgorithmType.PHARAOX, MM2 },
+            { AlgorithmType.ESIZE, MM2 },
+            { AlgorithmType.DUMB, MM2 },
         };
         // @formatter:on
         return Arrays.asList(data);
     }
 
     @Before
-    public final void setup()
+    public final void setUp()
     {
         factory = new AlgorithmFactory(type, mastermind);
     }
@@ -52,28 +55,26 @@ public class AlgorithmFactoryTest
     @Test
     public final void testGetAlgorithm()
     {
-        Algorithm algorithm = factory.getAlgorithm();
+        final Algorithm algorithm = factory.getAlgorithm();
         if (type == AlgorithmType.SIMPLE)
-            assertTrue(algorithm instanceof SimpleAlgorithm);
+        {
+            assertTrue(M_WRONG_ALGORITHM_TYPE, algorithm instanceof SimpleAlgorithm);
+        }
         else if (type == AlgorithmType.KNUTH)
-            assertTrue(algorithm instanceof KnuthAlgorithm);
+        {
+            assertTrue(M_WRONG_ALGORITHM_TYPE, algorithm instanceof KnuthAlgorithm);
+        }
         else if (type == AlgorithmType.PHARAOX)
-            assertTrue(algorithm instanceof PharaoxAlgorithm);
+        {
+            assertTrue(M_WRONG_ALGORITHM_TYPE, algorithm instanceof PharaoxAlgorithm);
+        }
         else if (type == AlgorithmType.ESIZE)
-            assertTrue(algorithm instanceof ExpectedSizeAlgorithm);
+        {
+            assertTrue(M_WRONG_ALGORITHM_TYPE, algorithm instanceof ExpectedSizeAlgorithm);
+        }
         else if (type == AlgorithmType.DUMB)
-            assertTrue(algorithm instanceof DumbAlgorithm);
-    }
-
-    @Test
-    public final void testAlgorithmTypeValueOf()
-    {
-        assertEquals(type, AlgorithmType.valueOf(type.toString()));
-    }
-
-    @Test
-    public final void testAlgorithmTypeValues()
-    {
-        AlgorithmType.values();
+        {
+            assertTrue(M_WRONG_ALGORITHM_TYPE, algorithm instanceof DumbAlgorithm);
+        }
     }
 }

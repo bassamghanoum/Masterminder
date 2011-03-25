@@ -58,7 +58,7 @@ public class Mastermind
         for (int i = 0; i < string.length(); i++)
         {
             final char chi = string.charAt(i);
-            if (!stringContainsChar(validChars, chi)
+            if (validChars.indexOf(chi) == -1
                 || (uniqueChars && usedChars.contains(chi)))
             {
                 result = false;
@@ -72,11 +72,6 @@ public class Mastermind
         return result;
     }
     
-    private static boolean stringContainsChar(final String string, final char chx)
-    {
-        return string.contains(new String(new char[] { chx }));
-    }
-
     public final String getAlphabet()
     {
         return alphabet;
@@ -127,17 +122,17 @@ public class Mastermind
         return new Score(0, length);
     }
 
-    public final Score evaluateScore(final String guess, final String code)
+    public final Score evaluateScoreSafe(final String guess, final String code)
     {
-        return evaluateScore(guess, code, true);
-    }
-
-    public final Score evaluateScore(final String guess, final String code, final boolean safe)
-    {
-        if (safe && (!isValidCode(guess) || !isValidCode(code)))
+        if ((!isValidCode(guess) || !isValidCode(code)))
         {
             throw new MastermindException();
         }
+        return evaluateScore(guess, code);
+    }
+
+    public final Score evaluateScore(final String guess, final String code)
+    {
         Score result;
         if (uniqueChars)
         {
@@ -161,7 +156,7 @@ public class Mastermind
             {
                 bulls++;
             }
-            else if (stringContainsChar(code, chi))
+            else if (code.indexOf(chi) != -1)
             {
                 cows++;
             }
@@ -251,7 +246,7 @@ public class Mastermind
         final SortedSet<String> result = new TreeSet<String>();
         for (final String code : codes)
         {
-            final Score evaluatedScore = evaluateScore(guess, code, safe);
+            final Score evaluatedScore = evaluateScore(guess, code);
             if (evaluatedScore.equals(score))
             {
                 result.add(code);

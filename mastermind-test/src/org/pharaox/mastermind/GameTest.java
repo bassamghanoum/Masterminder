@@ -2,7 +2,7 @@ package org.pharaox.mastermind;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.pharaox.mastermind.Constants.*;
+import static org.pharaox.mastermind.Constants.*; // NOPMD UnusedImports
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,13 +18,15 @@ import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
 @RunWith(value = Parameterized.class)
 public class GameTest
 {
-    private AlgorithmType type;
-    private Mastermind mastermind;
-    private String code;
-    private int maxRounds;
+    private static final String M_WRONG_GAME_OUTCOME = "Wrong game outcome:";
+    private static final String M_UNEXPECTED_ROUNDS_PLAYED = "Unexpected rounds played:";
     
-    private Player player;
-    private Game game;
+    private final transient AlgorithmType type;
+    private final transient Mastermind mastermind;
+    private final transient String code;
+    private final transient int maxRounds;
+
+    private transient Game game;
 
     public GameTest(final AlgorithmType type, final Mastermind mastermind, final String code,
         final int maxRounds)
@@ -39,31 +41,32 @@ public class GameTest
     public static Collection<Object[]> data()
     {
         // @formatter:off
-        Object[][] data = new Object[][]
+        final Object[][] data = new Object[][]
         {
-            { AlgorithmType.SIMPLE, M2, M2_CODE, M2_MAX_ROUNDS_SIMPLE },
-            { AlgorithmType.KNUTH, M2, M2_CODE, M2_MAX_ROUNDS_KNUTH },
-            { AlgorithmType.ESIZE, M2, M2_CODE, M2_MAX_ROUNDS_ESIZE },
-            { AlgorithmType.DUMB, M2, M2_CODE, M2_MAX_ROUNDS_DUMB },
+            { AlgorithmType.SIMPLE, MM2, MM2_CODE, MM2_MAX_ROUNDS_SIMPLE },
+            { AlgorithmType.KNUTH, MM2, MM2_CODE, MM2_MAX_ROUNDS_KNUTH },
+            { AlgorithmType.ESIZE, MM2, MM2_CODE, MM2_MAX_ROUNDS_ESIZE },
+            { AlgorithmType.DUMB, MM2, MM2_CODE, MM2_MAX_ROUNDS_DUMB },
         };
         // @formatter:on
         return Arrays.asList(data);
     }
 
     @Before
-    public final void setup()
+    public final void setUp()
     {
-        player = new DefaultPlayer(mastermind, code);
+        final Player player = new DefaultPlayer(mastermind, code);
         game = new Game(mastermind, type, maxRounds, player);
     }
 
     @Test
     public final void testPlay()
     {
-        boolean won = game.play();
-        assertEquals(won, game.hasWon());
-        assertTrue((type != AlgorithmType.DUMB && won) || (type == AlgorithmType.DUMB && !won));
-        assertTrue(game.getRoundsPlayed() <= maxRounds);
+        final boolean won = game.play();
+        assertEquals(M_WRONG_GAME_OUTCOME, won, game.hasWon());
+        assertTrue(M_WRONG_GAME_OUTCOME, 
+            ((type != AlgorithmType.DUMB) && won) || ((type == AlgorithmType.DUMB) && !won));
+        assertTrue(M_UNEXPECTED_ROUNDS_PLAYED, game.getRoundsPlayed() <= maxRounds);
     }
 
     @Test(expected = MastermindException.class)

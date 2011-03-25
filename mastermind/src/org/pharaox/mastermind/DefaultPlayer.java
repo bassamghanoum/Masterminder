@@ -27,6 +27,6 @@ public class DefaultPlayer implements Player
     @Override
     public final Score getScore(final String guess)
     {
-        return mastermind.evaluateScore(guess, code);
+        return mastermind.evaluateScoreSafe(guess, code);
     }
 }

@@ -1,11 +1,15 @@
-package org.pharaox.mastermind;
+package org.pharaox.mastermind; // NOPMD TooManyStaticImports
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-import static org.pharaox.util.Logger.debug;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.pharaox.mastermind.Constants.*; // NOPMD UnusedImports
 import static org.pharaox.mastermind.Mastermind.MAX_LENGTH;
-import static org.pharaox.mastermind.Constants.*;
+import static org.pharaox.util.Logger.debug;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,26 +26,37 @@ import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(value = Parameterized.class)
 public class MastermindTest
-{
+{ // NOPMD TooManyMethods
+    
+    private static final String M_WRONG_ALPHABET = "Wrong alphabet:";
+    private static final String M_WRONG_LENGTH = "Wrong length:";
+    private static final String M_WRONG_UNIQUE_CHARS_FLAG = "Wrong unique chars flag:";
+    private static final String M_WRONG_CODE_VALIDITY = "Wrong code validity:";
+    private static final String M_WRONG_NUMBER_OF_SCORES = "Wrong number of scores:";
+    private static final String M_WRONG_SCORE = "Wrong score:";
+    private static final String M_WRONG_NUMBER_OF_CODES = "Wrong number of codes:";
+    private static final String M_WRONG_CODE = "Wrong code:";
+    private static final String M_INVALID_CODE = "Invalid code";
+
     private static final int NUM_UNIQUE_CODES = 2;
 
-    private String alphabet;
-    private int length;
-    private boolean uniqueChars;
-    private String code;
-    private Score[] scores;
-    private Score[] possibleScores;
-    private String[] possibleCodes;
-    private String[] possibleCodes2;
+    private final transient String alphabet;
+    private final transient int length;
+    private final transient boolean uniqueChars;
+    private final transient String code;
+    private final transient Score[] scores;
+    private final transient Score[] possibleScores;
+    private final transient String[] possibleCodes;
+    private final transient String[] possibleCodes2;
 
-    private String[] codes;
-    private boolean[] valids;
-    private String[] invalidAlphabets;
-    private String[] validAlphabets;
-    private int[] invalidLengths;
-    private int[] validLengths;
+    private transient String[] codes;
+    private transient boolean[] valids;
+    private transient String[] invalidAlphabets;
+    private transient String[] validAlphabets;
+    private transient int[] invalidLengths;
+    private transient int[] validLengths;
 
-    private Mastermind mastermind;
+    private transient Mastermind mastermind;
 
     // @checkstyle:off (Long argument list)
     public MastermindTest(final String alphabet, final int length, final boolean uniqueChars,
@@ -89,15 +104,15 @@ public class MastermindTest
     public static Collection<Object[]> data()
     {
         // @formatter:off, @checkstyle:off (Magic numbers)
-        Object[][] data = new Object[][]
+        final Object[][] data = new Object[][]
         {
-            { M1_ALPHABET, M1_LENGTH, false, M1_CODE, 
+            { MM1_ALPHABET, MM1_LENGTH, false, MM1_CODE, 
                 new Score[] { sc(0, 1), sc(1, 1), sc(1, 1) },
                 new Score[] { sc(0, 0), sc(1, 0), sc(2, 0), sc(3, 0), sc(4, 0),
                     sc(0, 1), sc(1, 1), sc(2, 1), sc(3, 1), sc(0, 2), sc(1, 2), sc(2, 2),
                     sc(0, 3), sc(0, 4) },
                 new String[] {}, new String[] {} },
-            { M2_ALPHABET, M2_LENGTH, false, "DA", 
+            { MM2_ALPHABET, MM2_LENGTH, false, "DA", 
                 new Score[] { sc(0, 1), sc(1, 0), sc(1, 0), sc(2, 0), sc(0, 1), sc(0, 0), 
                     sc(0, 0), sc(1, 0), sc(0, 1), sc(0, 0), sc(0, 0), sc(1, 0),
                     sc(0, 2), sc(0, 1), sc(0, 1), sc(0, 1) },
@@ -117,50 +132,72 @@ public class MastermindTest
         return Arrays.asList(data);
     }
 
-    private static Score sc(final int cows, final int bulls)
+    private static Score sc(final int cows, final int bulls) // NOPMD ShortMethodName
     {
         return new Score(cows, bulls);
     }
 
     @Before
-    public final void setup()
+    public final void setUp()
     {
         mastermind = new Mastermind(alphabet, length, uniqueChars);
     }
 
-    @Test(expected = MastermindException.class)
-    public final void testInvalidAlphabets()
+    @Test
+    public final void testInvalidAlphabets() // NOPMD JUnitTestsShouldIncludeAssert
     {
-        for (String a : invalidAlphabets)
+        for (final String a : invalidAlphabets)
         {
-            new Mastermind(a, length);
+            createMastermind(a, length, false);
         }
     }
 
     @Test
-    public final void testValidAlphabets()
+    public final void testValidAlphabets() // NOPMD JUnitTestsShouldIncludeAssert
     {
-        for (String a : validAlphabets)
+        for (final String a : validAlphabets)
         {
-            new Mastermind(a, length);
-        }
-    }
-
-    @Test(expected = MastermindException.class)
-    public final void testInvalidLengths()
-    {
-        for (int i : invalidLengths)
-        {
-            new Mastermind(alphabet, i);
+            createMastermind(a, length, true);
         }
     }
 
     @Test
-    public final void testValidLengths()
+    public final void testInvalidLengths() // NOPMD JUnitTestsShouldIncludeAssert
     {
-        for (int i : validLengths)
+        for (final int i : invalidLengths)
         {
-            new Mastermind(alphabet, i);
+            createMastermind(alphabet, i, false);
+        }
+    }
+
+    @Test
+    public final void testValidLengths() // NOPMD JUnitTestsShouldIncludeAssert
+    {
+        for (final int i : validLengths)
+        {
+            createMastermind(alphabet, i, true);
+        }
+    }
+
+    private static void createMastermind(final String alphabetx, final int lengthx, 
+        final boolean valid)
+    {
+        try
+        {
+            new Mastermind(alphabetx, lengthx);
+            failIf(!valid);
+        }
+        catch (final MastermindException e)
+        {
+            failIf(valid);
+        }
+    }
+
+    private static void failIf(final boolean condition)
+    {
+        if (condition)
+        {
+            fail();
         }
     }
 
@@ -173,10 +210,10 @@ public class MastermindTest
     @Test
     public final void testGeneratedCodesAreDifferent()
     {
-        Set<String> generated = new HashSet<String>();
+        final Set<String> generated = new HashSet<String>();
         for (int i = 0; i < NUM_UNIQUE_CODES; i++)
         {
-            String codex = mastermind.generateCode();
+            final String codex = mastermind.generateCode();
             assertValidCode(codex, alphabet, length, uniqueChars);
             generated.add(codex);
         }
@@ -185,19 +222,19 @@ public class MastermindTest
     @Test
     public final void testGetAlphabet()
     {
-        assertEquals(alphabet, mastermind.getAlphabet());
+        assertEquals(M_WRONG_ALPHABET, alphabet, mastermind.getAlphabet());
     }
 
     @Test
     public final void testGetLength()
     {
-        assertEquals(length, mastermind.getLength());
+        assertEquals(M_WRONG_LENGTH, length, mastermind.getLength());
     }
 
     @Test
     public final void testHasUniqueChars()
     {
-        assertEquals(uniqueChars, mastermind.hasUniqueChars());
+        assertEquals(M_WRONG_UNIQUE_CHARS_FLAG, uniqueChars, mastermind.hasUniqueChars());
     }
 
     @Test
@@ -205,30 +242,31 @@ public class MastermindTest
     {
         for (int i = 0; i < codes.length; i++)
         {
-            assertEquals(valids[i], mastermind.isValidCode(codes[i]));
+            assertEquals(M_WRONG_CODE_VALIDITY, valids[i], mastermind.isValidCode(codes[i]));
         }
     }
 
     @Test
     public final void testGetWinningScore()
     {
-        assertEquals(new Score(0, length), mastermind.getWinningScore());
+        assertEquals(M_WRONG_SCORE, new Score(0, length), mastermind.getWinningScore());
     }
 
     @Test
-    public final void testEvaluateScore()
+    public final void testEvaluateScore() // NOPMD JUnitTestsShouldIncludeAssert
     {
         mastermind.visitCodes(new EvaluateScoreVisitor(scores));
     }
 
     class EvaluateScoreVisitor implements CodeVisitor
     {
-        private Score[] scores;
-        private int count = 0;
+        private final transient Score[] scores;
+        private transient int count = 0;
 
         public EvaluateScoreVisitor(final Score[] scores)
         {
-            this.scores = scores;
+            this.scores = new Score[scores.length];
+            System.arraycopy(scores, 0, this.scores, 0, scores.length);
         }
 
         @Override
@@ -236,9 +274,9 @@ public class MastermindTest
         {
             if (count < scores.length)
             {
-                Score score = mastermind.evaluateScore(codex, code);
+                final Score score = mastermind.evaluateScoreSafe(codex, code);
                 debug(codex + ": " + score);
-                assertTrue(score.equals(scores[count]));
+                assertEquals(M_WRONG_SCORE, score, scores[count]);
             }
             count++;
         }
@@ -247,33 +285,37 @@ public class MastermindTest
     @Test(expected = MastermindException.class)
     public final void testEvaluateScoreInvalidScore()
     {
-        mastermind.evaluateScore("", code);
+        mastermind.evaluateScoreSafe("", code);
     }
 
     @Test(expected = MastermindException.class)
     public final void testEvaluateScoreInvalidCode()
     {
-        mastermind.evaluateScore(codes[0], "");
+        mastermind.evaluateScoreSafe(codes[0], "");
     }
 
     @Test
     public final void testGetAllPossibleScores()
     {
-        List<Score> allPossibleScores = mastermind.getAllPossibleScores();
-        assertEquals(possibleScores.length, allPossibleScores.size());
+        final List<Score> allPossibleScores = mastermind.getAllPossibleScores();
+        assertEquals(M_WRONG_NUMBER_OF_SCORES, possibleScores.length, allPossibleScores.size());
         for (int i = 0; i < possibleScores.length; i++)
-            assertEquals(possibleScores[i], allPossibleScores.get(i));
+        {
+            assertEquals(M_WRONG_SCORE, possibleScores[i], allPossibleScores.get(i));
+        }
     }
 
     @Test
     public final void testGetAllPossibleCodes()
     {
-        SortedSet<String> allPossibleCodes = mastermind.getAllPossibleCodes();
+        final SortedSet<String> allPossibleCodes = mastermind.getAllPossibleCodes();
         if (possibleCodes.length > 0)
         {
-            assertEquals(possibleCodes.length, allPossibleCodes.size());
-            for (int i = 0; i < possibleCodes.length; i++)
-                assertTrue(allPossibleCodes.contains(possibleCodes[i]));
+            assertEquals(M_WRONG_NUMBER_OF_CODES, possibleCodes.length, allPossibleCodes.size());
+            for (final String possibleCode : possibleCodes)
+            {
+                assertTrue(M_WRONG_CODE, allPossibleCodes.contains(possibleCode));
+            }
         }
     }
 
@@ -284,26 +326,28 @@ public class MastermindTest
         codesx = mastermind.evaluatePossibleCodes(code, Score.ZERO_SCORE, codesx);
         if (possibleCodes2.length > 0)
         {
-            assertEquals(possibleCodes2.length, codesx.size());
-            for (int i = 0; i < possibleCodes2.length; i++)
-                assertTrue(codesx.contains(possibleCodes2[i]));
+            assertEquals(M_WRONG_NUMBER_OF_CODES, possibleCodes2.length, codesx.size());
+            for (final String element : possibleCodes2)
+            {
+                assertTrue(M_WRONG_CODE, codesx.contains(element));
+            }
         }
     }
 
     public static void assertValidCode(final String code, final String alphabet, final int length,
         final boolean uniqueChars)
     {
-        assertTrue(code != null && !code.isEmpty());
-        assertTrue(code.length() == length);
-        Set<Character> usedChars = new HashSet<Character>();
+        assertTrue(M_INVALID_CODE, (code != null) && !code.isEmpty());
+        assertEquals(M_INVALID_CODE, length, code.length());
+        final Set<Character> usedChars = new HashSet<Character>();
         for (int i = 0; i < code.length(); i++)
         {
-            char c = code.charAt(i);
-            assertTrue(alphabet.contains(new String(new char[] { c })));
+            final char chi = code.charAt(i);
+            assertThat(M_INVALID_CODE, alphabet.indexOf(chi), not(equalTo(-1)));
             if (uniqueChars)
             {
-                assertFalse(usedChars.contains(c));
-                usedChars.add(c);
+                assertFalse(M_INVALID_CODE, usedChars.contains(chi));
+                usedChars.add(chi);
             }
         }
     }

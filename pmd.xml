@@ -197,7 +197,11 @@
    <rule ref="rulesets/controversial.xml/AvoidAccessibilityAlteration"/>
    <rule ref="rulesets/controversial.xml/DoNotCallGarbageCollectionExplicitly"/>
    <rule ref="rulesets/naming.xml/ShortVariable"/>
-   <rule ref="rulesets/naming.xml/LongVariable"/>
+   <rule ref="rulesets/naming.xml/LongVariable">
+      <properties>
+         <property name="minimum" value="30"/>
+      </properties>
+   </rule>
    <rule ref="rulesets/naming.xml/ShortMethodName"/>
    <rule ref="rulesets/naming.xml/VariableNamingConventions"/>
    <rule ref="rulesets/naming.xml/MethodNamingConventions"/>

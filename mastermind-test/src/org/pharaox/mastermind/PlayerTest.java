@@ -1,8 +1,7 @@
 package org.pharaox.mastermind;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.pharaox.mastermind.Messages.*;
+import static org.pharaox.mastermind.Messages.*; // NOPMD UnusedImports
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -18,19 +17,20 @@ public class PlayerTest
     private static final String GUESS = "AABB";
     private static final int COWS = 1;
     private static final int BULLS = 0;
-    private static final String INPUT = "" + COWS + "\n" + BULLS + "\n";
-    private static final String[] INVALID_INPUT = { "", "" + COWS + "\n", "XXX\nYYY\n" };
+    private static final String INPUT = 
+        Integer.toString(COWS) + "\n" + Integer.toString(BULLS) + "\n";
+    private static final String INCOMPLETE_INPUT = Integer.toString(COWS) + "\n";
+    private static final String NON_NUMERIC_INPUT = "XXX\nYYY\n";
 
-    private StringReader reader;
-    private StringWriter writer;
-    private Player player;
-
-    public PlayerTest()
-    {
-    }
+    private static final String M_WRONG_CONSOLE_MSG = "Wrong console message:";
+    private static final String M_WRONG_SCORE = "Wrong score:";
+    
+    private transient StringReader reader;
+    private transient StringWriter writer;
+    private transient Player player;
 
     @Before
-    public final void setup()
+    public final void setUp()
     {
         reader = new StringReader(INPUT);
         writer = new StringWriter();
@@ -38,7 +38,7 @@ public class PlayerTest
     }
 
     @After
-    public final void teardown() throws IOException
+    public final void tearDown() throws IOException
     {
         reader.close();
         writer.close();
@@ -48,35 +48,32 @@ public class PlayerTest
     public final void testStartGame()
     {
         player.startGame();
-        assertEquals(M_C_STARTING_GAME + "\n", writer.toString());
+        assertEquals(M_WRONG_CONSOLE_MSG, M_C_STARTING_GAME + "\n", writer.toString());
     }
 
     @Test
     public final void testEndGameWon()
     {
         player.endGame(true, ROUNDS_PLAYED);
-        String expected = String.format(M_C_GAME_WON, ROUNDS_PLAYED) + "\n";
-        assertEquals(expected, writer.toString());
+        final String expected = String.format(M_C_GAME_WON, ROUNDS_PLAYED) + "\n";
+        assertEquals(M_WRONG_CONSOLE_MSG, expected, writer.toString());
     }
 
     @Test
     public final void testEndGameLost()
     {
         player.endGame(false, ROUNDS_PLAYED);
-        String expected = String.format(M_C_GAME_LOST, ROUNDS_PLAYED) + "\n";
-        assertEquals(expected, writer.toString());
+        final String expected = String.format(M_C_GAME_LOST, ROUNDS_PLAYED) + "\n";
+        assertEquals(M_WRONG_CONSOLE_MSG, expected, writer.toString());
     }
 
     @Test
     public final void testGetScore()
     {
-        Score score = player.getScore(GUESS);
-        assertEquals(new Score(COWS, BULLS), score);
-        // @formatter:off
-        String expected = String.format(M_C_GUESS, GUESS) + "\n" 
-            + M_C_COWS + M_C_BULLS;
-        // @formatter:on
-        assertEquals(expected, writer.toString());
+        final Score score = player.getScore(GUESS);
+        assertEquals(M_WRONG_SCORE, new Score(COWS, BULLS), score);
+        final String expected = String.format(M_C_GUESS, GUESS) + "\n" + M_C_COWS + M_C_BULLS;
+        assertEquals(M_WRONG_CONSOLE_MSG, expected, writer.toString());
     }
 
     @Test(expected = MastermindException.class)
@@ -86,23 +83,28 @@ public class PlayerTest
         player.getScore(GUESS);
     }
 
-    @Test
-    public final void testGetScoreInvalidInput()
+    @Test(expected = MastermindException.class)
+    public final void testGetScoreEmptyInput()
     {
-        for (int i = 0; i < INVALID_INPUT.length; i++)
-        {
-            player = new ReaderWriterPlayer(new StringReader(INVALID_INPUT[i]), writer);
-            try
-            {
-                player.getScore(GUESS);
-                fail();
-            }
-            catch (MastermindException e)
-            // @checkstyle:off (Empty catch block)
-            {
-            }
-            // @checkstyle:on
-        }
+        getScoreFromInput("");
+    }
+
+    @Test(expected = MastermindException.class)
+    public final void testGetScoreIncompleteInput()
+    {
+        getScoreFromInput(INCOMPLETE_INPUT);
     }
     
+    @Test(expected = MastermindException.class)
+    public final void testGetScoreNonNumericInput()
+    {
+        getScoreFromInput(NON_NUMERIC_INPUT);
+    }
+    
+    private Score getScoreFromInput(final String input)
+    {
+        player = new ReaderWriterPlayer(new StringReader(input), writer);
+        return player.getScore(GUESS);
+    }
+
 }
