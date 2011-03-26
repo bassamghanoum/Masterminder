@@ -13,26 +13,24 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
-
 @RunWith(value = Parameterized.class)
 public class GameTest
 {
     private static final String M_WRONG_GAME_OUTCOME = "Wrong game outcome:";
     private static final String M_UNEXPECTED_ROUNDS_PLAYED = "Unexpected rounds played:";
     
-    private final transient AlgorithmType type;
     private final transient Mastermind mastermind;
+    private final transient AlgorithmFactory factory;
     private final transient String code;
     private final transient int maxRounds;
 
     private transient Game game;
 
-    public GameTest(final AlgorithmType type, final Mastermind mastermind, final String code,
+    public GameTest(final Mastermind mastermind, final AlgorithmFactory factory, final String code,
         final int maxRounds)
     {
-        this.type = type;
         this.mastermind = mastermind;
+        this.factory = factory;
         this.code = code;
         this.maxRounds = maxRounds;
     }
@@ -43,10 +41,10 @@ public class GameTest
         // @formatter:off
         final Object[][] data = new Object[][]
         {
-            { AlgorithmType.SIMPLE, MM2, MM2_CODE, MM2_MAX_ROUNDS_SIMPLE },
-            { AlgorithmType.KNUTH, MM2, MM2_CODE, MM2_MAX_ROUNDS_KNUTH },
-            { AlgorithmType.ESIZE, MM2, MM2_CODE, MM2_MAX_ROUNDS_ESIZE },
-            { AlgorithmType.DUMB, MM2, MM2_CODE, MM2_MAX_ROUNDS_DUMB },
+            { MM2, new SimpleAlgorithmFactory(MM2), MM2_CODE, MM2_MAX_ROUNDS_SIMPLE },
+            { MM2, new KnuthAlgorithmFactory(MM2), MM2_CODE, MM2_MAX_ROUNDS_KNUTH },
+            { MM2, new ExpectedSizeAlgorithmFactory(MM2), MM2_CODE, MM2_MAX_ROUNDS_ESIZE },
+            { MM2, new DumbAlgorithmFactory(MM2), MM2_CODE, MM2_MAX_ROUNDS_DUMB },
         };
         // @formatter:on
         return Arrays.asList(data);
@@ -56,7 +54,7 @@ public class GameTest
     public final void setUp()
     {
         final Player player = new DefaultPlayer(mastermind, code);
-        game = new Game(mastermind, type, maxRounds, player);
+        game = new Game(mastermind, factory.getAlgorithm(), maxRounds, player);
     }
 
     @Test
@@ -64,8 +62,8 @@ public class GameTest
     {
         final boolean won = game.play();
         assertEquals(M_WRONG_GAME_OUTCOME, won, game.hasWon());
-        assertTrue(M_WRONG_GAME_OUTCOME, 
-            ((type != AlgorithmType.DUMB) && won) || ((type == AlgorithmType.DUMB) && !won));
+        boolean dumb = (factory instanceof DumbAlgorithmFactory);
+        assertTrue(M_WRONG_GAME_OUTCOME, (!dumb && won) || (dumb && !won));
         assertTrue(M_UNEXPECTED_ROUNDS_PLAYED, game.getRoundsPlayed() <= maxRounds);
     }
 

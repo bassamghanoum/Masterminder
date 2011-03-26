@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
-
 public class ReadyGuesses
 {
     private final transient Mastermind mastermind;
@@ -20,10 +18,10 @@ public class ReadyGuesses
     private transient String secondGuess = null;
     private transient String thirdGuess = null;
 
-    public ReadyGuesses(final Mastermind mastermind, final AlgorithmType type)
+    public ReadyGuesses(final Mastermind mastermind, final AlgorithmFactory factory)
     {
         this.mastermind = mastermind;
-        this.factory = new AlgorithmFactory(type, mastermind);
+        this.factory = factory;
         this.firstGuess = makeFirstGuess();
         initSecondGuesses();
         initThirdGuesses();

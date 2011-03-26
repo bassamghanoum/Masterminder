@@ -3,26 +3,25 @@ package org.pharaox.mastermind;
 import static org.pharaox.util.Logger.debug;
 import static org.pharaox.util.Logger.info;
 
-import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
-
 public class AlgorithmEvaluator
 {
     public static final int MAX_ROUNDS = 10;
 
     private final transient Mastermind mastermind;
-    private final transient AlgorithmType type;
-    private final transient ReadyGuesses readyGuesses;
+    private final transient AlgorithmFactory factory;
+    private final transient GuessCalculator calc;
     
     private transient int totalRoundsPlayed = 0;
     private transient int maxRoundsPlayed = 0;
     private transient int gamesPlayed = 0;
     private transient int gamesWon = 0;
 
-    public AlgorithmEvaluator(final Mastermind mastermind, final AlgorithmType type)
+    public AlgorithmEvaluator(final Mastermind mastermind, final AlgorithmFactory factory, 
+        final int levels)
     {
         this.mastermind = mastermind;
-        this.type = type;
-        this.readyGuesses = new ReadyGuesses(mastermind, type);
+        this.factory = factory;
+        this.calc = new GuessCalculator(mastermind, factory, levels);
     }
 
     public final void evaluate()
@@ -33,7 +32,7 @@ public class AlgorithmEvaluator
 
     private void printInfo()
     {
-        info("Algorithm Evaluation for " + new AlgorithmFactory(type, mastermind).getAlgorithm());
+        info("Algorithm Evaluation for " + factory.getAlgorithm());
         info("===============================================");
         info("Total Rounds Played: " + totalRoundsPlayed);
         info("Max Rounds Played: " + maxRoundsPlayed);
@@ -75,7 +74,8 @@ public class AlgorithmEvaluator
         {
             debug("Code: " + code);
             final Player player = new DefaultPlayer(mastermind, code);
-            final Game game = new Game(mastermind, type, MAX_ROUNDS, player, readyGuesses);
+            final Algorithm algorithm = factory.getAlgorithm();
+            final Game game = new Game(mastermind, algorithm, MAX_ROUNDS, player, calc);
             final boolean won = game.play();
             final int roundsPlayed = game.getRoundsPlayed();
             if (won)
