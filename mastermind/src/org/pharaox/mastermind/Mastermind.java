@@ -9,7 +9,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class Mastermind
-{ // NOPMD TooManyMethods
+{
     public static final int MAX_LENGTH = 9;
     public static final String VALID_ALPHA_CHARS = "0123456789ABCDEFGH";
 
@@ -58,8 +58,7 @@ public class Mastermind
         for (int i = 0; i < string.length(); i++)
         {
             final char chi = string.charAt(i);
-            if (validChars.indexOf(chi) == -1
-                || (uniqueChars && usedChars.contains(chi)))
+            if (validChars.indexOf(chi) == -1 || (uniqueChars && usedChars.contains(chi)))
             {
                 result = false;
                 break;
@@ -213,7 +212,7 @@ public class Mastermind
                 {
                     continue;
                 }
-                result.add(new Score(cows, bulls)); // NOPMD AvoidInstantiatingObjectsInLoops
+                result.add(new Score(cows, bulls));
             }
         }
         return result;
@@ -236,12 +235,6 @@ public class Mastermind
 
     public final SortedSet<String> evaluatePossibleCodes(final String guess, final Score score,
         final SortedSet<String> codes)
-    {
-        return evaluatePossibleCodes(guess, score, codes, true);
-    }
-
-    public final SortedSet<String> evaluatePossibleCodes(final String guess, final Score score,
-        final SortedSet<String> codes, final boolean safe)
     {
         final SortedSet<String> result = new TreeSet<String>();
         for (final String code : codes)
@@ -271,7 +264,7 @@ public class Mastermind
             }
             if (index == length - 1)
             {
-                visitor.visit(new String(chars)); // NOPMD AvoidInstantiatingObjectsInLoops
+                visitor.visit(new String(chars));
             }
             else
             {

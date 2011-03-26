@@ -1,7 +1,7 @@
 package org.pharaox.mastermind;
 
 import static org.junit.Assert.assertEquals;
-import static org.pharaox.mastermind.Messages.*; // NOPMD UnusedImports
+import static org.pharaox.mastermind.Messages.*;
 
 import java.io.IOException;
 import java.io.StringReader;

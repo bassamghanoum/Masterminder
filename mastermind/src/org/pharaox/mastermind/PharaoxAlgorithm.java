@@ -22,7 +22,7 @@ public class PharaoxAlgorithm extends AbstractAlgorithm
         {
             // @formatter:off
             final SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
-                getPossibleCodes(), false);
+                getPossibleCodes());
             // @formatter:on
             final int diff = getPossibleCodes().size() - elem.size();
             dist.add(diff);

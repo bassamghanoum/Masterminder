@@ -5,7 +5,7 @@ public class AlgorithmFactory
     public enum AlgorithmType
     {
         SIMPLE, KNUTH, PHARAOX, ESIZE, DUMB,
-    };
+    }
 
     private final transient AlgorithmType type;
     private final transient Mastermind mastermind;

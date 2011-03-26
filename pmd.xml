@@ -3,7 +3,9 @@
    <description>PMD Plugin preferences rule set</description>
    <rule ref="rulesets/typeresolution.xml/LooseCoupling"/>
    <rule ref="rulesets/typeresolution.xml/CloneMethodMustImplementCloneable"/>
+<!--   
    <rule ref="rulesets/typeresolution.xml/UnusedImports"/>
+-->   
    <rule ref="rulesets/typeresolution.xml/SignatureDeclareThrowsException"/>
    <rule ref="rulesets/braces.xml/IfStmtsMustUseBraces"/>
    <rule ref="rulesets/braces.xml/WhileLoopsMustUseBraces"/>
@@ -115,7 +117,9 @@
    <rule ref="rulesets/j2ee.xml/DoNotUseThreads"/>
    <rule ref="rulesets/optimizations.xml/LocalVariableCouldBeFinal"/>
    <rule ref="rulesets/optimizations.xml/MethodArgumentCouldBeFinal"/>
+<!--   
    <rule ref="rulesets/optimizations.xml/AvoidInstantiatingObjectsInLoops"/>
+-->   
    <rule ref="rulesets/optimizations.xml/UseArrayListInsteadOfVector"/>
    <rule ref="rulesets/optimizations.xml/SimplifyStartsWith"/>
    <rule ref="rulesets/optimizations.xml/UseStringBufferForStringAppends"/>
@@ -166,11 +170,15 @@
    <rule ref="rulesets/imports.xml/DontImportJavaLang"/>
    <rule ref="rulesets/imports.xml/UnusedImports"/>
    <rule ref="rulesets/imports.xml/ImportFromSamePackage"/>
+<!--   
    <rule ref="rulesets/imports.xml/TooManyStaticImports"/>
+-->   
    <rule ref="rulesets/junit.xml/JUnitStaticSuite"/>
    <rule ref="rulesets/junit.xml/JUnitSpelling"/>
    <rule ref="rulesets/junit.xml/JUnitAssertionsShouldIncludeMessage"/>
+<!--   
    <rule ref="rulesets/junit.xml/JUnitTestsShouldIncludeAssert"/>
+-->   
    <rule ref="rulesets/junit.xml/TestClassWithoutTestCases"/>
    <rule ref="rulesets/junit.xml/UnnecessaryBooleanAssertion"/>
    <rule ref="rulesets/junit.xml/UseAssertEqualsInsteadOfAssertTrue"/>
@@ -189,7 +197,9 @@
    <rule ref="rulesets/controversial.xml/UnnecessaryParentheses"/>
    <rule ref="rulesets/controversial.xml/DefaultPackage"/>
    <rule ref="rulesets/controversial.xml/BooleanInversion"/>
+<!--   
    <rule ref="rulesets/controversial.xml/DataflowAnomalyAnalysis"/>
+-->   
    <rule ref="rulesets/controversial.xml/AvoidFinalLocalVariable"/>
    <rule ref="rulesets/controversial.xml/AvoidUsingShortType"/>
    <rule ref="rulesets/controversial.xml/AvoidUsingVolatile"/>
@@ -228,7 +238,11 @@
    <rule ref="rulesets/codesize.xml/NcssMethodCount"/>
    <rule ref="rulesets/codesize.xml/NcssTypeCount"/>
    <rule ref="rulesets/codesize.xml/NcssConstructorCount"/>
-   <rule ref="rulesets/codesize.xml/TooManyMethods"/>
+   <rule ref="rulesets/codesize.xml/TooManyMethods">
+      <properties>
+         <property name="maxmethods" value="20"/>
+      </properties>
+   </rule>	  
    <rule ref="rulesets/finalizers.xml/EmptyFinalizer"/>
    <rule ref="rulesets/finalizers.xml/FinalizeOnlyCallsSuperFinalize"/>
    <rule ref="rulesets/finalizers.xml/FinalizeOverloaded"/>

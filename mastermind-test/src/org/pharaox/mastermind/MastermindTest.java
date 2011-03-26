@@ -1,11 +1,11 @@
-package org.pharaox.mastermind; // NOPMD TooManyStaticImports
+package org.pharaox.mastermind;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.pharaox.mastermind.Constants.*; // NOPMD UnusedImports
+import static org.pharaox.mastermind.Constants.*;
 import static org.pharaox.mastermind.Mastermind.MAX_LENGTH;
 import static org.pharaox.util.Logger.debug;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -27,7 +27,6 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(value = Parameterized.class)
 public class MastermindTest
 { // NOPMD TooManyMethods
-    
     private static final String M_WRONG_ALPHABET = "Wrong alphabet:";
     private static final String M_WRONG_LENGTH = "Wrong length:";
     private static final String M_WRONG_UNIQUE_CHARS_FLAG = "Wrong unique chars flag:";
@@ -107,23 +106,23 @@ public class MastermindTest
         final Object[][] data = new Object[][]
         {
             { MM1_ALPHABET, MM1_LENGTH, false, MM1_CODE, 
-                new Score[] { sc(0, 1), sc(1, 1), sc(1, 1) },
-                new Score[] { sc(0, 0), sc(1, 0), sc(2, 0), sc(3, 0), sc(4, 0),
-                    sc(0, 1), sc(1, 1), sc(2, 1), sc(3, 1), sc(0, 2), sc(1, 2), sc(2, 2),
-                    sc(0, 3), sc(0, 4) },
+                new Score[] { scr(0, 1), scr(1, 1), scr(1, 1) },
+                new Score[] { scr(0, 0), scr(1, 0), scr(2, 0), scr(3, 0), scr(4, 0),
+                    scr(0, 1), scr(1, 1), scr(2, 1), scr(3, 1), scr(0, 2), scr(1, 2), scr(2, 2),
+                    scr(0, 3), scr(0, 4) },
                 new String[] {}, new String[] {} },
             { MM2_ALPHABET, MM2_LENGTH, false, "DA", 
-                new Score[] { sc(0, 1), sc(1, 0), sc(1, 0), sc(2, 0), sc(0, 1), sc(0, 0), 
-                    sc(0, 0), sc(1, 0), sc(0, 1), sc(0, 0), sc(0, 0), sc(1, 0),
-                    sc(0, 2), sc(0, 1), sc(0, 1), sc(0, 1) },
-                new Score[] { sc(0, 0), sc(1, 0), sc(2, 0), sc(0, 1), sc(0, 2) },
+                new Score[] { scr(0, 1), scr(1, 0), scr(1, 0), scr(2, 0), scr(0, 1), scr(0, 0), 
+                    scr(0, 0), scr(1, 0), scr(0, 1), scr(0, 0), scr(0, 0), scr(1, 0),
+                    scr(0, 2), scr(0, 1), scr(0, 1), scr(0, 1) },
+                new Score[] { scr(0, 0), scr(1, 0), scr(2, 0), scr(0, 1), scr(0, 2) },
                 new String[] { "AA", "AB", "AC", "AD", "BA", "BB", "BC", "BD", 
                     "CA", "CB", "CC", "CD", "DA", "DB", "DC", "DD" },
                 new String[] { "BB", "BC", "CB", "CC" } },
             { "1234", 2, true, "12", 
-                new Score[] { sc(0, 2), sc(0, 1), sc(0, 1), sc(2, 0), sc(1, 0), sc(1, 0), 
-                    sc(1, 0), sc(0, 1), sc(0, 0), sc(1, 0), sc(0, 1), sc(0, 0) }, 
-                new Score[] { sc(0, 0), sc(1, 0), sc(2, 0), sc(0, 1), sc(0, 2) },
+                new Score[] { scr(0, 2), scr(0, 1), scr(0, 1), scr(2, 0), scr(1, 0), scr(1, 0), 
+                    scr(1, 0), scr(0, 1), scr(0, 0), scr(1, 0), scr(0, 1), scr(0, 0) }, 
+                new Score[] { scr(0, 0), scr(1, 0), scr(2, 0), scr(0, 1), scr(0, 2) },
                 new String[] { "12", "13", "14", "21", "23", "24", "31", "32", "34",
                     "41", "42", "43" },
                 new String[] { "34", "43" } }
@@ -132,7 +131,7 @@ public class MastermindTest
         return Arrays.asList(data);
     }
 
-    private static Score sc(final int cows, final int bulls) // NOPMD ShortMethodName
+    private static Score scr(final int cows, final int bulls)
     {
         return new Score(cows, bulls);
     }
@@ -144,7 +143,7 @@ public class MastermindTest
     }
 
     @Test
-    public final void testInvalidAlphabets() // NOPMD JUnitTestsShouldIncludeAssert
+    public final void testInvalidAlphabets()
     {
         for (final String a : invalidAlphabets)
         {
@@ -153,7 +152,7 @@ public class MastermindTest
     }
 
     @Test
-    public final void testValidAlphabets() // NOPMD JUnitTestsShouldIncludeAssert
+    public final void testValidAlphabets()
     {
         for (final String a : validAlphabets)
         {
@@ -162,7 +161,7 @@ public class MastermindTest
     }
 
     @Test
-    public final void testInvalidLengths() // NOPMD JUnitTestsShouldIncludeAssert
+    public final void testInvalidLengths()
     {
         for (final int i : invalidLengths)
         {
@@ -171,7 +170,7 @@ public class MastermindTest
     }
 
     @Test
-    public final void testValidLengths() // NOPMD JUnitTestsShouldIncludeAssert
+    public final void testValidLengths()
     {
         for (final int i : validLengths)
         {
@@ -179,6 +178,7 @@ public class MastermindTest
         }
     }
 
+    @SuppressWarnings("unused")
     private static void createMastermind(final String alphabetx, final int lengthx, 
         final boolean valid)
     {
@@ -253,21 +253,14 @@ public class MastermindTest
     }
 
     @Test
-    public final void testEvaluateScore() // NOPMD JUnitTestsShouldIncludeAssert
+    public final void testEvaluateScore()
     {
-        mastermind.visitCodes(new EvaluateScoreVisitor(scores));
+        mastermind.visitCodes(new EvaluateScoreVisitor());
     }
 
     class EvaluateScoreVisitor implements CodeVisitor
     {
-        private final transient Score[] scores;
         private transient int count = 0;
-
-        public EvaluateScoreVisitor(final Score[] scores)
-        {
-            this.scores = new Score[scores.length];
-            System.arraycopy(scores, 0, this.scores, 0, scores.length);
-        }
 
         @Override
         public void visit(final String codex)
@@ -334,6 +327,7 @@ public class MastermindTest
         }
     }
 
+    @SuppressWarnings("null")
     public static void assertValidCode(final String code, final String alphabet, final int length,
         final boolean uniqueChars)
     {

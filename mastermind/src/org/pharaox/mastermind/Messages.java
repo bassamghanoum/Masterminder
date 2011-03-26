@@ -19,6 +19,7 @@ public final class Messages
 
     private Messages()
     {
+        // No implementation needed
     }
 
     public static String msg(final String key)

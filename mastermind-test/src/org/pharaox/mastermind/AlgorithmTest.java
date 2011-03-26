@@ -1,8 +1,8 @@
-package org.pharaox.mastermind; // NOPMD TooManyStaticImports
+package org.pharaox.mastermind;
 
 import static org.junit.Assert.assertEquals;
-import static org.pharaox.mastermind.AlgorithmFactory.AlgorithmType.*; // NOPMD UnusedImports
-import static org.pharaox.mastermind.Constants.*; // NOPMD UnusedImports
+import static org.pharaox.mastermind.AlgorithmFactory.AlgorithmType.*;
+import static org.pharaox.mastermind.Constants.*;
 import static org.pharaox.mastermind.MastermindTest.assertValidCode;
 import static org.pharaox.mastermind.Score.ZERO_SCORE;
 

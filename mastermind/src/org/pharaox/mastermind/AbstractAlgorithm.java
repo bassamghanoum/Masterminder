@@ -61,7 +61,7 @@ public abstract class AbstractAlgorithm implements Algorithm
             {
                 // @formatter:off
                 possibleCodes = mastermind.evaluatePossibleCodes(guess, guessScores.get(guess), 
-                    possibleCodes, false);
+                    possibleCodes);
                 // @formatter:on
                 evaluated.add(guess);
             }

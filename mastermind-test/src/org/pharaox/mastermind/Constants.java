@@ -58,5 +58,6 @@ public final class Constants
 
     private Constants()
     {
+        // No implementation needed
     }
 }

@@ -1,6 +1,6 @@
 package org.pharaox.mastermind;
 
-import static org.pharaox.mastermind.Messages.*; // NOPMD UnusedImports
+import static org.pharaox.mastermind.Messages.*;
 
 public abstract class AbstractIOPlayer implements Player
 {

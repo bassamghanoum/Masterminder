@@ -7,7 +7,7 @@ import java.util.Map;
 import org.pharaox.mastermind.AlgorithmFactory.AlgorithmType;
 
 public class ReadyGuesses
-{ // NOPMD TooManyMethods
+{
     private final transient Mastermind mastermind;
     private final transient AlgorithmFactory factory;
     private final transient String firstGuess;

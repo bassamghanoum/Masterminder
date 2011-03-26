@@ -15,6 +15,7 @@ public final class Main
 
     private Main()
     {
+        // No implementation needed
     }
 
     public static void main(final String[] args)

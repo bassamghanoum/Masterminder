@@ -9,6 +9,7 @@ public final class Logger
 
     private Logger()
     {
+        // No implementation needed
     }
 
     private static Level level = Level.ERROR;
