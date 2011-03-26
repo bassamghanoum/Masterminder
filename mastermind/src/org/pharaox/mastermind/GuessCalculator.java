@@ -10,7 +10,7 @@ public class GuessCalculator
     private final transient Mastermind mastermind;
     private final transient AlgorithmFactory factory;
     private final transient int levels;
-    
+
     private final transient List<Score> allScores;
     private final transient Object[] objects;
     private final transient String[] guesses;
@@ -36,9 +36,9 @@ public class GuessCalculator
         }
     }
 
-    private void initGuesses(final List<Score> scores, final int level, final int n)
+    private void initGuesses(final List<Score> scores, final int level, final int depth)
     {
-        if (n == level)
+        if (depth == level)
         {
             makeAndAddGuess(scores, level);
         }
@@ -47,10 +47,11 @@ public class GuessCalculator
             for (final Score score : allScores)
             {
                 final List<Score> scoresx = makeScores(scores, score);
-                boolean canMakeGuess = ((n < level - 1) ? hasGuess(scoresx, n + 1) : true);
+                final boolean canMakeGuess =
+                    ((depth < level - 1) ? hasGuess(scoresx, depth + 1) : true);
                 if (isNotWinningScore(score) && canMakeGuess)
                 {
-                    initGuesses(scoresx, level, n + 1);
+                    initGuesses(scoresx, level, depth + 1);
                 }
             }
         }
@@ -61,22 +62,22 @@ public class GuessCalculator
         final String guess = makeGuess(scores, level);
         if (!guess.isEmpty())
         {
-            addGuess(scores, guess, level);
+            addGuess(scores, level, guess);
         }
     }
-    
+
     private String makeGuess(final List<Score> scores, final int level)
     {
-        Algorithm algorithm = factory.getAlgorithm();
+        final Algorithm algorithm = factory.getAlgorithm();
         for (int i = 0; i < level; i++)
         {
-            String guess = (i == 0) ? (String) objects[i] : guesses[i];
+            final String guess = (i == 0) ? (String) objects[i] : guesses[i];
             algorithm.putGuessScore(guess, scores.get(i));
         }
         return algorithm.makeGuess();
     }
-    
-    private void addGuess(final List<Score> scores, final String guess, final int level)
+
+    private void addGuess(final List<Score> scores, final int level, final String guess)
     {
         assert (level < levels);
         if (level == 0)
@@ -85,8 +86,8 @@ public class GuessCalculator
         }
         else
         {
-            Map<Score, Object> map = getFirstMap(level);
-            addGuessToMap(map, scores, guess, level, 0);
+            final Map<Score, Object> map = getFirstMap(level);
+            addGuessToMap(scores, level, guess, map, 0);
         }
     }
 
@@ -102,18 +103,18 @@ public class GuessCalculator
         return map;
     }
 
-    private void addGuessToMap(final Map<Score, Object> map, final List<Score> scores, 
-        final String guess, final int level, final int n)
+    private void addGuessToMap(final List<Score> scores, final int level, final String guess,
+        final Map<Score, Object> map, final int depth)
     {
-        Score score = scores.get(n);
-        if (n == level - 1)
+        final Score score = scores.get(depth);
+        if (depth == level - 1)
         {
             map.put(score, guess);
         }
         else
         {
-            Map<Score, Object> mapx = getNextMap(map, score);
-            addGuessToMap(mapx, scores, guess, level, n + 1);
+            final Map<Score, Object> mapx = getNextMap(map, score);
+            addGuessToMap(scores, level, guess, mapx, depth + 1);
         }
     }
 
@@ -156,33 +157,33 @@ public class GuessCalculator
     public final String getGuess(final List<Score> scores, final int level)
     {
         assert hasGuesses(level);
-        return getGuess(scores, objects[level], level, 0);
+        return getGuess(scores, level, objects[level], 0);
     }
-    
-    private String getGuess(final List<Score> scores, final Object obj, final int level, 
-        final int n)
+
+    private String getGuess(final List<Score> scores, final int level, final Object obj,
+        final int depth)
     {
         String result = null;
-        if (n == level)
+        if (depth == level)
         {
             result = (String) obj;
         }
         else
         {
-            Object objx = getObject(scores, obj, n);
+            final Object objx = getObject(scores, obj, depth);
             if (objx != null)
             {
-                result = getGuess(scores, objx, level, n + 1);
+                result = getGuess(scores, level, objx, depth + 1);
             }
         }
         return result;
     }
 
     @SuppressWarnings("unchecked")
-    private Object getObject(final List<Score> scores, final Object obj, final int n)
+    private Object getObject(final List<Score> scores, final Object obj, final int depth)
     {
-        Map<Score, Object> map = (Map<Score, Object>) obj;
-        return map.get(scores.get(n));
+        final Map<Score, Object> map = (Map<Score, Object>) obj;
+        return map.get(scores.get(depth));
     }
-    
+
 }

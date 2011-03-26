@@ -17,6 +17,8 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(value = Parameterized.class)
 public class GuessCalculatorTest
 {
+    private static final String M_WRONG_GUESS = "Wrong guess:";
+    
     private final transient Mastermind mastermind;
     private final transient AlgorithmFactory factory;
     private final transient List<Score> scores;
@@ -59,9 +61,9 @@ public class GuessCalculatorTest
     @Test
     public final void testGetFirstGuess()
     {
-        String guess = calc.getGuess(new ArrayList<Score>(), 0);
-        String expected = guesses.getFirstGuess();
-        assertEquals(expected, guess);
+        final String guess = calc.getGuess(new ArrayList<Score>(), 0);
+        final String expected = guesses.getFirstGuess();
+        assertEquals(M_WRONG_GUESS, expected, guess);
     }
     
     @Test
@@ -69,9 +71,9 @@ public class GuessCalculatorTest
     {
         for (Score score : scores)
         {
-            String guess = calc.getGuess(Arrays.asList(score), 1);
-            String expected = guesses.getSecondGuess(score);
-            assertEquals(expected, guess);
+            final String guess = calc.getGuess(Arrays.asList(score), 1);
+            final String expected = guesses.getSecondGuess(score);
+            assertEquals(M_WRONG_GUESS, expected, guess);
         }
     }
 
@@ -82,9 +84,9 @@ public class GuessCalculatorTest
         {
             for (Score score2 : scores)
             {
-                String guess = calc.getGuess(Arrays.asList(score1, score2), 2);
-                String expected = guesses.getThirdGuess(score1, score2);
-                assertEquals(expected, guess);
+                final String guess = calc.getGuess(Arrays.asList(score1, score2), 2);
+                final String expected = guesses.getThirdGuess(score1, score2);
+                assertEquals(M_WRONG_GUESS, expected, guess);
             }
         }
     }
@@ -99,10 +101,10 @@ public class GuessCalculatorTest
                 for (Score score3 : scores)
                 {
                     // @checkstyle:off (Magic numbers)
-                    String guess = calc.getGuess(Arrays.asList(score1, score2, score3), 3);
+                    final String guess = calc.getGuess(Arrays.asList(score1, score2, score3), 3);
                     // @checkstyle:on
-                    String expected = guesses.getFourthGuess(score1, score2, score3);
-                    assertEquals(expected, guess);
+                    final String expected = guesses.getFourthGuess(score1, score2, score3);
+                    assertEquals(M_WRONG_GUESS, expected, guess);
                 }
             }
         }

@@ -62,7 +62,7 @@ public class GameTest
     {
         final boolean won = game.play();
         assertEquals(M_WRONG_GAME_OUTCOME, won, game.hasWon());
-        boolean dumb = (factory instanceof DumbAlgorithmFactory);
+        final boolean dumb = (factory instanceof DumbAlgorithmFactory);
         assertTrue(M_WRONG_GAME_OUTCOME, (!dumb && won) || (dumb && !won));
         assertTrue(M_UNEXPECTED_ROUNDS_PLAYED, game.getRoundsPlayed() <= maxRounds);
     }

@@ -96,7 +96,7 @@ public class Game
         String guess;
         if ((calc != null) && calc.hasGuesses(round))
         {
-            List<Score> scoresx = makeScoresForCalc(round);
+            final List<Score> scoresx = makeScoresForCalc(round);
             guess = calc.getGuess(scoresx, round);
         }
         else
@@ -108,7 +108,7 @@ public class Game
 
     private List<Score> makeScoresForCalc(final int round)
     {
-        List<Score> result = new ArrayList<Score>();
+        final List<Score> result = new ArrayList<Score>();
         for (int i = round - 1; i >= 0; i--)
         {
             result.add(scores[i]);
