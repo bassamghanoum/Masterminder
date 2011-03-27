@@ -188,8 +188,10 @@ public class ReadyGuesses
         return algorithm.makeGuess();
     }
 
+    // @checkstyle:off (Too many parameters)
     private void addFourthGuess(final Score score1, final Score score2, final Score score3,
         final String guess)
+    // @checkstyle:on
     {
         Map<Score, Map<Score, String>> map1 = fourthGuesses.get(score1);
         if (map1 == null)

@@ -47,7 +47,7 @@ public class MainTest
     @Parameters
     public static Collection<Object[]> data()
     {
-        // @formatter:off, @checkstyle:off
+        // @formatter:off
         final Object[][] data = new Object[][]
         {
             { "", "i-AA-c-e" },
@@ -61,7 +61,7 @@ public class MainTest
             { "0\n0\n0\n2\n", "i-AA-c-b-BB-c-b-w" },
             { "0\n0\n0\n0\n0\n0\n0\n2\n", "i-AA-c-b-BB-c-b-CC-c-b-DD-c-b-w" },
         };
-        // @formatter:on, @checkstyle:on
+        // @formatter:on
         return Arrays.asList(data);
     }
     
@@ -134,7 +134,7 @@ public class MainTest
         final String outcome = tokens.get(tokens.size() - 1);
         if (outcome.equals(O_ERROR))
         {
-            builder.append(new MastermindException().getClass().toString());
+            builder.append(MastermindException.class.toString());
         } 
         else if (outcome.equals(O_WON))
         {

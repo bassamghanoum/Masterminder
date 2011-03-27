@@ -17,7 +17,7 @@ public abstract class AbstractAlgorithm implements Algorithm
     private final transient Set<String> evaluated = new HashSet<String>();
 
     private transient SortedSet<String> possibleCodes = new TreeSet<String>();
-    
+
     public AbstractAlgorithm(final Mastermind mastermind)
     {
         this.mastermind = mastermind;
@@ -59,13 +59,15 @@ public abstract class AbstractAlgorithm implements Algorithm
         {
             if (!evaluated.contains(guess))
             {
-                // @formatter:off
-                possibleCodes = mastermind.evaluatePossibleCodes(guess, guessScores.get(guess), 
-                    possibleCodes);
-                // @formatter:on
+                possibleCodes = evaluatePossibleCodes(guess, guessScores.get(guess));
                 evaluated.add(guess);
             }
         }
+    }
+
+    protected final SortedSet<String> evaluatePossibleCodes(final String guess, final Score score)
+    {
+        return mastermind.evaluatePossibleCodes(guess, score, possibleCodes);
     }
 
     private String makeNextGuess()

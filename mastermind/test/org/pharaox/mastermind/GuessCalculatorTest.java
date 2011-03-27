@@ -29,7 +29,7 @@ public class GuessCalculatorTest
     @Parameters
     public static Collection<Object[]> data()
     {
-        // @formatter:off, @checkstyle:off
+        // @formatter:off
         final Object[][] data = new Object[][]
         {
             { MM2, new SimpleAlgorithmFactory(MM2) },
@@ -37,7 +37,7 @@ public class GuessCalculatorTest
             { MM2, new ExpectedSizeAlgorithmFactory(MM2) },
             { MM2, new DumbAlgorithmFactory(MM2) },
         };
-        // @formatter:on, @checkstyle:on
+        // @formatter:on
         return Arrays.asList(data);
     }
     

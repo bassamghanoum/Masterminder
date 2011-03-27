@@ -17,11 +17,8 @@ public class KnuthAlgorithm extends AbstractAlgorithm
         int maxSize = 0;
         for (final Score score : getAllScores())
         {
-            // @formatter:off
-            final SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
-                getPossibleCodes());
-            // @formatter:on
-            maxSize = Math.max(maxSize, elem.size());
+            final SortedSet<String> codes = evaluatePossibleCodes(guess, score);
+            maxSize = Math.max(maxSize, codes.size());
         }
         return (getPossibleCodes().size() - maxSize);
     }

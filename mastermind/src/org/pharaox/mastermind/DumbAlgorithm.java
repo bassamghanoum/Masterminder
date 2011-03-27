@@ -1,18 +1,16 @@
 package org.pharaox.mastermind;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class DumbAlgorithm implements Algorithm
 {
     public static final String NAME = "Dumb Mastermind Algorithm";
 
     private final transient String code;
-    private final transient Map<String, Score> guessScores = new HashMap<String, Score>();
+    private final transient SimpleAlgorithm delegate;
 
     public DumbAlgorithm(final Mastermind mastermind)
     {
         code = mastermind.getAllPossibleCodes().first();
+        delegate = new SimpleAlgorithm(mastermind);
     }
 
     @Override
@@ -24,13 +22,13 @@ public class DumbAlgorithm implements Algorithm
     @Override
     public final void putGuessScore(final String guess, final Score score)
     {
-        guessScores.put(guess, score);
+        delegate.putGuessScore(guess, score);
     }
 
     @Override
     public final Score getGuessScore(final String guess)
     {
-        return guessScores.get(guess);
+        return delegate.getGuessScore(guess);
     }
 
     @Override

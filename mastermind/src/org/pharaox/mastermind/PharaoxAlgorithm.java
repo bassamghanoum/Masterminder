@@ -20,11 +20,8 @@ public class PharaoxAlgorithm extends AbstractAlgorithm
         final Distribution dist = new Distribution();
         for (final Score score : getAllScores())
         {
-            // @formatter:off
-            final SortedSet<String> elem = getMastermind().evaluatePossibleCodes(guess, score, 
-                getPossibleCodes());
-            // @formatter:on
-            final int diff = getPossibleCodes().size() - elem.size();
+            final SortedSet<String> codes = evaluatePossibleCodes(guess, score);
+            final int diff = getPossibleCodes().size() - codes.size();
             dist.add(diff);
         }
         return dist.calculatePercentile(percents);

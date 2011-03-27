@@ -103,8 +103,10 @@ public class GuessCalculator
         return map;
     }
 
+    // @checkstyle:off (Too many parameters)
     private void addGuessToMap(final List<Score> scores, final int level, final String guess,
         final Map<Score, Object> map, final int depth)
+    // @checkstyle:on
     {
         final Score score = scores.get(depth);
         if (depth == level - 1)
@@ -161,8 +163,10 @@ public class GuessCalculator
     }
 
     @SuppressWarnings("unchecked")
+    // @checkstyle:off (Too many parameters)
     private String getGuess(final List<Score> scores, final int level, final Object obj,
         final int depth)
+    // @checkstyle:on
     {
         String result = "";
         if (depth == level)

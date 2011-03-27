@@ -60,11 +60,9 @@ public class MastermindTest // NOPMD TooManyFields
 
     private transient Mastermind mastermind;
 
-    // @checkstyle:off (Long argument list)
     public MastermindTest(final String alphabet, final int length, final boolean uniqueChars,
         final String code, final Score[] scores, final Score[] possibleScores,
         final String[] possibleCodes, final String[] possibleCodes2)
-    // @checkstyle:on
     {
         this.alphabet = alphabet;
         this.length = length;
