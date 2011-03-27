@@ -25,12 +25,13 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(value = Parameterized.class)
-public class MastermindTest
+public class MastermindTest // NOPMD TooManyFields
 { // NOPMD TooManyMethods
     private static final String M_WRONG_ALPHABET = "Wrong alphabet:";
     private static final String M_WRONG_LENGTH = "Wrong length:";
     private static final String M_WRONG_UNIQUE_CHARS_FLAG = "Wrong unique chars flag:";
     private static final String M_WRONG_CODE_VALIDITY = "Wrong code validity:";
+    private static final String M_WRONG_SCORE_VALIDITY = "Wrong score validity:";
     private static final String M_WRONG_NUMBER_OF_SCORES = "Wrong number of scores:";
     private static final String M_WRONG_SCORE = "Wrong score:";
     private static final String M_WRONG_NUMBER_OF_CODES = "Wrong number of codes:";
@@ -48,12 +49,14 @@ public class MastermindTest
     private final transient String[] possibleCodes;
     private final transient String[] possibleCodes2;
 
-    private transient String[] codes;
-    private transient boolean[] valids;
     private transient String[] invalidAlphabets;
     private transient String[] validAlphabets;
     private transient int[] invalidLengths;
     private transient int[] validLengths;
+    private transient String[] testCodes;
+    private transient boolean[] testCodesAreValid;
+    private transient Score[] testScores;
+    private transient boolean[] testScoresAreValid;
 
     private transient Mastermind mastermind;
 
@@ -77,8 +80,37 @@ public class MastermindTest
 
     private void initalizeArrays()
     {
+        initializeAlphabetsAndLengths();
+        initializeTestCodes();
+        initializeTestScores();
+    }
+
+    private void initializeAlphabetsAndLengths()
+    {
         // @formatter:off
-        this.codes = new String[]
+        this.invalidAlphabets = new String[] 
+        { 
+            null, "", alphabet.substring(0, 1), alphabet + "#", alphabet + alphabet 
+        };
+        this.validAlphabets = new String[] 
+        { 
+            alphabet, code 
+        };
+        this.invalidLengths =  new int[] 
+        { 
+            Integer.MIN_VALUE, 0, alphabet.length() + 1, MAX_LENGTH + 1, Integer.MAX_VALUE 
+        };
+        this.validLengths = new int[] 
+        { 
+            1, alphabet.length() / 2, alphabet.length() 
+        };
+        // @formatter:on
+    }
+
+    private void initializeTestCodes()
+    {
+        // @formatter:off
+        this.testCodes = new String[]
         {
             alphabet.substring(0, length),
             alphabet.substring(alphabet.length() - length, alphabet.length()),
@@ -89,13 +121,26 @@ public class MastermindTest
             code + alphabet.substring(0, 1),
             code.substring(0, code.length() - 1) + "#"
         };
-        this.valids = new boolean[] { true, true, !uniqueChars, false, false, false, false, false };
-        this.invalidAlphabets = new String[] { null, "", alphabet.substring(0, 1), alphabet + "#", 
-            alphabet + alphabet };
-        this.validAlphabets = new String[] { alphabet, code };
-        this.invalidLengths =  new int[] { Integer.MIN_VALUE, 0, alphabet.length() + 1, 
-            MAX_LENGTH + 1, Integer.MAX_VALUE };
-        this.validLengths = new int[] { 1, alphabet.length() / 2, alphabet.length() };
+        this.testCodesAreValid = new boolean[] 
+        { 
+            true, true, !uniqueChars, false, false, false, false, false 
+        };
+        // @formatter:on
+    }
+
+    private void initializeTestScores()
+    {
+        // @formatter:off
+        this.testScores = new Score[]
+        {
+            scr(0, 0), scr(0, 1), scr(1, 0), scr(0, length), scr(length, 0),
+            scr(0, -1), scr(-1, 0), scr(0, length + 1), scr(length + 1, 0), scr(1, length - 1),
+            scr(1, length), scr(length, 1), null
+        };
+        this.testScoresAreValid = new boolean[] 
+        { 
+            true, true, true, true, true, false, false, false, false, false, false, false, false 
+        };
         // @formatter:on
     }
 
@@ -204,7 +249,7 @@ public class MastermindTest
     @Test
     public final void testGeneratedCodeIsValid()
     {
-        assertValidCode(mastermind.generateCode(), alphabet, length, uniqueChars);
+        assertValidCode(mastermind.generateCode());
     }
 
     @Test
@@ -214,7 +259,7 @@ public class MastermindTest
         for (int i = 0; i < NUM_UNIQUE_CODES; i++)
         {
             final String codex = mastermind.generateCode();
-            assertValidCode(codex, alphabet, length, uniqueChars);
+            assertValidCode(codex);
             generated.add(codex);
         }
     }
@@ -240,9 +285,20 @@ public class MastermindTest
     @Test
     public final void testIsValidCode()
     {
-        for (int i = 0; i < codes.length; i++)
+        for (int i = 0; i < testCodes.length; i++)
         {
-            assertEquals(M_WRONG_CODE_VALIDITY, valids[i], mastermind.isValidCode(codes[i]));
+            assertEquals(M_WRONG_CODE_VALIDITY, testCodesAreValid[i], 
+                mastermind.isValidCode(testCodes[i]));
+        }
+    }
+    
+    @Test
+    public final void testIsValidScore()
+    {
+        for (int i = 0; i < testScores.length; i++)
+        {
+            assertEquals(M_WRONG_SCORE_VALIDITY, testScoresAreValid[i], 
+                mastermind.isValidScore(testScores[i]));
         }
     }
 
@@ -284,7 +340,7 @@ public class MastermindTest
     @Test(expected = MastermindException.class)
     public final void testEvaluateScoreInvalidCode()
     {
-        mastermind.evaluateScoreSafe(codes[0], "");
+        mastermind.evaluateScoreSafe(testCodes[0], "");
     }
 
     @Test
@@ -328,15 +384,14 @@ public class MastermindTest
     }
 
     @SuppressWarnings("null")
-    public static void assertValidCode(final String code, final String alphabet, final int length,
-        final boolean uniqueChars)
+    private void assertValidCode(final String codex)
     {
-        assertTrue(M_INVALID_CODE, (code != null) && !code.isEmpty());
-        assertEquals(M_INVALID_CODE, length, code.length());
+        assertTrue(M_INVALID_CODE, (codex != null) && !codex.isEmpty());
+        assertEquals(M_INVALID_CODE, length, codex.length());
         final Set<Character> usedChars = new HashSet<Character>();
-        for (int i = 0; i < code.length(); i++)
+        for (int i = 0; i < codex.length(); i++)
         {
-            final char chi = code.charAt(i);
+            final char chi = codex.charAt(i);
             assertThat(M_INVALID_CODE, alphabet.indexOf(chi), not(equalTo(-1)));
             if (uniqueChars)
             {

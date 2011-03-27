@@ -86,6 +86,7 @@ public class Game
         final String guess = makeGuess(round);
         assert mastermind.isValidCode(guess);
         final Score score = player.getScore(guess);
+        assert mastermind.isValidScore(score);
         debug(guess + " => " + score);
         putGuessScore(guess, score);
         return score;
@@ -102,6 +103,10 @@ public class Game
         else
         {
             guess = algorithm.makeGuess();
+        }
+        if (guess.isEmpty())
+        {
+            throw new MastermindException();
         }
         return guess;
     }

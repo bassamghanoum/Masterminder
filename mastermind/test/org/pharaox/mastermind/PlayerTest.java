@@ -2,6 +2,7 @@ package org.pharaox.mastermind;
 
 import static org.junit.Assert.assertEquals;
 import static org.pharaox.mastermind.Messages.*;
+import static org.pharaox.mastermind.Constants.*;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -20,7 +21,9 @@ public class PlayerTest
     private static final String INPUT = 
         Integer.toString(COWS) + "\n" + Integer.toString(BULLS) + "\n";
     private static final String INCOMPLETE_INPUT = Integer.toString(COWS) + "\n";
-    private static final String NON_NUMERIC_INPUT = "XXX\nYYY\n";
+    private static final String NON_NUMERIC_INPUT = "X\n0\n";
+    private static final String NEGATIVE_NUMBERS_INPUT = "-1\n0\n";
+    private static final String INVALID_INPUT = "1\n3\n";
 
     private static final String M_WRONG_CONSOLE_MSG = "Wrong console message:";
     private static final String M_WRONG_SCORE = "Wrong score:";
@@ -34,7 +37,7 @@ public class PlayerTest
     {
         reader = new StringReader(INPUT);
         writer = new StringWriter();
-        player = new ReaderWriterPlayer(reader, writer);
+        player = new ReaderWriterPlayer(MM1, reader, writer);
     }
 
     @After
@@ -101,9 +104,21 @@ public class PlayerTest
         getScoreFromInput(NON_NUMERIC_INPUT);
     }
     
+    @Test(expected = MastermindException.class)
+    public final void testGetScoreNegativeNumbersInput()
+    {
+        getScoreFromInput(NEGATIVE_NUMBERS_INPUT);
+    }
+    
+    @Test(expected = MastermindException.class)
+    public final void testGetScoreInvalidInput()
+    {
+        getScoreFromInput(INVALID_INPUT);
+    }
+    
     private Score getScoreFromInput(final String input)
     {
-        player = new ReaderWriterPlayer(new StringReader(input), writer);
+        player = new ReaderWriterPlayer(MM1, new StringReader(input), writer);
         return player.getScore(GUESS);
     }
 

@@ -4,6 +4,14 @@ import static org.pharaox.mastermind.Messages.*;
 
 public abstract class AbstractIOPlayer implements Player
 {
+    private final transient Mastermind mastermind;
+    
+    public AbstractIOPlayer(final Mastermind mastermind)
+    {
+        super();
+        this.mastermind = mastermind;
+    }
+
     @Override
     public final void startGame()
     {
@@ -29,7 +37,12 @@ public abstract class AbstractIOPlayer implements Player
         printLine(M_C_GUESS, guess);
         final int cows = readLineInt(M_C_COWS);
         final int bulls = readLineInt(M_C_BULLS);
-        return new Score(cows, bulls);
+        final Score score = new Score(cows, bulls);
+        if (!mastermind.isValidScore(score))
+        {
+            throw new MastermindException();
+        }
+        return score;
     }
 
     protected abstract void printLine(String message, Object... args);

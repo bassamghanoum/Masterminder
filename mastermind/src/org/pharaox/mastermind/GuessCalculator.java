@@ -141,7 +141,7 @@ public class GuessCalculator
     private boolean hasGuess(final List<Score> scores, final int level)
     {
         guesses[level] = getGuess(scores, level);
-        return (guesses[level] != null);
+        return (!guesses[level].isEmpty());
     }
 
     private boolean isNotWinningScore(final Score score)
@@ -160,30 +160,25 @@ public class GuessCalculator
         return getGuess(scores, level, objects[level], 0);
     }
 
+    @SuppressWarnings("unchecked")
     private String getGuess(final List<Score> scores, final int level, final Object obj,
         final int depth)
     {
-        String result = null;
+        String result = "";
         if (depth == level)
         {
             result = (String) obj;
         }
         else
         {
-            final Object objx = getObject(scores, obj, depth);
+            final Map<Score, Object> map = (Map<Score, Object>) obj;
+            final Object objx = map.get(scores.get(depth));
             if (objx != null)
             {
                 result = getGuess(scores, level, objx, depth + 1);
             }
         }
         return result;
-    }
-
-    @SuppressWarnings("unchecked")
-    private Object getObject(final List<Score> scores, final Object obj, final int depth)
-    {
-        final Map<Score, Object> map = (Map<Score, Object>) obj;
-        return map.get(scores.get(depth));
     }
 
 }

@@ -15,8 +15,8 @@ public class ReadyGuesses
     private final transient Map<Score, Map<Score, Map<Score, String>>> fourthGuesses =
         new HashMap<Score, Map<Score, Map<Score, String>>>();
     
-    private transient String secondGuess = null;
-    private transient String thirdGuess = null;
+    private transient String secondGuess = "";
+    private transient String thirdGuess = "";
 
     public ReadyGuesses(final Mastermind mastermind, final AlgorithmFactory factory)
     {
@@ -87,7 +87,7 @@ public class ReadyGuesses
     private boolean hasSecondGuess(final Score score)
     {
         secondGuess = getSecondGuess(score);
-        return (secondGuess != null);
+        return (!secondGuess.isEmpty());
     }
 
     private void initThirdGuessesLevel2(final List<Score> scores, final Score score1)
@@ -155,7 +155,7 @@ public class ReadyGuesses
     private boolean hasThirdGuess(final Score score1, final Score score2)
     {
         thirdGuess = getThirdGuess(score1, score2);
-        return (thirdGuess != null);
+        return (!thirdGuess.isEmpty());
     }
 
     private void initFourthGuessesLevel3(final List<Score> scores, final Score score1,
@@ -213,30 +213,40 @@ public class ReadyGuesses
 
     public final String getSecondGuess(final Score score)
     {
-        return secondGuesses.get(score);
+        return getGuessFromMap(secondGuesses, score);
+    }
+
+    private String getGuessFromMap(final Map<Score, String> map, final Score score)
+    {
+        String guess = map.get(score);
+        if (guess == null)
+        {
+            guess = "";
+        }
+        return guess;
     }
 
     public final String getThirdGuess(final Score score1, final Score score2)
     {
-        String guess = null;
+        String guess = "";
         final Map<Score, String> map = thirdGuesses.get(score1);
         if (map != null)
         {
-            guess = map.get(score2);
+            guess = getGuessFromMap(map, score2);
         }
         return guess;
     }
 
     public final String getFourthGuess(final Score score1, final Score score2, final Score score3)
     {
-        String guess = null;
+        String guess = "";
         final Map<Score, Map<Score, String>> map1 = fourthGuesses.get(score1);
         if (map1 != null)
         {
             final Map<Score, String> map2 = map1.get(score2);
             if (map2 != null)
             {
-                guess = map2.get(score3);
+                guess = getGuessFromMap(map2, score3);
             }
         }
         return guess;

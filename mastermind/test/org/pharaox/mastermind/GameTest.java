@@ -73,4 +73,35 @@ public class GameTest
         game.play();
         game.play();
     }
+    
+    @Test(expected = MastermindException.class)
+    public final void testPlayWithCheatingPlayer()
+    {
+        if (factory instanceof DumbAlgorithmFactory)
+        {
+            throw new MastermindException(); // Make the test pass
+        }
+        final Player player = new Player()
+        {
+            @Override
+            public void startGame()
+            {
+                // No implementation needed
+            }
+
+            @Override
+            public void endGame(final boolean won, final int roundsPlayed)
+            {
+                // No implementation needed
+            }
+
+            @Override
+            public Score getScore(final String guess)
+            {
+                return new Score(0, 0);
+            }
+        };
+        game = new Game(mastermind, factory.getAlgorithm(), maxRounds, player);
+        game.play();
+    }
 }

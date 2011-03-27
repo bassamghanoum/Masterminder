@@ -1,8 +1,8 @@
 package org.pharaox.mastermind;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.pharaox.mastermind.Constants.*;
-import static org.pharaox.mastermind.MastermindTest.assertValidCode;
 import static org.pharaox.mastermind.Score.ZERO_SCORE;
 
 import java.util.Arrays;
@@ -17,6 +17,7 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(value = Parameterized.class)
 public class AlgorithmTest
 {
+    private static final String M_INVALID_GUESS = "Invalid guess";
     private static final String M_WRONG_GUESS = "Wrong guess:";
     private static final String M_WRONG_SCORE = "Wrong score:";
     private static final String M_WRONG_ALGORITHM_NAME = "Wrong algorithm name:";
@@ -65,8 +66,7 @@ public class AlgorithmTest
     public final void testMakeGuess()
     {
         final String guess = algorithm.makeGuess();
-        assertValidCode(guess, mastermind.getAlphabet(), mastermind.getLength(),
-            mastermind.hasUniqueChars());
+        assertTrue(M_INVALID_GUESS, mastermind.isValidCode(guess));
         assertEquals(M_WRONG_GUESS, firstGuess, guess);
     }
 

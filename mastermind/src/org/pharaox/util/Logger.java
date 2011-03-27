@@ -12,7 +12,7 @@ public final class Logger
         // No implementation needed
     }
 
-    private static Level level = Level.ERROR;
+    private static Level level = Level.INFO;
 
     public static void error(final String message)
     {

@@ -1,2 +1,2 @@
-call mvn clean install checkstyle:checkstyle pmd:pmd
+call mvn clean install checkstyle:checkstyle
 rd /s /q target

@@ -6,13 +6,10 @@ public class ConsolePlayer extends AbstractIOPlayer
 {
     private final transient Console console;
 
-    public ConsolePlayer(final Console console)
+    public ConsolePlayer(final Mastermind mastermind, final Console console)
     {
-        super();
-        if (console == null)
-        {
-            throw new MastermindException();
-        }
+        super(mastermind);
+        assert (console != null);
         this.console = console;
     }
 

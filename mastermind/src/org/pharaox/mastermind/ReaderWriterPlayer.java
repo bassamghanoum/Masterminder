@@ -11,9 +11,9 @@ public class ReaderWriterPlayer extends AbstractIOPlayer
     private final transient BufferedReader reader;
     private final transient PrintWriter writer;
 
-    public ReaderWriterPlayer(final Reader reader, final Writer writer)
+    public ReaderWriterPlayer(final Mastermind mastermind, final Reader reader, final Writer writer)
     {
-        super();
+        super(mastermind);
         this.reader = new BufferedReader(reader);
         this.writer = new PrintWriter(writer, true);
     }
