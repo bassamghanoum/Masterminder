@@ -27,9 +27,6 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(value = Parameterized.class)
 public class MastermindTest // NOPMD TooManyFields
 { // NOPMD TooManyMethods
-    private static final String M_WRONG_ALPHABET = "Wrong alphabet:";
-    private static final String M_WRONG_LENGTH = "Wrong length:";
-    private static final String M_WRONG_UNIQUE_CHARS_FLAG = "Wrong unique chars flag:";
     private static final String M_WRONG_CODE_VALIDITY = "Wrong code validity:";
     private static final String M_WRONG_SCORE_VALIDITY = "Wrong score validity:";
     private static final String M_WRONG_NUMBER_OF_SCORES = "Wrong number of scores:";
@@ -227,7 +224,7 @@ public class MastermindTest // NOPMD TooManyFields
     {
         try
         {
-            new Mastermind(alphabetx, lengthx);
+            new Mastermind(alphabetx, lengthx, false);
             failIf(!valid);
         }
         catch (final MastermindException e)
@@ -260,24 +257,6 @@ public class MastermindTest // NOPMD TooManyFields
             assertValidCode(codex);
             generated.add(codex);
         }
-    }
-
-    @Test
-    public final void testGetAlphabet()
-    {
-        assertEquals(M_WRONG_ALPHABET, alphabet, mastermind.getAlphabet());
-    }
-
-    @Test
-    public final void testGetLength()
-    {
-        assertEquals(M_WRONG_LENGTH, length, mastermind.getLength());
-    }
-
-    @Test
-    public final void testHasUniqueChars()
-    {
-        assertEquals(M_WRONG_UNIQUE_CHARS_FLAG, uniqueChars, mastermind.hasUniqueChars());
     }
 
     @Test

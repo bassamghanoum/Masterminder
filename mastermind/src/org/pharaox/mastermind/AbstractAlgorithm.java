@@ -10,30 +10,29 @@ import java.util.TreeSet;
 
 public abstract class AbstractAlgorithm implements Algorithm
 {
+    private static final double EPSILON = 0.0000001;
+
     private final transient Mastermind mastermind;
-    private final transient SortedSet<String> allCodes;
-    private final transient List<Score> allScores;
     private final transient Map<String, Score> guessScores = new HashMap<String, Score>();
     private final transient Set<String> evaluated = new HashSet<String>();
 
-    private transient SortedSet<String> possibleCodes = new TreeSet<String>();
+    private transient SortedSet<String> possibleCodes;
 
     public AbstractAlgorithm(final Mastermind mastermind)
     {
         this.mastermind = mastermind;
-        allCodes = mastermind.getAllPossibleCodes();
-        allScores = mastermind.getAllPossibleScores();
-        possibleCodes.addAll(allCodes);
+        initPossibleCodes();
     }
 
-    protected final Mastermind getMastermind()
+    private void initPossibleCodes()
     {
-        return mastermind;
+        possibleCodes = new TreeSet<String>();
+        possibleCodes.addAll(mastermind.getAllPossibleCodes());
     }
 
-    protected final List<Score> getAllScores()
+    protected final List<Score> getAllPossibleScores()
     {
-        return allScores;
+        return mastermind.getAllPossibleScores();
     }
 
     public final SortedSet<String> getPossibleCodes()
@@ -72,33 +71,43 @@ public abstract class AbstractAlgorithm implements Algorithm
 
     private String makeNextGuess()
     {
-        String guess = possibleCodes.first();
+        String bestGuess = possibleCodes.first();
         double maxRating = 0.0;
-        for (final String guessx : allCodes)
+        final SortedSet<String> allPossibleCodes = mastermind.getAllPossibleCodes();
+        for (final String guess : allPossibleCodes)
         {
-            final double rating = calculateGuessRating(guessx);
-            final boolean preferGuessx =
-                possibleCodes.contains(guessx) && !possibleCodes.contains(guess);
-            if ((rating > maxRating) || ((rating == maxRating) && preferGuessx))
+            final double rating = calculateGuessRating(guess);
+            if (isBetterGuess(guess, rating, bestGuess, maxRating))
             {
-                guess = guessx;
+                bestGuess = guess;
+                maxRating = Math.max(maxRating, rating);
             }
-            maxRating = Math.max(maxRating, rating);
         }
-        return guess;
+        return bestGuess;
     }
 
     protected abstract double calculateGuessRating(final String guess);
+
+    // @checkstyle:off (Too many parameters)
+    private boolean isBetterGuess(final String guess, final double rating, final String bestGuess,
+        final double maxRating)
+    // @checkstyle:on
+    {
+        boolean result = false;
+        if (rating > maxRating)
+        {
+            result = true;
+        }
+        else if (Math.abs(maxRating - rating) < EPSILON)
+        {
+            result = possibleCodes.contains(guess) && !possibleCodes.contains(bestGuess);
+        }
+        return result;
+    }
 
     @Override
     public final void putGuessScore(final String guess, final Score score)
     {
         guessScores.put(guess, score);
-    }
-
-    @Override
-    public final Score getGuessScore(final String guess)
-    {
-        return guessScores.get(guess);
     }
 }

@@ -11,7 +11,7 @@ import java.util.TreeSet;
 public class Mastermind
 {
     public static final int MAX_LENGTH = 9;
-    public static final String VALID_ALPHA_CHARS = "0123456789ABCDEFGH";
+    public static final String VALID_ALPHABET_CHARS = "0123456789ABCDEFGH";
 
     private static final Random RANDOM = new Random();
     private static final char MARK = '*';
@@ -22,11 +22,6 @@ public class Mastermind
     
     private final transient List<Score> allPossibleScores;
     private final transient SortedSet<String> allPossibleCodes;
-
-    public Mastermind(final String alphabet, final int length)
-    {
-        this(alphabet, length, false);
-    }
 
     public Mastermind(final String alphabet, final int length, final boolean uniqueChars)
     {
@@ -51,7 +46,7 @@ public class Mastermind
         // @formatter:off
         return ((alphabet != null) 
             && (alphabet.length() > 1) && (alphabet.length() >= length) 
-            && containsValidChars(alphabet, VALID_ALPHA_CHARS, true));
+            && containsValidChars(alphabet, VALID_ALPHABET_CHARS, true));
         // @formatter:on
     }
 
@@ -112,21 +107,6 @@ public class Mastermind
             }
         });
         return result;
-    }
-
-    public final String getAlphabet()
-    {
-        return alphabet;
-    }
-
-    public final int getLength()
-    {
-        return length;
-    }
-
-    public final boolean hasUniqueChars()
-    {
-        return uniqueChars;
     }
 
     public final List<Score> getAllPossibleScores()

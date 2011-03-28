@@ -1,0 +1,11 @@
+|org.pharaox.mastermind.fixtures.MainFixture|
+|input|outputSchema|run?|getOutput?|outputConformsToSchema?|
+|a|i-AB-c-e|||true|
+|-1#0#|i-AB-c-b-e|||true|
+|3#0#|i-AB-c-b-e|||true|
+|1#1#|i-AB-c-b-e|||true|
+|2#2#|i-AB-c-b-e|||true|
+|0#0#0#0#0#0#|i-AB-c-b-CC-c-b-DD-c-b-e|||true|
+|0#2#|i-AB-c-b-w|||true|
+|0#0#0#2#|i-AB-c-b-CC-c-b-w|||true|
+|0#0#0#0#0#2#|i-AB-c-b-CC-c-b-DD-c-b-w|||true|

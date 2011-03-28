@@ -15,16 +15,6 @@ public class Score
         this.bulls = bulls;
     }
 
-    public final int getCows()
-    {
-        return cows;
-    }
-
-    public final int getBulls()
-    {
-        return bulls;
-    }
-
     @Override
     public final String toString()
     {

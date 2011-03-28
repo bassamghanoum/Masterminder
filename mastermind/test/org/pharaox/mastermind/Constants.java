@@ -48,7 +48,7 @@ public final class Constants
 
     public static final int MM2_TOTAL_ROUNDS_SIMPLE = 53;
     public static final int MM2_TOTAL_ROUNDS_KNUTH = 45;
-    public static final int MM2_TOTAL_ROUNDS_ESIZE = 46;
+    public static final int MM2_TOTAL_ROUNDS_ESIZE = 45;
     public static final int MM2_TOTAL_ROUNDS_DUMB = 151;
 
     public static final int MM2_MAX_ROUNDS_SIMPLE = 5;

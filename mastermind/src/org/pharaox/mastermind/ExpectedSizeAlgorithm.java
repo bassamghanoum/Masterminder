@@ -4,8 +4,6 @@ import java.util.SortedSet;
 
 public class ExpectedSizeAlgorithm extends AbstractAlgorithm
 {
-    public static final String NAME = "Expected Size Mastermind Algorithm";
-
     public ExpectedSizeAlgorithm(final Mastermind mastermind)
     {
         super(mastermind);
@@ -15,7 +13,7 @@ public class ExpectedSizeAlgorithm extends AbstractAlgorithm
     protected final double calculateGuessRating(final String guess)
     {
         double sum = 0.0;
-        for (final Score score : getAllScores())
+        for (final Score score : getAllPossibleScores())
         {
             final SortedSet<String> codes = evaluatePossibleCodes(guess, score);
             final double size =
@@ -23,11 +21,5 @@ public class ExpectedSizeAlgorithm extends AbstractAlgorithm
             sum += size;
         }
         return (getPossibleCodes().size() - sum);
-    }
-
-    @Override
-    public final String toString()
-    {
-        return NAME;
     }
 }

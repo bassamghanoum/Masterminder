@@ -1,4 +1,16 @@
 *.class
+*.zip
 /*/bin/
 /*/target/
 /*/log/
+/coverage/
+/fitnesse/ErrorLogs/
+/fitnesse/files/
+/fitnesse/FitNesse/
+/fitnesse/FrontPage/
+/fitnesse/PageFooter/
+/fitnesse/PageHeader/
+/fitnesse/RecentChanges/
+/fitnesse/properties
+/fitnesse/updateDoNotCopyOverList
+/fitnesse/updateList

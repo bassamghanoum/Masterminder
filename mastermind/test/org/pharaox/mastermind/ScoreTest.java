@@ -12,18 +12,9 @@ public class ScoreTest
     private static final Score[] SCORES = { Score.ZERO_SCORE, new Score(1, 2), new Score(1, 2),
         new Score(2, 3), new Score(2, 3) };
 
-    private static final String M_WRONG_COWS = "Wrong cows:";
-    private static final String M_WRONG_BULLS = "Wrong bulls:";
     private static final String M_EQUALITY_CHECK_FAILED = "Equality check failed:";
     private static final String M_HASHCODE_CHECK_FAILED = "Hashcode check failed:";
     
-    @Test
-    public final void testConstructor()
-    {
-        assertEquals(M_WRONG_COWS, 0, SCORES[0].getCows());
-        assertEquals(M_WRONG_BULLS, 0, SCORES[0].getBulls());
-    }
-
     @Test
     public final void testEquals()
     {

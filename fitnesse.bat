@@ -1,0 +1,1 @@
+java -jar c:\bin\fitnesse\fitnesse.jar -d . -r fitnesse

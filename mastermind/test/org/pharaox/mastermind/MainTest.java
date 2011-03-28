@@ -50,16 +50,16 @@ public class MainTest
         // @formatter:off
         final Object[][] data = new Object[][]
         {
-            { "", "i-AA-c-e" },
-            { "a", "i-AA-c-e" },
-            { "-1\n0\n", "i-AA-c-b-e" }, // NOPMD AvoidDuplicateLiterals
-            { "3\n0\n", "i-AA-c-b-e" },
-            { "1\n1\n", "i-AA-c-b-e" },
-            { "2\n2\n", "i-AA-c-b-e" },
-            { "0\n0\n0\n0\n0\n0\n0\n0\n", "i-AA-c-b-BB-c-b-CC-c-b-DD-c-b-e" },
-            { "0\n2\n", "i-AA-c-b-w" },
-            { "0\n0\n0\n2\n", "i-AA-c-b-BB-c-b-w" },
-            { "0\n0\n0\n0\n0\n0\n0\n2\n", "i-AA-c-b-BB-c-b-CC-c-b-DD-c-b-w" },
+            { "", "i-AB-c-e" },
+            { "a", "i-AB-c-e" },
+            { "-1\n0\n", "i-AB-c-b-e" }, // NOPMD AvoidDuplicateLiterals
+            { "3\n0\n", "i-AB-c-b-e" },
+            { "1\n1\n", "i-AB-c-b-e" },
+            { "2\n2\n", "i-AB-c-b-e" },
+            { "0\n0\n0\n0\n0\n0\n", "i-AB-c-b-CC-c-b-DD-c-b-e" },
+            { "0\n2\n", "i-AB-c-b-w" },
+            { "0\n0\n0\n2\n", "i-AB-c-b-CC-c-b-w" },
+            { "0\n0\n0\n0\n0\n2\n", "i-AB-c-b-CC-c-b-DD-c-b-w" },
         };
         // @formatter:on
         return Arrays.asList(data);
@@ -68,16 +68,22 @@ public class MainTest
     @Test
     public final void testRun()
     {
+        final String output = run();
+        assertEquals(M_WRONG_OUTPUT, buildOutput(), output);
+    }
+    
+    public final String run()
+    {
         final Reader reader = new StringReader(input);
         final Writer writer = new StringWriter();
         final Main main = new Main(new String[] {}, reader, writer);
         main.run();
-        assertEquals(M_WRONG_OUTPUT, buildOutput(outputSchema), writer.toString());
+        return writer.toString();
     }
 
-    private String buildOutput(final String schema)
+    public final String buildOutput()
     {
-        final List<String> tokens = tokenizeSchema(schema);
+        final List<String> tokens = tokenizeSchema(outputSchema);
         return buildOutput(tokens);
     }
 

@@ -32,7 +32,7 @@ public class AlgorithmEvaluator
 
     private void printInfo()
     {
-        info("Algorithm Evaluation for " + factory.getAlgorithm());
+        info("Algorithm Evaluation for " + factory.getAlgorithm().getClass());
         info("===============================================");
         info("Total Rounds Played: " + totalRoundsPlayed);
         info("Max Rounds Played: " + maxRoundsPlayed);

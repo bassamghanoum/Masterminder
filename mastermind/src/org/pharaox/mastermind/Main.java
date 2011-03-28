@@ -9,7 +9,6 @@ import java.util.Arrays;
 
 public class Main
 {
-    private static final String SIMPLE_ALG = "simple";
     private static final String KNUTH_ALG = "knuth";
     private static final String ESIZE_ALG = "esize";
     
@@ -17,7 +16,8 @@ public class Main
     private static final int DEFAULT_LENGTH = 2;
     private static final boolean DEFAULT_UNIQUE_CHARS = false;
     private static final int DEFAULT_MAX_ROUNDS = 10;
-    private static final String DEFAULT_ALG = SIMPLE_ALG;
+    private static final String DEFAULT_ALG = KNUTH_ALG;
+    private static final int DEFAULT_PRECALC_LEVELS = 3;
     
     @SuppressWarnings("unused")
     private final transient String[] args; // NOPMD
@@ -29,6 +29,7 @@ public class Main
     private transient boolean uniqueChars = DEFAULT_UNIQUE_CHARS; // NOPMD
     private transient int maxRounds = DEFAULT_MAX_ROUNDS; // NOPMD
     private transient String alg = DEFAULT_ALG; // NOPMD
+    private transient int precalcLevels = DEFAULT_PRECALC_LEVELS; // NOPMD
     
     Main(final String[] args, final Reader reader, final Writer writer)
     {
@@ -59,13 +60,15 @@ public class Main
     private void playGame()
     {
         final Mastermind mastermind = new Mastermind(alphabet, length, uniqueChars);
-        final Algorithm algorithm = getAlgorithm(mastermind);
+        final AlgorithmFactory factory = createFactory(mastermind);
+        final Algorithm algorithm = factory.getAlgorithm();
         final Player player = new ReaderWriterPlayer(mastermind, reader, writer);
-        final Game game = new Game(mastermind, algorithm, maxRounds, player);
+        final GuessCalculator calc = new GuessCalculator(mastermind, factory, precalcLevels);
+        final Game game = new Game(mastermind, algorithm, maxRounds, player, calc);
         game.play();
     }
 
-    private Algorithm getAlgorithm(final Mastermind mastermind)
+    private AlgorithmFactory createFactory(final Mastermind mastermind)
     {
         AlgorithmFactory factory; 
         if (alg.equals(KNUTH_ALG))
@@ -80,7 +83,7 @@ public class Main
         {
             factory = new SimpleAlgorithmFactory(mastermind);
         }
-        return factory.getAlgorithm();
+        return factory;
     }
 
     private void reportError(final MastermindException exc)
@@ -98,9 +101,12 @@ public class Main
 
     public static void main(final String[] args)
     {
-        final InputStreamReader reader = new InputStreamReader(System.in);
-        final OutputStreamWriter writer = new OutputStreamWriter(System.out);
-        new Main(args, reader, writer).run();
+        while (true)
+        {
+            final InputStreamReader reader = new InputStreamReader(System.in);
+            final OutputStreamWriter writer = new OutputStreamWriter(System.out);
+            new Main(args, reader, writer).run();
+        }
     }
 
 }
