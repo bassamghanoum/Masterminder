@@ -1,4 +1,4 @@
-|org.pharaox.mastermind.fixtures.MainFixture|
+|org.pharaox.mastermind.MainFixture|
 |input|outputSchema|run?|getOutput?|outputConformsToSchema?|
 |a|i-AB-c-e|||true|
 |-1#0#|i-AB-c-b-e|||true|

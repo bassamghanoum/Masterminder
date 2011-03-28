@@ -1,3 +1,6 @@
-rem java -ea -cp mastermind\target\mastermind-1.0-SNAPSHOT.jar org.pharaox.mastermind.Main
+@echo off
 
-java -ea -cp C:\bin\emma-2.0.5312\lib\emma.jar emmarun -r html -cp mastermind\target\mastermind-1.0-SNAPSHOT.jar org.pharaox.mastermind.Main
+set EMMA_OPTS=
+if "%1"=="emma" set EMMA_OPTS=-cp %EMMA_HOME%\lib\emma.jar emmarun -r html
+
+java -ea %EMMA_OPTS% -cp mastermind\target\mastermind-1.0-SNAPSHOT.jar org.pharaox.mastermind.Main

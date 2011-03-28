@@ -1,1 +1,3 @@
-java -jar c:\bin\fitnesse\fitnesse.jar -d . -r fitnesse
+@echo off
+
+java -jar fitnesse.jar -d . -r fitnesse

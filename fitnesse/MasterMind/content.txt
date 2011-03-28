@@ -1,3 +1,3 @@
-!path D:\Projects\Mastermind\mastermind\bin
+!path mastermind\bin
 
 !contents
