@@ -49,6 +49,7 @@ public class Distribution
 
     public final int calculatePercentile(final double percents)
     {
+        assert (percents >= 0);
         int result = numbers.lastKey();
         int num = 0;
         for (final int key : numbers.keySet())

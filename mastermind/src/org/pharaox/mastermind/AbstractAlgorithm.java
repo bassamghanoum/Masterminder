@@ -20,6 +20,7 @@ public abstract class AbstractAlgorithm implements Algorithm
 
     public AbstractAlgorithm(final Mastermind mastermind)
     {
+        assert (mastermind != null);
         this.mastermind = mastermind;
         initPossibleCodes();
     }
@@ -49,6 +50,7 @@ public abstract class AbstractAlgorithm implements Algorithm
         {
             guess = makeNextGuess();
         }
+        assert (guess.isEmpty() == possibleCodes.isEmpty());
         return guess;
     }
 
@@ -58,7 +60,8 @@ public abstract class AbstractAlgorithm implements Algorithm
         {
             if (!evaluated.contains(guess))
             {
-                possibleCodes = evaluatePossibleCodes(guess, guessScores.get(guess));
+                final Score score = guessScores.get(guess);
+                possibleCodes = evaluatePossibleCodes(guess, score);
                 evaluated.add(guess);
             }
         }
@@ -108,6 +111,7 @@ public abstract class AbstractAlgorithm implements Algorithm
     @Override
     public final void putGuessScore(final String guess, final Score score)
     {
+        assert (mastermind.isValidCode(guess) && mastermind.isValidScore(score));
         guessScores.put(guess, score);
     }
 }

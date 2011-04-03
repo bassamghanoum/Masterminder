@@ -14,6 +14,7 @@ public class ReaderWriterPlayer extends AbstractIOPlayer
     public ReaderWriterPlayer(final Mastermind mastermind, final Reader reader, final Writer writer)
     {
         super(mastermind);
+        assert (reader != null && writer != null);
         this.reader = new BufferedReader(reader);
         this.writer = new PrintWriter(writer, true);
     }
@@ -21,6 +22,7 @@ public class ReaderWriterPlayer extends AbstractIOPlayer
     @Override
     protected final void printLine(final String message, final Object... args)
     {
+        assert (message != null);
         writer.printf(message + "\n", args);
         writer.flush();
     }
@@ -28,6 +30,7 @@ public class ReaderWriterPlayer extends AbstractIOPlayer
     @Override
     protected final int readLineInt(final String message)
     {
+        assert (message != null);
         print(message);
         final String line = readLine();
         return parseInt(line);

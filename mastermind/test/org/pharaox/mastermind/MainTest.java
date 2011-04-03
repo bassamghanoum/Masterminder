@@ -21,6 +21,9 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(value = Parameterized.class)
 public class MainTest
 {
+    private static final String[] TEST_ARGS_1 = new String[] { "-a", "ABCD", "-l", "2", "-r", "4",
+        "-s", "knuth", "-p", "3" };
+
     private static final String T_INTRO = "i";
     private static final String T_COWS = "c";
     private static final String T_BULLS = "b";
@@ -29,17 +32,19 @@ public class MainTest
     private static final String O_LOST = "l";
 
     private static final String M_WRONG_OUTPUT = "Wrong output:";
-    
+
     private static final String DELIM = "-";
 
+    private final transient String[] args;
     private final transient String input;
     private final transient String outputSchema;
-    
+
     private transient int numRounds;
-    
-    public MainTest(final String input, final String outputSchema)
+
+    public MainTest(final String[] args, final String input, final String outputSchema)
     {
         super();
+        this.args = Arrays.copyOf(args, args.length);
         this.input = input;
         this.outputSchema = outputSchema;
     }
@@ -47,36 +52,41 @@ public class MainTest
     @Parameters
     public static Collection<Object[]> data()
     {
-        // @formatter:off
+        // @formatter:off, @checkstyle:off
         final Object[][] data = new Object[][]
         {
-            { "", "i-AB-c-e" },
-            { "a", "i-AB-c-e" },
-            { "-1\n0\n", "i-AB-c-b-e" }, // NOPMD AvoidDuplicateLiterals
-            { "3\n0\n", "i-AB-c-b-e" },
-            { "1\n1\n", "i-AB-c-b-e" },
-            { "2\n2\n", "i-AB-c-b-e" },
-            { "0\n0\n0\n0\n0\n0\n", "i-AB-c-b-CC-c-b-DD-c-b-e" },
-            { "0\n2\n", "i-AB-c-b-w" },
-            { "0\n0\n0\n2\n", "i-AB-c-b-CC-c-b-w" },
-            { "0\n0\n0\n0\n0\n2\n", "i-AB-c-b-CC-c-b-DD-c-b-w" },
+            { TEST_ARGS_1, "", "i-AB-c-e" },
+            { TEST_ARGS_1, "a", "i-AB-c-e" },
+            { TEST_ARGS_1, "-1\n0\n", "i-AB-c-b-e" }, // NOPMD AvoidDuplicateLiterals
+            { TEST_ARGS_1, "3\n0\n", "i-AB-c-b-e" },
+            { TEST_ARGS_1, "1\n1\n", "i-AB-c-b-e" },
+            { TEST_ARGS_1, "2\n2\n", "i-AB-c-b-e" },
+            { TEST_ARGS_1, "0\n0\n0\n0\n0\n0\n", "i-AB-c-b-CC-c-b-DD-c-b-e" },
+            { TEST_ARGS_1, "0\n2\n", "i-AB-c-b-w" },
+            { TEST_ARGS_1, "0\n0\n0\n2\n", "i-AB-c-b-CC-c-b-w" },
+            { TEST_ARGS_1, "0\n0\n0\n0\n0\n2\n", "i-AB-c-b-CC-c-b-DD-c-b-w" },
+/*            
+            { new String[] { "-a", "ABCDEF", "-l", "4", "-r", "9", "-s", "simple" }, "a", "i-AAAA-c-e" },
+            { new String[] { "-a", "ABCDEF", "-l", "4", "-r", "5", "-s", "knuth" }, "a", "i-AABB-c-e" },
+            { new String[] { "-a", "ABCDEF", "-l", "4", "-r", "6", "-s", "exp_size" }, "a", "i-AABC-c-e" },
+*/            
         };
-        // @formatter:on
+        // @formatter:on, @checkstyle:on
         return Arrays.asList(data);
     }
-    
+
     @Test
     public final void testRun()
     {
         final String output = run();
         assertEquals(M_WRONG_OUTPUT, buildOutput(), output);
     }
-    
+
     public final String run()
     {
         final Reader reader = new StringReader(input);
         final Writer writer = new StringWriter();
-        final Main main = new Main(new String[] {}, reader, writer);
+        final Main main = new Main(args, reader, writer);
         main.run();
         return writer.toString();
     }
@@ -141,7 +151,7 @@ public class MainTest
         if (outcome.equals(O_ERROR))
         {
             builder.append(MastermindException.class.toString());
-        } 
+        }
         else if (outcome.equals(O_WON))
         {
             builder.append(String.format(M_C_GAME_WON, numRounds));

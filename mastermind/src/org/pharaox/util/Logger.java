@@ -16,7 +16,7 @@ public final class Logger
 
     public static void error(final String message)
     {
-        if (level.ordinal() >= Level.ERROR.ordinal())
+        if (levelHigherThan(Level.ERROR))
         {
             log(message);
         }
@@ -24,7 +24,7 @@ public final class Logger
 
     public static void warning(final String message)
     {
-        if (level.ordinal() >= Level.WARNING.ordinal())
+        if (levelHigherThan(Level.WARNING))
         {
             log(message);
         }
@@ -32,7 +32,7 @@ public final class Logger
 
     public static void info(final String message)
     {
-        if (level.ordinal() >= Level.INFO.ordinal())
+        if (levelHigherThan(Level.INFO))
         {
             log(message);
         }
@@ -40,10 +40,15 @@ public final class Logger
 
     public static void debug(final String message)
     {
-        if (level.ordinal() >= Level.DEBUG.ordinal())
+        if (levelHigherThan(Level.DEBUG))
         {
             log(message);
         }
+    }
+
+    private static boolean levelHigherThan(final Level levelx)
+    {
+        return level.ordinal() >= levelx.ordinal();
     }
 
     private static void log(final String message)

@@ -19,6 +19,7 @@ public class AlgorithmEvaluator
     public AlgorithmEvaluator(final Mastermind mastermind, final AlgorithmFactory factory, 
         final int levels)
     {
+        assert (mastermind != null && factory != null);
         this.mastermind = mastermind;
         this.factory = factory;
         this.calc = new GuessCalculator(mastermind, factory, levels);
@@ -30,6 +31,46 @@ public class AlgorithmEvaluator
         printInfo();
     }
 
+    class GamesVisitor implements CodeVisitor
+    {
+        @Override
+        public void visit(final String code)
+        {
+            assert mastermind.isValidCode(code);
+            debug("Code: " + code);
+            final Player player = new DefaultPlayer(mastermind, code);
+            final Algorithm algorithm = factory.getAlgorithm();
+            final Game game = new Game(mastermind, algorithm, MAX_ROUNDS, player, calc);
+            final boolean won = game.play();
+            final int roundsPlayed = game.getRoundsPlayed();
+            debugGameWon(won, roundsPlayed);
+            updateStatistics(won, roundsPlayed);
+        }
+
+        private void debugGameWon(final boolean won, final int roundsPlayed)
+        {
+            if (won)
+            {
+                debug("Game won in " + roundsPlayed + " round(s)");
+            }
+            else
+            {
+                debug("Game lost in " + roundsPlayed + " round(s)");
+            }
+        }
+
+        private void updateStatistics(final boolean won, final int roundsPlayed)
+        {
+            totalRoundsPlayed += roundsPlayed;
+            maxRoundsPlayed = Math.max(maxRoundsPlayed, roundsPlayed);
+            gamesPlayed++;
+            if (won)
+            {
+                gamesWon++;
+            }
+        }
+    }
+    
     private void printInfo()
     {
         info("Algorithm Evaluation for " + factory.getAlgorithm().getClass());
@@ -44,60 +85,36 @@ public class AlgorithmEvaluator
 
     public final int getTotalRoundsPlayed()
     {
+        assert hasFinished();
         return totalRoundsPlayed;
     }
-
+    
     public final int getMaxRoundsPlayed()
     {
+        assert hasFinished();
         return maxRoundsPlayed;
     }
 
     public final int getGamesPlayed()
     {
+        assert hasFinished();
         return gamesPlayed;
     }
 
     public final int getGamesWon()
     {
+        assert hasFinished();
         return gamesWon;
     }
 
     public final double getAverageRoundsPlayed()
     {
+        assert hasFinished();
         return (double) totalRoundsPlayed / (double) gamesPlayed;
     }
 
-    class GamesVisitor implements CodeVisitor
+    private boolean hasFinished()
     {
-        @Override
-        public void visit(final String code)
-        {
-            debug("Code: " + code);
-            final Player player = new DefaultPlayer(mastermind, code);
-            final Algorithm algorithm = factory.getAlgorithm();
-            final Game game = new Game(mastermind, algorithm, MAX_ROUNDS, player, calc);
-            final boolean won = game.play();
-            final int roundsPlayed = game.getRoundsPlayed();
-            if (won)
-            {
-                debug("Game won in " + roundsPlayed + " round(s)");
-            }
-            else
-            {
-                debug("Game lost in " + roundsPlayed + " round(s)");
-            }
-            updateStatistics(won, roundsPlayed);
-        }
-
-        private void updateStatistics(final boolean won, final int roundsPlayed)
-        {
-            totalRoundsPlayed += roundsPlayed;
-            maxRoundsPlayed = Math.max(maxRoundsPlayed, roundsPlayed);
-            gamesPlayed++;
-            if (won)
-            {
-                gamesWon++;
-            }
-        }
+        return (gamesPlayed > 0);
     }
 }

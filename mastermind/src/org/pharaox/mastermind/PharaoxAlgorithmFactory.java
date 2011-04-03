@@ -7,7 +7,7 @@ public class PharaoxAlgorithmFactory implements AlgorithmFactory
     
     public PharaoxAlgorithmFactory(final Mastermind mastermind, final double percents)
     {
-        super();
+        assert (mastermind != null && percents >= 0);
         this.mastermind = mastermind;
         this.percents = percents;
     }

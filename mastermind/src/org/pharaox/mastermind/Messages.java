@@ -24,6 +24,7 @@ public final class Messages
 
     public static String msg(final int key)
     {
+        assert (key >= 0);
         return getMessage(BUNDLE_NAME, PACKAGE + "." + key);
     }
 }

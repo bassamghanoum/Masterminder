@@ -8,7 +8,7 @@ public abstract class AbstractIOPlayer implements Player
     
     public AbstractIOPlayer(final Mastermind mastermind)
     {
-        super();
+        assert (mastermind != null);
         this.mastermind = mastermind;
     }
 
@@ -34,6 +34,7 @@ public abstract class AbstractIOPlayer implements Player
     @Override
     public final Score getScore(final String guess)
     {
+        assert mastermind.isValidCode(guess);
         printLine(M_C_GUESS, guess);
         final int cows = readLineInt(M_C_COWS);
         final int bulls = readLineInt(M_C_BULLS);

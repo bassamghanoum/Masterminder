@@ -6,7 +6,7 @@ public class KnuthAlgorithmFactory implements AlgorithmFactory
     
     public KnuthAlgorithmFactory(final Mastermind mastermind)
     {
-        super();
+        assert (mastermind != null);
         this.mastermind = mastermind;
     }
 

@@ -1,6 +1,5 @@
 @echo off
 
-set EMMA_OPTS=
-if "%1"=="emma" set EMMA_OPTS=-cp %EMMA_HOME%\lib\emma.jar emmarun -r html
+rem set EMMA_OPTS=-cp %EMMA_HOME%\lib\emma.jar emmarun -r html
 
-java -ea %EMMA_OPTS% -cp mastermind\target\mastermind-1.0-SNAPSHOT.jar org.pharaox.mastermind.Main
+java %EMMA_OPTS% -cp mastermind\target\mastermind-1.0-SNAPSHOT.jar org.pharaox.mastermind.Main %1 %2 %3 %4 %5 %6 %7 %8 %9

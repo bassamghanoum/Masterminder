@@ -9,6 +9,7 @@ public class PharaoxAlgorithm extends AbstractAlgorithm
     public PharaoxAlgorithm(final Mastermind mastermind, final double percents)
     {
         super(mastermind);
+        assert (percents >= 0);
         this.percents = percents;
     }
 

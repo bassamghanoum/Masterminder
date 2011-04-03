@@ -180,6 +180,7 @@ public class Mastermind
         {
             result = evaluateScoreNonUniqueChars(guess, code);
         }
+        assert isValidScore(result);
         return result;
     }
 
@@ -235,6 +236,7 @@ public class Mastermind
     public final SortedSet<String> evaluatePossibleCodes(final String guess, final Score score,
         final SortedSet<String> codes)
     {
+        assert (isValidCode(guess) && isValidScore(score));
         final SortedSet<String> result = new TreeSet<String>();
         for (final String code : codes)
         {
@@ -249,6 +251,7 @@ public class Mastermind
 
     public final void visitCodes(final CodeVisitor visitor)
     {
+        assert (visitor != null);
         visitCodes(new char[length], 0, visitor);
     }
 

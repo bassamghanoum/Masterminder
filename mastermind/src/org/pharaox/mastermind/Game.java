@@ -29,21 +29,12 @@ public class Game
     public Game(final Mastermind mastermind, final Algorithm algorithm, final int maxRounds,
         final Player player, final GuessCalculator calc)
     {
+        assert (mastermind != null && algorithm != null && maxRounds > 0 && player != null);
         this.mastermind = mastermind;
         this.algorithm = algorithm;
         this.maxRounds = maxRounds;
         this.player = player;
         this.calc = calc;
-    }
-
-    public final boolean hasWon()
-    {
-        return won;
-    }
-
-    public final int getRoundsPlayed()
-    {
-        return roundsPlayed;
     }
 
     public final boolean play()
@@ -124,5 +115,22 @@ public class Game
     private void putGuessScore(final String guess, final Score score)
     {
         algorithm.putGuessScore(guess, score);
+    }
+    
+    public final boolean hasWon()
+    {
+        assert isOver();
+        return won;
+    }
+    
+    public final int getRoundsPlayed()
+    {
+        assert isOver();
+        return roundsPlayed;
+    }
+    
+    private boolean isOver()
+    {
+        return (roundsPlayed > 0);
     }
 }

@@ -6,7 +6,7 @@ public class ExpectedSizeAlgorithmFactory implements AlgorithmFactory
     
     public ExpectedSizeAlgorithmFactory(final Mastermind mastermind)
     {
-        super();
+        assert (mastermind != null);
         this.mastermind = mastermind;
     }
 

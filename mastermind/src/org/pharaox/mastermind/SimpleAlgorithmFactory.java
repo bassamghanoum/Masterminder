@@ -6,7 +6,7 @@ public class SimpleAlgorithmFactory implements AlgorithmFactory
     
     public SimpleAlgorithmFactory(final Mastermind mastermind)
     {
-        super();
+        assert (mastermind != null);
         this.mastermind = mastermind;
     }
 

@@ -7,49 +7,89 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.Arrays;
 
+import org.pharaox.util.Arguments;
+import org.pharaox.util.ArgumentsException;
+
 public class Main
 {
-    private static final String KNUTH_ALG = "knuth";
-    private static final String ESIZE_ALG = "esize";
-    
-    private static final String DEFAULT_ALPHABET = "ABCD";
-    private static final int DEFAULT_LENGTH = 2;
+    private static final String ARG_ALPHABET = "a";
+    private static final String ARG_LENGTH = "l";
+    private static final String ARG_UNIQUE_CHARS = "u";
+    private static final String ARG_MAX_ROUNDS = "r";
+    private static final String ARG_ALG = "s";
+    private static final String ARG_PRECALC_LEVELS = "p";
+    private static final String ARG_MODE = "m";
+    private static final String ARGS_SCHEMA = ARG_ALPHABET + "*," + ARG_LENGTH + "#,"
+        + ARG_UNIQUE_CHARS + "!," + ARG_MAX_ROUNDS + "#," + ARG_ALG + "*," + ARG_PRECALC_LEVELS
+        + "#," + ARG_MODE + "*";
+
+    private static final String ALG_SIMPLE = "simple";
+    private static final String ALG_KNUTH = "knuth";
+    private static final String ALG_EXP_SIZE = "exp_size";
+
+    private static final String MODE_PLAY = "play";
+    private static final String MODE_EVALUATE = "eval";
+
+    private static final String DEFAULT_ALPHABET = "ABCDEF";
+    private static final int DEFAULT_LENGTH = 4;
     private static final boolean DEFAULT_UNIQUE_CHARS = false;
-    private static final int DEFAULT_MAX_ROUNDS = 10;
-    private static final String DEFAULT_ALG = KNUTH_ALG;
-    private static final int DEFAULT_PRECALC_LEVELS = 3;
-    
-    @SuppressWarnings("unused")
-    private final transient String[] args; // NOPMD
+    private static final int DEFAULT_MAX_ROUNDS = 7;
+    private static final String DEFAULT_ALG = ALG_SIMPLE;
+    private static final int DEFAULT_PRECALC_LEVELS = 1;
+    private static final String DEFAULT_MODE = MODE_PLAY;
+
+    private final transient String[] args;
     private final transient Reader reader;
     private final transient Writer writer;
-    
-    private transient String alphabet = DEFAULT_ALPHABET; // NOPMD
-    private transient int length = DEFAULT_LENGTH; // NOPMD
-    private transient boolean uniqueChars = DEFAULT_UNIQUE_CHARS; // NOPMD
-    private transient int maxRounds = DEFAULT_MAX_ROUNDS; // NOPMD
-    private transient String alg = DEFAULT_ALG; // NOPMD
-    private transient int precalcLevels = DEFAULT_PRECALC_LEVELS; // NOPMD
-    
+
+    private transient String alphabet;
+    private transient int length;
+    private transient boolean uniqueChars;
+    private transient int maxRounds;
+    private transient String alg;
+    private transient int precalcLevels;
+    private transient String mode;
+
     Main(final String[] args, final Reader reader, final Writer writer)
     {
-        super();
+        assert (args != null && reader != null && writer != null);
         this.args = Arrays.copyOf(args, args.length);
         this.reader = reader;
         this.writer = writer;
-        parseArgs();
+        initialize();
     }
 
-    private void parseArgs()
+    private void initialize()
     {
-        // TODO
+        try
+        {
+            final Arguments arguments = new Arguments(ARGS_SCHEMA, args);
+            alphabet = arguments.getString(ARG_ALPHABET, DEFAULT_ALPHABET);
+            length = arguments.getInt(ARG_LENGTH, DEFAULT_LENGTH);
+            uniqueChars = arguments.getBoolean(ARG_UNIQUE_CHARS, DEFAULT_UNIQUE_CHARS);
+            maxRounds = arguments.getInt(ARG_MAX_ROUNDS, DEFAULT_MAX_ROUNDS);
+            alg = arguments.getString(ARG_ALG, DEFAULT_ALG);
+            precalcLevels = arguments.getInt(ARG_PRECALC_LEVELS, DEFAULT_PRECALC_LEVELS);
+            mode = arguments.getString(ARG_MODE, DEFAULT_MODE);
+        }
+        catch (ArgumentsException e)
+        {
+            reportError(e);
+        }
     }
 
     public final void run()
     {
         try
         {
-            playGame();
+            if (mode.equals(MODE_PLAY))
+            {
+                playGame();
+            }
+            else if (mode.equals(MODE_EVALUATE))
+            {
+                evaluateAlgorithm();
+            }
         }
         catch (final MastermindException e)
         {
@@ -68,25 +108,37 @@ public class Main
         game.play();
     }
 
+    private void evaluateAlgorithm()
+    {
+        final Mastermind mastermind = new Mastermind(alphabet, length, uniqueChars);
+        final AlgorithmFactory factory = createFactory(mastermind);
+        final AlgorithmEvaluator eval = new AlgorithmEvaluator(mastermind, factory, precalcLevels);
+        eval.evaluate();
+    }
+
     private AlgorithmFactory createFactory(final Mastermind mastermind)
     {
-        AlgorithmFactory factory; 
-        if (alg.equals(KNUTH_ALG))
+        AlgorithmFactory factory;
+        if (alg.equals(ALG_KNUTH))
         {
-            factory = new KnuthAlgorithmFactory(mastermind); 
+            factory = new KnuthAlgorithmFactory(mastermind);
         }
-        else if (alg.equals(ESIZE_ALG))
+        else if (alg.equals(ALG_EXP_SIZE))
         {
-            factory = new ExpectedSizeAlgorithmFactory(mastermind); 
+            factory = new ExpectedSizeAlgorithmFactory(mastermind);
+        }
+        else if (alg.equals(ALG_SIMPLE))
+        {
+            factory = new SimpleAlgorithmFactory(mastermind);
         }
         else
         {
-            factory = new SimpleAlgorithmFactory(mastermind);
+            throw new MastermindException();
         }
         return factory;
     }
 
-    private void reportError(final MastermindException exc)
+    private void reportError(final RuntimeException exc)
     {
         try
         {
@@ -101,12 +153,9 @@ public class Main
 
     public static void main(final String[] args)
     {
-        while (true)
-        {
-            final InputStreamReader reader = new InputStreamReader(System.in);
-            final OutputStreamWriter writer = new OutputStreamWriter(System.out);
-            new Main(args, reader, writer).run();
-        }
+        final InputStreamReader reader = new InputStreamReader(System.in);
+        final OutputStreamWriter writer = new OutputStreamWriter(System.out);
+        new Main(args, reader, writer).run();
     }
 
 }

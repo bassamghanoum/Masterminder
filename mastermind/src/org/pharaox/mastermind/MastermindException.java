@@ -12,5 +12,6 @@ public class MastermindException extends RuntimeException
     public MastermindException(final Exception exc)
     {
         super(exc);
+        assert (exc != null);
     }
 }

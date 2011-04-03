@@ -7,7 +7,7 @@ public class DefaultPlayer implements Player
     
     public DefaultPlayer(final Mastermind mastermind, final String code)
     {
-        super();
+        assert (mastermind != null && mastermind.isValidCode(code));
         this.mastermind = mastermind;
         this.code = code;
     }
@@ -27,6 +27,7 @@ public class DefaultPlayer implements Player
     @Override
     public final Score getScore(final String guess)
     {
-        return mastermind.evaluateScoreSafe(guess, code);
+        assert mastermind.isValidCode(guess);
+        return mastermind.evaluateScore(guess, code);
     }
 }

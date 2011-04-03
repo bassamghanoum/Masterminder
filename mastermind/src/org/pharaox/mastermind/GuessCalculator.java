@@ -18,7 +18,7 @@ public class GuessCalculator
     public GuessCalculator(final Mastermind mastermind, final AlgorithmFactory factory,
         final int levels)
     {
-        super();
+        assert (mastermind != null && factory != null && levels > 0);
         this.mastermind = mastermind;
         this.factory = factory;
         this.levels = levels;
@@ -153,12 +153,14 @@ public class GuessCalculator
 
     public final boolean hasGuesses(final int level)
     {
+        assert (level >= 0);
         return (level < levels);
     }
 
     public final String getGuess(final List<Score> scores, final int level)
     {
-        assert hasGuesses(level);
+        assert hasGuesses(level); 
+        assert (level > 0) ? (scores != null && !scores.isEmpty()) : true;
         return getGuess(scores, level, objects[level], 0);
     }
 

@@ -7,6 +7,7 @@ public class DumbAlgorithm implements Algorithm
     public DumbAlgorithm(final Mastermind mastermind)
     {
         code = mastermind.getAllPossibleCodes().first();
+        assert mastermind.isValidCode(code);
     }
 
     @Override

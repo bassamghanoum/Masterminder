@@ -1,11 +1,23 @@
 |org.pharaox.mastermind.MainFixture|
-|input|outputSchema|run?|getOutput?|outputConformsToSchema?|
-|a|i-AB-c-e|||true|
-|-1#0#|i-AB-c-b-e|||true|
-|3#0#|i-AB-c-b-e|||true|
-|1#1#|i-AB-c-b-e|||true|
-|2#2#|i-AB-c-b-e|||true|
-|0#0#0#0#0#0#|i-AB-c-b-CC-c-b-DD-c-b-e|||true|
-|0#2#|i-AB-c-b-w|||true|
-|0#0#0#2#|i-AB-c-b-CC-c-b-w|||true|
-|0#0#0#0#0#2#|i-AB-c-b-CC-c-b-DD-c-b-w|||true|
+|argsString|input|outputSchema|run?|getOutput?|outputConformsToSchema?|
+|-a ABCD -l 2 -r 4 -s knuth|a|i-AB-c-e|||true|
+|-a ABCD -l 2 -r 4 -s knuth|-1#0#|i-AB-c-b-e|||true|
+|-a ABCD -l 2 -r 4 -s knuth|3#0#|i-AB-c-b-e|||true|
+|-a ABCD -l 2 -r 4 -s knuth|1#1#|i-AB-c-b-e|||true|
+|-a ABCD -l 2 -r 4 -s knuth|2#2#|i-AB-c-b-e|||true|
+|-a ABCD -l 2 -r 4 -s knuth|0#0#0#0#0#0#|i-AB-c-b-CC-c-b-DD-c-b-e|||true|
+|-a ABCD -l 2 -r 4 -s knuth|0#2#|i-AB-c-b-w|||true|
+|-a ABCD -l 2 -r 4 -s knuth|0#0#0#2#|i-AB-c-b-CC-c-b-w|||true|
+|-a ABCD -l 2 -r 4 -s knuth|0#0#0#0#0#2#|i-AB-c-b-CC-c-b-DD-c-b-w|||true|
+
+|org.pharaox.mastermind.MainFixture|
+|argsString|input|outputSchema|run?|getOutput?|outputConformsToSchema?|
+|-a ABCDEF -l 4 -r 9 -s simple|a|i-AAAA-c-e|||true|
+|-a ABCDEF -l 4 -r 5 -s knuth|a|i-AABB-c-e|||true|
+|-a ABCDEF -l 4 -r 6 -s exp_size|a|i-AABC-c-e|||true|
+
+|org.pharaox.mastermind.MainFixture|
+|argsString|input|outputSchema|run?|getOutput?|outputConformsToSchema?|
+|-s simple -p 4 -m eval|-|-||||
+|-s knuth -p 4 -m eval|-|-||||
+|-s exp_size -p 4 -m eval|-|-||||
