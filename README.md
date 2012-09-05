@@ -9,4 +9,4 @@ I created Mastermind more than one year ago, in February - March 2011. It was fo
 
 Feedback, comments, and contributions are welcome!
 
-Read more in our Wiki (https://github.com/stoyanr/Mastermind/wiki).
+Read more in our [Wiki](https://github.com/stoyanr/Mastermind/wiki).
