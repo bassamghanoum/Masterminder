@@ -4,7 +4,9 @@
 /*/bin/
 /*/target/
 /*/log/
+/target/
 /coverage/
+/docs/
 /fitnesse/ErrorLogs/
 /fitnesse/files/
 /fitnesse/FitNesse/
