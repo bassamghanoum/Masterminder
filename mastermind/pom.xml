@@ -4,11 +4,42 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>mastermind</artifactId>
 	<packaging>jar</packaging>
+	<name>Masterminder</name>
+    <description>Java implementation of several strategies for winning the popular board game Mastermind</description>
 	
 	<parent>
 		<groupId>com.stoyanr.mastermind</groupId>
 		<artifactId>mastermind-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
+	
+	<build>
+		<plugins>	
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>  
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>  
+				<groupId>org.apache.maven.plugins</groupId>  
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 	
 </project>
