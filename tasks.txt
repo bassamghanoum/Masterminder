@@ -1,0 +1,8 @@
+*Apply for public Maven repo
+*Maven POM
+
+License
+Wiki
+Javadoc
+Build jar, upload to github
+Blog
