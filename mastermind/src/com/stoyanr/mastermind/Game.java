@@ -23,6 +23,15 @@ import static com.stoyanr.util.Logger.debug;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a single game. A game is initialized with a {@link Mastermind} instance (game setup),
+ * a particular {@link Algorithm}, max number of rounds, and a {@link Player} instance. To play a
+ * game, call its {@link #play()} method. The two methods {@link #hasWon()} and
+ * {@link #getRoundsPlayed} should be invoked only after the game has finished to determine whether
+ * the game is won and the number of rounds it took. A game can be played only once.
+ * 
+ * @author Stoyan Rachev
+ */
 public class Game
 {
     private final transient Mastermind mastermind;
@@ -37,12 +46,36 @@ public class Game
     private transient Score[] scores = new Score[] { ZERO_SCORE, ZERO_SCORE, ZERO_SCORE };
     // @formatter:on
 
+    /**
+     * Creates a new game with the specified setup, algorithm, max number of rounds, and player.
+     * This constructor delegates to
+     * {@link #Game(Mastermind, Algorithm, int, Player, GuessCalculator)} by passing null for the
+     * guess calculator.
+     * 
+     * @param mastermind The game setup to use.
+     * @param algorithm The algorithm to use.
+     * @param maxRounds Max number of rounds allowed. If the game is not won within this number of
+     * rounds, it is terminated and declared "lost".
+     * @param player The player to use.
+     */
     public Game(final Mastermind mastermind, final Algorithm algorithm, final int maxRounds,
         final Player player)
     {
         this(mastermind, algorithm, maxRounds, player, null);
     }
 
+    /**
+     * Creates a new game with the specified setup, algorithm, max number of rounds, player, and
+     * guess calculator.
+     * 
+     * @param mastermind The game setup to use.
+     * @param algorithm The algorithm to use.
+     * @param maxRounds Max number of rounds allowed. If the game is not won within this number of
+     * rounds, it is terminated and declared "lost".
+     * @param player The player to use.
+     * @param calc A guess calculator used to optimize the performance of multiple games played with
+     * the same algorithm, can be null if a guess calculator should not be used.
+     */
     public Game(final Mastermind mastermind, final Algorithm algorithm, final int maxRounds,
         final Player player, final GuessCalculator calc)
     {
@@ -54,6 +87,22 @@ public class Game
         this.calc = calc;
     }
 
+    /**
+     * Plays the game. Calls {@link Player#startGame()} and {@link Player#endGame(boolean, int)} at
+     * the beginning and at the end of the game respectively. At each game round, calls
+     * {@link Algorithm#makeGuess()}, {@link Player#getScore(String)}, and
+     * {@link Algorithm#putGuessScore(String, Score)} in this order, until a correct guess is made.
+     * If this does not happen within the specified max number of rounds, it is terminated and
+     * declared lost.
+     * 
+     * <p>
+     * A game can be played only once. If this method is called for a second time on the same
+     * instance, an exception is thrown.
+     * 
+     * @return true if the game is won, false otherwise.
+     * @throws MastermindException If the method is called for a second time on the same instance,
+     * if an empty guess is returned by the algorithm, or if another unexpected condition occurs.
+     */
     public final boolean play()
     {
         if (roundsPlayed > 0)
@@ -133,19 +182,31 @@ public class Game
     {
         algorithm.putGuessScore(guess, score);
     }
-    
+
+    /**
+     * Returns whether the game has been won or not. Should only be called after the game has been
+     * played, i.e. the {@link #play()} method has finished.
+     * 
+     * @return true if the game has been won, false otherwise.
+     */
     public final boolean hasWon()
     {
         assert isOver();
         return won;
     }
-    
+
+    /**
+     * Returns the actual number of rounds played. Should only be called after the game has been
+     * played, i.e. the {@link #play()} method has finished.
+     * 
+     * @return The actual number of rounds played.
+     */
     public final int getRoundsPlayed()
     {
         assert isOver();
         return roundsPlayed;
     }
-    
+
     private boolean isOver()
     {
         return (roundsPlayed > 0);

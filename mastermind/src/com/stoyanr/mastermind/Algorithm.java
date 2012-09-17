@@ -17,9 +17,30 @@
  */
 package com.stoyanr.mastermind;
 
+/**
+ * Interface to be implemented by the strategy implementations. This interface has two methods, one
+ * for making a guess, and another for accepting a score for the guess. During a game, these methods
+ * are invoked repeatedly until a correct guess is made, or until the max number of guesses is
+ * reached.
+ * 
+ * @author Stoyan Rachev
+ */
 public interface Algorithm
 {
+    /**
+     * Makes a next guess based on the implemented strategy. Should take into account the scores
+     * assigned to all previously made guesses.
+     * 
+     * @return The guess made by the algorithm.
+     */
     String makeGuess();
 
+    /**
+     * Accepts a score for the last guess returned by {@link #makeGuess()}.
+     * 
+     * @param guess The guess which is rated with the passed score. Normally, this should be the
+     * last guess returned by {@link #makeGuess()}.
+     * @param score The score assigned to the passed guess.
+     */
     void putGuessScore(final String guess, final Score score);
 }

@@ -17,6 +17,12 @@
  */
 package com.stoyanr.mastermind;
 
+/**
+ * Interface to be implemented by players. A player interacts with an {@link Algorithm} within a 
+ * {@link Game} by providing scores for the guesses made by the algorithm.
+ * 
+ * @author Stoyan Rachev
+ */
 public interface Player
 {
     void startGame();

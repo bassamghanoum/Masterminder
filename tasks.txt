@@ -1,8 +1,8 @@
 *Apply for public Maven repo
 *Maven POM
+*License
 
-License
-Wiki
 Javadoc
+Wiki
 Build jar, upload to github
 Blog

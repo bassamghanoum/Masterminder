@@ -1,1 +1,5 @@
 mastermind
+stoyan
+rachev
+href
+won

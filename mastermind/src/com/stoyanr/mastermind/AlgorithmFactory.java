@@ -17,7 +17,29 @@
  */
 package com.stoyanr.mastermind;
 
+/**
+ * Interface to be implemented by all algorithm factory implementations. This interface has a single
+ * method which returns a newly created algorithm of the correct type.
+ * 
+ * <p>
+ * Algorithm factories are intended to be used whenever a large number of games should be played
+ * with the same algorithm, for example when evaluating the effectiveness of the different
+ * strategies. A single {@link Algorithm} instance can't be reused for multiple games, as algorithms
+ * are mutable, that is playing a single game changes their state in a way that makes them
+ * unsuitable for playing a second one.
+ * 
+ * <p>
+ * This is the <a href="http://en.wikipedia.org/wiki/Abstract_factory_pattern">Abstract Factory</a>
+ * design pattern in action.
+ * 
+ * @author Stoyan Rachev
+ */
 public interface AlgorithmFactory
 {
+    /**
+     * Returns a newly created algorithm of the correct type.
+     * 
+     * @return A newly created algorithm of the correct type.
+     */
     Algorithm getAlgorithm();
 }
