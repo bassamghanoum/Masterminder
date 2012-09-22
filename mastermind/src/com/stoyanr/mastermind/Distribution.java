@@ -20,14 +20,25 @@ package com.stoyanr.mastermind;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+/**
+ * A distribution, or data set, of integer values. Provides methods for adding numbers and
+ * calculating various parameters, such as mean, standard deviation, and n-th percentile.
+ * 
+ * @author Stoyan Rachev
+ */
 public class Distribution
 {
     private static final double PERCENTS_100 = 100.0;
 
     private final transient SortedMap<Integer, Integer> numbers = new TreeMap<Integer, Integer>();
-    
+
     private transient int size = 0;
 
+    /**
+     * Adds a number to the data set.
+     * 
+     * @param number The number to be added.
+     */
     public final void add(final int number)
     {
         final Integer value = numbers.get(number);
@@ -42,6 +53,11 @@ public class Distribution
         size++;
     }
 
+    /**
+     * Calculates the mean of the data set.
+     * 
+     * @return The calculated mean.
+     */
     public final double calculateMean()
     {
         double sum = 0;
@@ -52,6 +68,11 @@ public class Distribution
         return (sum / size);
     }
 
+    /**
+     * Calculates the standard deviation of the data set.
+     * 
+     * @return The calculated standard deviation.
+     */
     public final double calculateStandardDeviation()
     {
         final double mean = calculateMean();
@@ -64,6 +85,12 @@ public class Distribution
         return Math.sqrt(sum / size);
     }
 
+    /**
+     * Calculates the n-th percentile of the data set.
+     * 
+     * @param percents The value of "n".
+     * @return The calculated percentile.
+     */
     public final int calculatePercentile(final double percents)
     {
         assert (percents >= 0);

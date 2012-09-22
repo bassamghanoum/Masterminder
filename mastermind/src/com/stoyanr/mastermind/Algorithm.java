@@ -18,10 +18,9 @@
 package com.stoyanr.mastermind;
 
 /**
- * Interface to be implemented by the strategy implementations. This interface has two methods, one
- * for making a guess, and another for accepting a score for the guess. During a game, these methods
- * are invoked repeatedly until a correct guess is made, or until the max number of guesses is
- * reached.
+ * Interface to be implemented by strategy implementations. This interface has two methods, one for
+ * making a guess, and another for accepting a score for the guess. During a game, these methods are
+ * invoked repeatedly until a correct guess is made, or until the max number of guesses is reached.
  * 
  * @author Stoyan Rachev
  */

@@ -17,10 +17,20 @@
  */
 package com.stoyanr.mastermind;
 
+/**
+ * A factory for {@link ExpectedSizeAlgorithm} instances.
+ * 
+ * @author Stoyan Rachev
+ */
 public class ExpectedSizeAlgorithmFactory implements AlgorithmFactory
 {
     private final transient Mastermind mastermind;
-    
+
+    /**
+     * Creates a new factory with the specified game setup.
+     * 
+     * @param mastermind The game setup to use.
+     */
     public ExpectedSizeAlgorithmFactory(final Mastermind mastermind)
     {
         assert (mastermind != null);

@@ -22,6 +22,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A performance optimization facility which calculates and stores the guesses made by a particular
+ * algorithm for a given game setup, for up to a predefined number of game rounds (or "levels").
+ * 
+ * @author Stoyan Rachev
+ */
 public class GuessCalculator
 {
     private final transient Mastermind mastermind;
@@ -32,6 +38,16 @@ public class GuessCalculator
     private final transient Object[] objects;
     private final transient String[] guesses;
 
+    /**
+     * Creates a new guess calculator for the specified game setup, algorithm, and levels. This
+     * constructor performs the computationally hard guesses initialization, so that subsequent
+     * method invocations are very fast.
+     * 
+     * @param mastermind The game setup to use.
+     * @param factory The algorithm factory used to produce multiple instances of the algorithm
+     * being evaluated.
+     * @param levels The number of game rounds to calculate and store guesses for.
+     */
     public GuessCalculator(final Mastermind mastermind, final AlgorithmFactory factory,
         final int levels)
     {
@@ -168,15 +184,30 @@ public class GuessCalculator
         return !score.equals(mastermind.getWinningScore());
     }
 
+    /**
+     * Returns true if the calculator has precalculated guesses for the specified level (game
+     * round), which is the case if this level is lower than the calculator levels.
+     * 
+     * @param level The level to check.
+     * @return true if the calculator has precalculated guesses for the specified level, false
+     * otherwise.
+     */
     public final boolean hasGuesses(final int level)
     {
         assert (level >= 0);
         return (level < levels);
     }
 
+    /**
+     * Returns the precalculated guess for the specified level and previously produced scores.
+     * 
+     * @param scores A list of scores produced during the previous game rounds.
+     * @param level The level for which to return the precalculated guess.
+     * @return The precalculated guess for the specified level and scores.
+     */
     public final String getGuess(final List<Score> scores, final int level)
     {
-        assert hasGuesses(level); 
+        assert hasGuesses(level);
         assert (level > 0) ? (scores != null && !scores.isEmpty()) : true;
         return getGuess(scores, level, objects[level], 0);
     }

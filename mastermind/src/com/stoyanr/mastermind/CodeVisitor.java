@@ -17,7 +17,17 @@
  */
 package com.stoyanr.mastermind;
 
+/**
+ * Interface for visitors accepted by the {@link Mastermind#visitCodes(CodeVisitor)} method.
+ * 
+ * @author Stoyan Rachev
+ */
 public interface CodeVisitor
 {
+    /**
+     * Visits the given code.
+     * 
+     * @param code The code being visited.
+     */
     void visit(final String code);
 }

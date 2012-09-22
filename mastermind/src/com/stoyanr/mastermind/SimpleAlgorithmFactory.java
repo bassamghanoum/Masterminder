@@ -17,10 +17,20 @@
  */
 package com.stoyanr.mastermind;
 
+/**
+ * A factory for {@link SimpleAlgorithm} instances.
+ * 
+ * @author Stoyan Rachev
+ */
 public class SimpleAlgorithmFactory implements AlgorithmFactory
 {
     private final transient Mastermind mastermind;
     
+    /**
+     * Creates a new factory with the specified game setup.
+     * 
+     * @param mastermind The game setup to use.
+     */
     public SimpleAlgorithmFactory(final Mastermind mastermind)
     {
         assert (mastermind != null);

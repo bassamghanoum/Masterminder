@@ -23,11 +23,25 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 
+/**
+ * A concrete {@link Player} implementation for "human" players that use I/O streams, such as the
+ * console, for interacting with a {@link Game}. Extends {@link AbstractIOPlayer} to read from a
+ * {@link java.io.Reader} and write to a {@link java.io.Writer}.
+ * 
+ * @author Stoyan Rachev
+ */
 public class ReaderWriterPlayer extends AbstractIOPlayer
 {
     private final transient BufferedReader reader;
     private final transient PrintWriter writer;
 
+    /**
+     * Creates a new player with the given game setup, reader, and writer.
+     * 
+     * @param mastermind The game setup to use.
+     * @param reader The reader to read from.
+     * @param writer The writer to write to.
+     */
     public ReaderWriterPlayer(final Mastermind mastermind, final Reader reader, final Writer writer)
     {
         super(mastermind);

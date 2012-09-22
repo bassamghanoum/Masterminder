@@ -17,6 +17,14 @@
  */
 package com.stoyanr.mastermind;
 
+/**
+ * A "dumb" strategy, mainly intended to be used for testing. It always guesses the same code (the
+ * first in the set of all possible codes), and so has almost no chance of winning. Unlike other
+ * algorithms in this package, this algorithm does not extend {@link AbstractAlgorithm}, but rather
+ * implements the {@link Algorithm} interface directly.
+ * 
+ * @author Stoyan Rachev
+ */
 public class DumbAlgorithm implements Algorithm
 {
     private final transient String code;

@@ -19,10 +19,15 @@ package com.stoyanr.mastermind;
 
 import static com.stoyanr.util.Messages.*;
 
+/**
+ * A utility class to retrieve messages from a resource file.
+ * 
+ * @author Stoyan Rachev
+ */
 public final class Messages
 {
     public static final String PACKAGE = "com.stoyanr.mastermind";
-    
+
     private static final String BUNDLE_NAME = PACKAGE + ".messages";
 
     // @formatter:off

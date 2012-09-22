@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a single game. A game is initialized with a {@link Mastermind} instance (game setup),
+ * A single Mastermind game. A game is initialized with a {@link Mastermind} instance (game setup),
  * a particular {@link Algorithm}, max number of rounds, and a {@link Player} instance. To play a
  * game, call its {@link #play()} method. The two methods {@link #hasWon()} and
  * {@link #getRoundsPlayed} should be invoked only after the game has finished to determine whether

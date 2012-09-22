@@ -28,7 +28,12 @@ import java.util.Arrays;
 import com.stoyanr.util.Arguments;
 import com.stoyanr.util.ArgumentsException;
 
-
+/**
+ * A simple command line program to test and demonstrate the capabilities of this package. See <a
+ * href="https://github.com/stoyanr/Masterminder/wiki">Masterminder Wiki</a> for more information.
+ * 
+ * @author Stoyan Rachev
+ */
 public class Main
 {
     private static final String ARG_ALPHABET = "a";
@@ -97,6 +102,9 @@ public class Main
         }
     }
 
+    /**
+     * Runs the program.
+     */
     public final void run()
     {
         try
@@ -170,6 +178,13 @@ public class Main
         }
     }
 
+    /**
+     * Runs the command line program. Creates a new Main instance with the passed arguments and
+     * console reader and writer and call its {@link #run()} method.
+     * 
+     * @param args The program arguments.
+     * @throws UnsupportedEncodingException
+     */
     public static void main(final String[] args) throws UnsupportedEncodingException
     {
         final InputStreamReader reader = new InputStreamReader(System.in, "UTF-8");

@@ -18,7 +18,7 @@
 package com.stoyanr.mastermind;
 
 /**
- * Interface to be implemented by all algorithm factory implementations. This interface has a single
+ * Interface to be implemented by algorithm factory implementations. This interface has a single
  * method which returns a newly created algorithm of the correct type.
  * 
  * <p>

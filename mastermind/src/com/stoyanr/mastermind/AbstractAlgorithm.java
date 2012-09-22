@@ -165,7 +165,7 @@ public abstract class AbstractAlgorithm implements Algorithm
      * greater or equal to 0. Usually, the guess with the highest rating is the guess eventually
      * returned by {@link #makeGuess()}.
      * 
-     * @param guess The guess for which a rating should be evaluated.
+     * @param guess The guess for which a rating should be calculated.
      * @return The rating calculated for the passed guess.
      */
     protected abstract double calculateGuessRating(final String guess);

@@ -19,8 +19,25 @@ package com.stoyanr.mastermind;
 
 import java.util.SortedSet;
 
+/**
+ * An implementation of the "worst-case" Mastermind strategy, first published by Donald Knuth. This
+ * strategy attempts to minimize the number of questions by always asking the question for which the
+ * largest number of combinations that yield any given answer is minimal.
+ * 
+ * <p>
+ * This strategy is described in details in the paper <a
+ * href="http://www.philos.rug.nl/~barteld/master.pdf">Yet Another Mastermind Strategy</a> by
+ * Barteld Kooi.
+ * 
+ * @author Stoyan Rachev
+ */
 public class KnuthAlgorithm extends AbstractAlgorithm
 {
+    /**
+     * Creates a new "worst-case" strategy for the specified game setup.
+     * 
+     * @param mastermind The game setup to use.
+     */
     public KnuthAlgorithm(final Mastermind mastermind)
     {
         super(mastermind);

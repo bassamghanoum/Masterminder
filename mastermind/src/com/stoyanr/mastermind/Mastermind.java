@@ -26,7 +26,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * Represents a particular game setup. The game setup is generalized to cover "Mastermind",
+ * A particular Mastermind game setup. The game setup is generalized to cover "Mastermind",
  * "Bulls and Cows", and all their variants one can imagine by introducing the following game
  * parameters:
  * <ul>

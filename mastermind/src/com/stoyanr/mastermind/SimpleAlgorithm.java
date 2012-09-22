@@ -17,8 +17,24 @@
  */
 package com.stoyanr.mastermind;
 
+/**
+ * An implementation of the "simple" Mastermind strategy. In this strategy, the next question is the
+ * first one in the ordering that is consistent with the answers given so far.
+ * 
+ * <p>
+ * This strategy is described in details in the paper <a
+ * href="http://www.philos.rug.nl/~barteld/master.pdf">Yet Another Mastermind Strategy</a> by
+ * Barteld Kooi.
+ * 
+ * @author Stoyan Rachev
+ */
 public class SimpleAlgorithm extends AbstractAlgorithm
 {
+    /**
+     * Creates a new "simple" strategy for the specified game setup.
+     * 
+     * @param mastermind The game setup to use.
+     */
     public SimpleAlgorithm(final Mastermind mastermind)
     {
         super(mastermind);

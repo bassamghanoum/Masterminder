@@ -17,11 +17,21 @@
  */
 package com.stoyanr.mastermind;
 
+/**
+ * A factory for {@link PharaoxAlgorithm} instances.
+ * 
+ * @author Stoyan Rachev
+ */
 public class PharaoxAlgorithmFactory implements AlgorithmFactory
 {
     private final transient Mastermind mastermind;
     private final transient double percents;
     
+    /**
+     * Creates a new factory with the specified game setup.
+     * 
+     * @param mastermind The game setup to use.
+     */
     public PharaoxAlgorithmFactory(final Mastermind mastermind, final double percents)
     {
         assert (mastermind != null && percents >= 0);

@@ -18,16 +18,37 @@
 package com.stoyanr.mastermind;
 
 /**
- * Interface to be implemented by players. A player interacts with an {@link Algorithm} within a 
+ * Interface to be implemented by players. A player interacts with an {@link Algorithm} within a
  * {@link Game} by providing scores for the guesses made by the algorithm.
  * 
  * @author Stoyan Rachev
  */
 public interface Player
 {
+    /**
+     * Starts the game for the player. This method is invoked by {@link Game#play()} before the game
+     * actually starts. It gives the player a chance to perform initialization, display messages, or
+     * carry out other preparation activities.
+     */
     void startGame();
 
+    /**
+     * Ends the game for the player. This method is invoked by {@link Game#play()} after the game
+     * has finished. It gives the player a chance to perform clean-up, display messages, or carry
+     * out other finalization activities.
+     * 
+     * @param won true if the game has been won, false otherwise.
+     * @param roundsPlayed The number of rounds played during the game.
+     */
     void endGame(final boolean won, final int roundsPlayed);
 
+    /**
+     * Gets the score for the given guess. This method is invoked by {@link Game#play()} repeatedly
+     * for each guess made by the {@link Algorithm}. The returned score is passed back to the
+     * algorithm via the {@link Algorithm#putGuessScore(String, Score)} method.
+     * 
+     * @param guess The guess to provide a score for.
+     * @return The score for the passed guess.
+     */
     Score getScore(final String guess);
 }

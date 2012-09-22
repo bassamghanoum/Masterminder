@@ -19,8 +19,26 @@ package com.stoyanr.mastermind;
 
 import java.util.SortedSet;
 
+/**
+ * An implementation of the "expected size" Mastermind strategy. This strategy attempts to minimize
+ * the number of questions by always asking the question for which the "expected size" (the sum of
+ * all sizes multiplied by their probability) of combinations that yield any given answer is
+ * minimal.
+ * 
+ * <p>
+ * This strategy is described in details in the paper <a
+ * href="http://www.philos.rug.nl/~barteld/master.pdf">Yet Another Mastermind Strategy</a> by
+ * Barteld Kooi.
+ * 
+ * @author Stoyan Rachev
+ */
 public class ExpectedSizeAlgorithm extends AbstractAlgorithm
 {
+    /**
+     * Creates a new "expected size" strategy for the specified game setup.
+     * 
+     * @param mastermind The game setup to use.
+     */
     public ExpectedSizeAlgorithm(final Mastermind mastermind)
     {
         super(mastermind);

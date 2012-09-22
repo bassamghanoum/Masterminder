@@ -19,10 +19,22 @@ package com.stoyanr.mastermind;
 
 import java.util.SortedSet;
 
+/**
+ * An implementation of the "PharaoX" strategy. This is a new strategy attempt which is not yet
+ * sufficiently refined to be used or published. It is not described in any paper (to my knowledge).
+ * 
+ * @author Stoyan Rachev
+ */
 public class PharaoxAlgorithm extends AbstractAlgorithm
 {
     private final transient double percents;
 
+    /**
+     * Creates a new "PharaoX" strategy for the specified game setup.
+     * 
+     * @param mastermind The game setup to use.
+     * @param percents
+     */
     public PharaoxAlgorithm(final Mastermind mastermind, final double percents)
     {
         super(mastermind);

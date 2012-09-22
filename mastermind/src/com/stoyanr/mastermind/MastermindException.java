@@ -17,10 +17,15 @@
  */
 package com.stoyanr.mastermind;
 
+/**
+ * An exception thrown by any method in this package when a non-generic error is encountered.
+ * 
+ * @author Stoyan Rachev
+ */
 public class MastermindException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
-    
+
     public MastermindException()
     {
         super();

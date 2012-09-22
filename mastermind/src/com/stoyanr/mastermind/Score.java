@@ -19,6 +19,13 @@ package com.stoyanr.mastermind;
 
 import static com.stoyanr.mastermind.Mastermind.MAX_LENGTH;
 
+/**
+ * A Mastermind score, or "answer". This is a pair of two numbers (cows, bulls), where "bulls" is
+ * the number of pawns that are of the right color and in the right place, and "cows" is the number
+ * of pawns that are of the right color, but are not in the right place.
+ * 
+ * @author Stoyan Rachev
+ */
 public class Score
 {
     public static final Score ZERO_SCORE = new Score(0, 0);

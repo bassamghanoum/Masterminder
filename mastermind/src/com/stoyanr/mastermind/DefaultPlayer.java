@@ -17,11 +17,25 @@
  */
 package com.stoyanr.mastermind;
 
+/**
+ * A {@link Player} implementation for "computer" players that interact with a {@link Game}
+ * directly. Does not perform any initialization or cleanup, and always scores the passed guess
+ * correctly against the code passed upon construction.
+ * 
+ * @author Stoyan Rachev
+ */
 public class DefaultPlayer implements Player
 {
     private final transient Mastermind mastermind;
     private final transient String code;
-    
+
+    /**
+     * Creates a new computer player with the given game setup and code.
+     * 
+     * @param mastermind The game setup to use.
+     * @param code The code against which all guesses will be scored. It has to be a valid code for
+     * the passed game setup.
+     */
     public DefaultPlayer(final Mastermind mastermind, final String code)
     {
         assert (mastermind != null && mastermind.isValidCode(code));
@@ -29,18 +43,31 @@ public class DefaultPlayer implements Player
         this.code = code;
     }
 
+    /**
+     * For computer players, this method doesn't do anything.
+     */
     @Override
     public final void startGame()
     {
         // No implementation needed
     }
 
+    /**
+     * For computer players, this method doesn't do anything.
+     */
     @Override
-    public final void endGame(final boolean wonx, final int roundsPlayedx)
+    public final void endGame(final boolean won, final int roundsPlayed)
     {
         // No implementation needed
     }
 
+    /**
+     * Scores the passed guess correctly against the code passed upon construction, by delegating to
+     * {@link Mastermind#evaluateScore(String, String)}.
+     * 
+     * @param guess The guess to provide a score for.
+     * @return The score for the passed guess.
+     */
     @Override
     public final Score getScore(final String guess)
     {

@@ -20,6 +20,22 @@ package com.stoyanr.mastermind;
 import static com.stoyanr.util.Logger.debug;
 import static com.stoyanr.util.Logger.info;
 
+/**
+ * An evaluator of the effectiveness of the different strategies. It is initialized with a
+ * {@link Mastermind} instance (game setup), and an {@link AlgorithmFactory}. To perform an
+ * evaluation, call the {@link #evaluate()} method of the evaluator. The remaining methods of this
+ * class should be invoked only after the evaluation is complete to determine the various statistics
+ * produced by the evaluation, among them the average rounds played which is the main characteristic
+ * used to measure the strategy effectiveness. An evaluation can be performed only once.
+ * 
+ * <p>
+ * Performing an evaluation requires playing all possible games for a given game setup. This is
+ * computationally hard and can take a lot of time, especially for larger alphabets and combination
+ * lengths. To alleviate this issue, an instance of the {@link GuessCalculator} class is created
+ * upon construction and used during the evaluation.
+ * 
+ * @author Stoyan Rachev
+ */
 public class AlgorithmEvaluator
 {
     public static final int MAX_ROUNDS = 10;
@@ -27,13 +43,21 @@ public class AlgorithmEvaluator
     private final transient Mastermind mastermind;
     private final transient AlgorithmFactory factory;
     private final transient GuessCalculator calc;
-    
+
     private transient int totalRoundsPlayed = 0;
     private transient int maxRoundsPlayed = 0;
     private transient int gamesPlayed = 0;
     private transient int gamesWon = 0;
 
-    public AlgorithmEvaluator(final Mastermind mastermind, final AlgorithmFactory factory, 
+    /**
+     * Creates a new evaluator for the specified setup and algorithm.
+     * 
+     * @param mastermind The game setup to use.
+     * @param factory The algorithm factory used to produce multiple instances of the algorithm
+     * being evaluated.
+     * @param levels The number of levels passed to the {@link GuessCalculator} constructor.
+     */
+    public AlgorithmEvaluator(final Mastermind mastermind, final AlgorithmFactory factory,
         final int levels)
     {
         assert (mastermind != null && factory != null);
@@ -42,6 +66,11 @@ public class AlgorithmEvaluator
         this.calc = new GuessCalculator(mastermind, factory, levels);
     }
 
+    /**
+     * Evaluates the strategy effectiveness. This method delegates to
+     * {@link Mastermind#visitCodes(CodeVisitor)} by passing a special visitor which plays a game
+     * for each visited code. Finally, it prints the evaluation statistics.
+     */
     public final void evaluate()
     {
         mastermind.visitCodes(new GamesVisitor());
@@ -87,7 +116,7 @@ public class AlgorithmEvaluator
             }
         }
     }
-    
+
     private void printInfo()
     {
         info("Algorithm Evaluation for " + factory.getAlgorithm().getClass());
@@ -100,30 +129,62 @@ public class AlgorithmEvaluator
         info("");
     }
 
+    /**
+     * Returns the total number of rounds played in all games during the evaluation. Should only be
+     * called after the evaluation is complete, i.e. the {@link #evaluate()} method has finished.
+     * 
+     * @return The total number of rounds played in all games during the evaluation.
+     */
     public final int getTotalRoundsPlayed()
     {
         assert hasFinished();
         return totalRoundsPlayed;
     }
-    
+
+    /**
+     * Returns the max number of rounds played in any of the games during the evaluation. Should
+     * only be called after the evaluation is complete, i.e. the {@link #evaluate()} method has
+     * finished.
+     * 
+     * @return The max number of rounds played in any of the games during the evaluation.
+     */
     public final int getMaxRoundsPlayed()
     {
         assert hasFinished();
         return maxRoundsPlayed;
     }
 
+    /**
+     * Returns the number of games played during the evaluation. Should only be called after the
+     * evaluation is complete, i.e. the {@link #evaluate()} method has finished.
+     * 
+     * @return The number of games played during the evaluation.
+     */
     public final int getGamesPlayed()
     {
         assert hasFinished();
         return gamesPlayed;
     }
 
+    /**
+     * Returns the number of games won during the evaluation. Should only be called after the
+     * evaluation is complete, i.e. the {@link #evaluate()} method has finished.
+     * 
+     * @return The number of games won during the evaluation.
+     */
     public final int getGamesWon()
     {
         assert hasFinished();
         return gamesWon;
     }
 
+    /**
+     * Returns the average number of rounds played during the evaluation, which is the total number
+     * of rounds played in all games divided by the number of played games. Should only be called
+     * after the evaluation is complete, i.e. the {@link #evaluate()} method has finished.
+     * 
+     * @return The average number of rounds played during the evaluation.
+     */
     public final double getAverageRoundsPlayed()
     {
         assert hasFinished();
