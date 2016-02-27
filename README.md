@@ -2,4 +2,4 @@
 
 Feedback, comments, and contributions are welcome!
 
-Read more in our [Wiki](https://github.com/stoyanr/Mastermind/wiki).
+Read more in our [Wiki](https://github.com/stoyanr/Masterminder/wiki).
